@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -11,11 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 
 @Entity
-public class Course {
+public class Course implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
-
+    private long courseId;
 
     private int courseNum;
     private String name;
@@ -24,6 +24,6 @@ public class Course {
     private int duration;
 
     @OneToMany(mappedBy = "course")
-    private List<courseClass> courseClassList;
+    private List<CourseClass> courseClasses;
 
 }

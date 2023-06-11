@@ -1,6 +1,5 @@
 package sg.edu.iss.team6.model;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,12 +13,13 @@ import java.util.List;
 @Entity
 public class Student {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
+    @JoinColumn(name = "student_id")
+    private long studentId;
 
-    @NotNull
-    private String username;
-    private String password;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String firstName;
     private String lastName;
     private String email;
@@ -27,7 +27,8 @@ public class Student {
     private String address;
     private long gpa;
 
-    @ManyToMany
-    private List<StudentEnrollment> enrolledClasses;
+    @OneToMany(mappedBy="student")
+    private List<Enrollment> studentEnrollments;
+
 
 }

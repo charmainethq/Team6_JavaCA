@@ -10,13 +10,17 @@ import sg.edu.iss.team6.service.StudentService;
 import java.util.*;
 
 @Controller
+@RequestMapping(value = "/student")
 public class StudentController {
     @Autowired
     StudentService studentService;
 
-    @RequestMapping(value = "/students")
+    @RequestMapping(value = "/all")
     public @ResponseBody List<Student> findAllStudents(){
-        return studentService.findAllStudents();
+        System.out.println("Inside findAllStudents() controller method");
+        List<Student> students = studentService.findAllStudents();
+        System.out.println("Number of students returned from service: " + students.size());
+        return students;
     }
 
 }
