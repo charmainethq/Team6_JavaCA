@@ -17,17 +17,18 @@ public class Enrollment implements Serializable {
     private long enrollmentId;
 
 
-
     @ManyToOne
     @JoinColumn(name="student_id")
     private Student student;
 
-    @OneToOne(mappedBy="classEnrollment")
+    @ManyToOne
+    @JoinColumn(name="class_id")
     private CourseClass courseClass;
 
     @Column(columnDefinition = "ENUM('SUBMITTED', 'CONFIRMED','COMPLETED', 'WITHDRAWN,'FAILED'")
     @Enumerated(EnumType.STRING)
     private EnrollmentEnum enrollmentStatus;
 
+    @Column(nullable = true)
     private long score;
 }
