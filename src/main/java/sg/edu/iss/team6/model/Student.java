@@ -1,5 +1,5 @@
 package sg.edu.iss.team6.model;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 public class Student {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JoinColumn(name = "student_id")
     private long studentId;
 
