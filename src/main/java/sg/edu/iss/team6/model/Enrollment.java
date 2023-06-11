@@ -30,5 +30,5 @@ public class Enrollment implements Serializable {
     private EnrollmentEnum enrollmentStatus;
 
     @Column(nullable = true)
-    private long score;
+    private Long score;
 }
