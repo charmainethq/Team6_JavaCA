@@ -17,7 +17,6 @@ public class Admin implements Serializable {
     @Id
     private long adminId;
 
-    @Id
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
