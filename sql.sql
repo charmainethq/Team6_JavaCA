@@ -1,4 +1,5 @@
 -- table User
+
 INSERT INTO User (user_id, password)
 VALUES ('stu_1_John', 'password123');
 INSERT INTO User (user_id, password)
