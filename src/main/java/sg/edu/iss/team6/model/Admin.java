@@ -1,12 +1,11 @@
 package sg.edu.iss.team6.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,7 +14,9 @@ import java.util.List;
 @Entity
 public class Admin implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long adminId;
+
 
     @OneToOne
     @JoinColumn(name = "user_id")
