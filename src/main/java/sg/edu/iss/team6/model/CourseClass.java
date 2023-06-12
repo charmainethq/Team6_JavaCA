@@ -32,9 +32,8 @@ public class CourseClass implements Serializable {
     @JoinColumn(name = "lecturer_id")
     private Lecturer lecturer;
 
-    @OneToOne
-    @JoinColumn(name="enrollment_id")
-    private Enrollment classEnrollment;
+    @OneToMany(mappedBy="courseClass")
+    private List<Enrollment> classEnrollment;
 
 
 }

@@ -16,9 +16,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public ArrayList<Student> findAllStudents() {
-        System.out.println("Inside findAllStudents() method");
-        ArrayList<Student> students = (ArrayList<Student>) srepo.findAllStudents();
-        System.out.println("Number of students found: " + students.size());
-        return students;
+        return (ArrayList<Student>) srepo.findAllStudents();
     }
 }

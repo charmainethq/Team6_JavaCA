@@ -16,11 +16,16 @@ public class StudentController {
     StudentService studentService;
 
     @RequestMapping(value = "/all")
-    public @ResponseBody List<Student> findAllStudents(){
-        System.out.println("Inside findAllStudents() controller method");
+    public @ResponseBody List<String> findAllStudents(){
+
         List<Student> students = studentService.findAllStudents();
-        System.out.println("Number of students returned from service: " + students.size());
-        return students;
+        List<String> studentNames = new ArrayList<>();
+        for (Student s: students
+             ) {studentNames.add(s.getFirstName());
+
+        }
+
+        return studentNames;
     }
 
 }

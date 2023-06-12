@@ -17,11 +17,12 @@ public class Enrollment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long enrollmentId;
 
+
     @ManyToOne
     @JoinColumn(name="student_user_id")
     private Student student;
 
-    @OneToOne(mappedBy="classEnrollment")
+    @ManyToOne
     @JoinColumn(name="class_id")
     private CourseClass courseClass;
 
@@ -29,5 +30,6 @@ public class Enrollment implements Serializable {
     @Enumerated(EnumType.STRING)
     private EnrollmentEnum enrollmentStatus;
 
-    private long score;
+    @Column(nullable = true)
+    private Long score;
 }
