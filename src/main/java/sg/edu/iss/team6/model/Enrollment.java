@@ -19,7 +19,7 @@ public class Enrollment implements Serializable {
 
 
     @ManyToOne
-    @JoinColumn(name="student_user_id")
+    @JoinColumn(name="student_id")
     private Student student;
 
     @ManyToOne
