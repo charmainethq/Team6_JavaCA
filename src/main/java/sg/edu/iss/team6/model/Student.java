@@ -18,7 +18,7 @@ public class Student {
     private long studentId;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "username")
     private User user;
 
     private String firstName;

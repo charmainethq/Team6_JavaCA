@@ -19,7 +19,7 @@ public class Admin implements Serializable {
 
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "username")
     private User user;
 
     private String firstName;
