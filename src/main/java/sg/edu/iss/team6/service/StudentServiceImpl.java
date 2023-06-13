@@ -16,6 +16,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public ArrayList<Student> findAllStudents() {
-        return (ArrayList<Student>) srepo.findAllStudents();
+        return (ArrayList<Student>) srepo.findAll();
     }
 }
