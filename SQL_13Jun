@@ -1,0 +1,73 @@
+-- Insert Users
+INSERT INTO user (username, password) VALUES
+('stu_1_alice', 'password1'),
+('stu_2_bob', 'password2'),
+('stu_3_charlie', 'password3'),
+('stu_4_david', 'password4'),
+('stu_5_eve', 'password5'),
+('adm_1_john', 'adminpass1'),
+('adm_2_jane', 'adminpass2'),
+('lec_1_edward', 'lecturerpass1'),
+('lec_2_frances', 'lecturerpass2'),
+('lec_3_george', 'lecturerpass3');
+
+-- Insert Admins
+INSERT INTO admin (admin_id,username, first_name, last_name, email, contact_no, address) VALUES
+(1,'adm_1_john', 'John', 'Doe', 'john.doe@gmail.com', 1234567890, '123 Admin St.'),
+(2,'adm_2_jane', 'Jane', 'Doe', 'jane.doe@gmail.com', 1234567891, '124 Admin St.');
+
+-- Insert Students
+INSERT INTO student (student_id,username, first_name, last_name, email, contact_no, address, gpa) VALUES
+(1,'stu_1_alice', 'Alice', 'Johnson', 'alice.johnson@gmail.com', 1234567892, '125 Student St.', 3.5),
+(2,'stu_2_bob', 'Bob', 'Smith', 'bob.smith@gmail.com', 1234567893, '126 Student St.', 3.2),
+(3,'stu_3_charlie', 'Charlie', 'Brown', 'charlie.brown@gmail.com', 1234567894, '127 Student St.', 3.8),
+(4,'stu_4_david', 'David', 'Williams', 'david.williams@gmail.com', 1234567895, '128 Student St.', 3.3),
+(5,'stu_5_eve', 'Eve', 'Davis', 'eve.davis@gmail.com', 1234567896, '129 Student St.', 3.7);
+
+-- Insert Lecturers
+INSERT INTO lecturer (lecturer_id,username, first_name, last_name, email, contact_no, address) VALUES
+(1,'lec_1_edward', 'Edward', 'Taylor', 'edward.taylor@gmail.com', 1234567897, '130 Lecturer St.'),
+(2,'lec_2_frances', 'Frances', 'Anderson', 'frances.anderson@gmail.com', 1234567898, '131 Lecturer St.'),
+(3,'lec_3_george', 'George', 'Martin', 'george.martin@gmail.com', 1234567899, '132 Lecturer St.');
+
+-- Insert Courses
+INSERT INTO course (course_num, name, description, credits, duration) VALUES
+(101, 'Computer Science', 'Study of Computers and Computing Technologies', 3, 4),
+(102, 'Physics', 'Study of Matter and Its Motion', 3, 4),
+(103, 'Chemistry', 'Study of Elements, Compounds and Mixtures', 3, 4),
+(104, 'Biology', 'Study of Life and Living Organisms', 3, 4);
+
+-- Insert Course Classes
+-- Assuming that the IDs of courses start from 1 and increment by 1
+-- Also assuming lecturer IDs start from 1 and increment by 1
+-- MySQL format for date is 'YYYY-MM-DD'
+INSERT INTO course_class (course_id, start_date, size, confirmed, room_num, lecturer_id) VALUES
+(1, '2023-09-01', 30, 0, 'A101', 1),
+(1, '2023-09-02', 30, 4, 'A102', 1),
+(2, '2023-09-03', 30, 23, 'B101', 2),
+(2, '2023-09-04', 30, 2, 'B102', 2),
+(3, '2023-09-05', 30, 5, 'C101', 3),
+(3, '2023-09-06', 30, 5, 'C102', 3),
+(4, '2023-09-07', 30, 9, 'D101', 1),
+(4, '2023-09-08', 30, 10, 'D102', 1);
+
+
+-- Insert Enrollments
+-- Assuming student IDs and course_class IDs start from 1 and increment by 1
+-- Note: status value must be one of the ENUM values
+INSERT INTO enrollment (enrollment_id, student_id, class_id, enrollment_status, score) VALUES
+(1, 1, 1, 'SUBMITTED', null),
+(2, 2, 1, 'CONFIRMED', 50.5),
+(3, 3, 1, 'SUBMITTED', null),
+(4, 2, 2, 'SUBMITTED', null),
+(5, 3, 2, 'CONFIRMED', 75.8),
+(6, 4, 2, 'CONFIRMED', 12.3),
+(7, 3, 3, 'SUBMITTED', null),
+(8, 4, 3, 'CONFIRMED', 91.2),
+(9, 5, 3, 'CONFIRMED', 33.7),
+(10, 4, 4, 'CONFIRMED', 67.9),
+(11, 5, 4, 'CONFIRMED', 88.1),
+(12, 1, 4, 'SUBMITTED', null),
+(13, 2, 5, 'CONFIRMED', 42.0),
+(14, 3, 5, 'CONFIRMED', 55.5),
+(15, 4, 5, 'SUBMITTED', null);
