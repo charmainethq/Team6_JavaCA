@@ -5,5 +5,5 @@ import sg.edu.iss.team6.model.*;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     public User findByUsername(String username);
-    public User deleteByUsername(String username);
+    public void deleteByUsername(String username);
 }

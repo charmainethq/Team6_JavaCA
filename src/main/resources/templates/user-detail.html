@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Details</title>
+    <link rel="stylesheet" href="/css/detail.css">
+</head>
+<body>
+    <div class="container">
+        <h1>User Details</h1>
+        <div class="details">
+            <label>Username:</label>
+            <span th:text="${user.username}"></span>
+        </div>
+        <div class="details">
+            <label>Password:</label>
+            <span th:text="${user.password}"></span>
+        </div>
+        
+        <div class="actions">
+            <a class="btn btn-info" th:href="@{/user/update/{username}(username=${user.username})}">Edit</a>
+            <a class="btn btn-danger" th:href="@{/user/delete/{username}(username=${user.username})}" onclick="return confirmDelete()">Delete</a>
+        </div>
+        
+        <script>
+            function confirmDelete() {
+                return confirm('Are you sure you want to delete this admin?');
+            }
+        </script>
+    </div>
+
