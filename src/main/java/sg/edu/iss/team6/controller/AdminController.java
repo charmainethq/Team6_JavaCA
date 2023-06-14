@@ -19,7 +19,7 @@ public class AdminController {
     @GetMapping("/admin")
     public String getAllAdmin(Model model) {
         model.addAttribute("admin", adminSvc.findAll());
-        return "list-admin";
+        return "admin-list";
     }
 
     @GetMapping("/admin/{id}")
@@ -32,11 +32,11 @@ public class AdminController {
     @GetMapping("/admin/create")
     public String createAdmin(Model model, Admin admin){
         model.addAttribute("admin", admin);
-        return "create-admin";
+        return "admin-create";
     }
 
     @PostMapping("admin/create")
-    public String saveMember(@ModelAttribute("admin") Admin admin, Model model){
+    public String saveAdmin(@ModelAttribute("admin") Admin admin, Model model){
         Admin newAdmin = new Admin();
 
         newAdmin.setFirstName(admin.getFirstName());
@@ -60,7 +60,7 @@ public class AdminController {
     public String showUpdateForm(@PathVariable("id") int id, Model model) {
         Admin admin = adminSvc.findById(id);
         model.addAttribute("admin", admin);
-        return "update-admin";
+        return "admin-update";
     }
 
     @PostMapping("/admin/update/{id}")

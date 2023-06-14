@@ -2,48 +2,7 @@
 <html>
 <head>
     <title>Admin Details</title>
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        label {
-            font-weight: bold;
-            color: #333;
-        }
-        .details {
-            margin-bottom: 10px;
-        }
-        .actions {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .actions a {
-            margin-right: 10px;
-        }
-        .actions a.btn {
-            text-decoration: none;
-            background-color: #4CAF50;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 4px;
-        }
-        .actions a.btn:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/detail.css">
 </head>
 <body>
     <div class="container">
@@ -76,13 +35,6 @@
             <label>Address:</label>
             <span th:text="${admin.address}"></span>
         </div>
-
-        <!-- Add more details as needed
-                <div class="details">
-            <label>Username:</label>
-            <span th:text="${admin.user.username}"></span>
-        </div>
-         -->
         
         <div class="actions">
             <a class="btn" th:href="@{/admin/update/{id}(id=${admin.adminId})}">Edit</a>
