@@ -27,7 +27,7 @@ public class StudentController {
     @Autowired
     CourseService courseService;
 
-
+    private static Long testId = 3L;
     @RequestMapping(value = "/all")
     public @ResponseBody List<String> findAllStudents(){
 
@@ -40,6 +40,38 @@ public class StudentController {
         return studentNames;
     }
 
+    @GetMapping(value = "/registerCourses")
+    public String getUnenrolledAndFailedCourses(Model model) {
+        //TODO: remove and use session instead
+        Long studentId = testId;
+
+        Student student = studentService.findByStudentId(studentId);
+        List<Course> allCourses = courseService.getAllCourses();
+
+        List<Course> unenrolledAndFailedCourses = allCourses.stream()
+                .filter(course -> {
+                    // filter for enrollment
+                    boolean hasEnrollment = student.getStudentEnrollments().stream()
+                            .anyMatch(enrollment ->
+                                    enrollment.getCourseClass().getCourse().getCourseId() == course.getCourseId());
+
+                    // Check if the enrollment status is withdrawal or failure
+                    boolean isWithdrawnOrFailed = student.getStudentEnrollments().stream()
+                            .anyMatch(enrollment ->
+                                    enrollment.getCourseClass().getCourse().getCourseId() == course.getCourseId() &&
+                                            (enrollment.getEnrollmentStatus() == EnrollmentEnum.WITHDRAWN ||
+                                                    enrollment.getEnrollmentStatus() == EnrollmentEnum.FAILED));
+
+                    // only include if hasEnrollment is false AND fail/withdraw is true.
+                    return !hasEnrollment || isWithdrawnOrFailed;
+                })
+                .collect(Collectors.toList());
+        model.addAttribute("coursesToRegister", unenrolledAndFailedCourses);
+        return "student-view-course-registration";
+    }
+
+
+
 
 
 
@@ -47,12 +79,15 @@ public class StudentController {
 
     @GetMapping(value = "{courseId}/viewClasses")
     public String getClassesByCourseId(@PathVariable("courseId") Long courseId, Model model) {
+        //TODO: remove and use session instead
+        Student s =  studentService.findByStudentId(testId);
+        model.addAttribute("student",s);
+
+        Course course = courseService.findCourseByCourseId(courseId);
+        model.addAttribute("course",course);
+
         List<CourseClass> classes = classService.findByCourseId(courseId);
         model.addAttribute("classes", classes);
-
-        //TODO: remove and use session instead
-        Student s =  studentService.findByStudentId(1L);
-        model.addAttribute("student",s);
 
         return "student-classList";
     }
@@ -65,6 +100,10 @@ public class StudentController {
         CourseClass courseClass = classService.findByClassId(classId);
 
         //TODO: exceptions
+        /**    if (student == null || courseClass == null) {
+         // Handle invalid student or class ID
+         return "redirect:/student/registerFailure";
+         }**/
 
         // Create a new enrollment object
         Enrollment enrollment = new Enrollment();

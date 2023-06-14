@@ -1,18 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
-
+    <link rel="stylesheet" th:href="@{/css/student-class-course.css}" />
     <script th:inline="javascript">
         function showPopup(size, confirmed) {
             console.log(`size: ${size}, confirmed: ${confirmed}`);
@@ -31,8 +20,8 @@
 </head>
 
 <body>
-
-
+<h1 th:text="${course.courseNum + ' ' + course.name}"></h1>
+<h3 th:text="*{course.description}"></h3>
 <table>
     <thead>
     <tr>

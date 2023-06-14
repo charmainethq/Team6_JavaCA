@@ -4,6 +4,6 @@ import sg.edu.iss.team6.model.*;
 import java.util.List;
 
 public interface CourseRepository extends JpaRepository<Course, Integer> {
-
+    public Course findCourseByCourseId(Long courseId);
 
 }

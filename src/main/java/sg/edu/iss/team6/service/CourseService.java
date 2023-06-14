@@ -1,8 +1,10 @@
 package sg.edu.iss.team6.service;
-import org.springframework.stereotype.Service;
 import sg.edu.iss.team6.model.Course;
-import java.util.ArrayList;
 
-@Service
+import java.util.List;
+
+
 public interface CourseService {
+    List<Course> getAllCourses();
+    Course findCourseByCourseId(Long courseId);
 }
