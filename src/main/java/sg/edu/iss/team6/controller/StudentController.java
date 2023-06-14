@@ -8,8 +8,13 @@ import sg.edu.iss.team6.model.*;
 import sg.edu.iss.team6.repository.EnrollmentRepository;
 import sg.edu.iss.team6.service.CourseClassService;
 import sg.edu.iss.team6.service.CourseService;
+import sg.edu.iss.team6.service.EmailService;
 import sg.edu.iss.team6.service.StudentService;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,6 +31,9 @@ public class StudentController {
 
     @Autowired
     CourseService courseService;
+
+    @Autowired
+    EmailService emailService;
 
     private static Long testId = 3L;
     @RequestMapping(value = "/all")
@@ -77,7 +85,7 @@ public class StudentController {
 
 
 
-    @GetMapping(value = "{courseId}/viewClasses")
+    @GetMapping(value = "{courseId}/viewAvailableClasses")
     public String getClassesByCourseId(@PathVariable("courseId") Long courseId, Model model) {
         //TODO: remove and use session instead
         Student s =  studentService.findByStudentId(testId);
@@ -93,7 +101,7 @@ public class StudentController {
     }
 
     @PostMapping("/register")
-    public String registerClass(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId) {
+    public String registerClass(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId) throws MessagingException, UnsupportedEncodingException {
 
         // Retrieve the student and class based on the provided IDs
         Student student = studentService.findByStudentId(studentId);
@@ -115,8 +123,32 @@ public class StudentController {
         // Save the enrollment object to the database
         enrollmentRepository.save(enrollment);
 
+        String testRecepientEmail= "sa56team6@outlook.com";
+
+        // Send confirmation email with link
+        String confirmationLink = generateConfirmationLink(studentId, enrollment.getEnrollmentId());
+
+        emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink);
+
         return "redirect:/student/registerSuccess";
     }
+
+    private String generateConfirmationLink(long studentId, long enrollmentId) {
+        // Construct the confirmation link URL
+        String baseUrl = "http://localhost:2000/student/confirmEnrollment";
+        String encodedStudentId = URLEncoder.encode(String.valueOf(studentId), StandardCharsets.UTF_8);
+        String encodedEnrollmentId = URLEncoder.encode(String.valueOf(enrollmentId), StandardCharsets.UTF_8);
+        return baseUrl + "?studentId=" + encodedStudentId + "&enrollmentId=" + encodedEnrollmentId;
+    }
+
+    @GetMapping("/confirmEnrollment")
+    public String confirmEnrollment(){
+
+        return "student-registerSuccess";
+    }
+
+
+
 
     @GetMapping("/registerSuccess")
     public String registerSuccess(){
