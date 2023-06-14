@@ -1,6 +1,7 @@
 package sg.edu.iss.team6.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -8,12 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import sg.edu.iss.team6.model.User;
 import sg.edu.iss.team6.service.UserService;
 
 @Controller
-public class UserController {
+public class UserController{
 
     @Autowired
     private UserService userSvc;
@@ -72,5 +75,4 @@ public class UserController {
         userSvc.update(existingUser);
         return "redirect:/user";
     }
-
 }
