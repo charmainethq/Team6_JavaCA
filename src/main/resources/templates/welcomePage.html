@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome Page</title>
+</head>
+
+<body>
+    <h3>Welcome Page after Successful Login</h3>
+    <a th:href="@{/logout}">LOGOUT</a>
+    <br><br><br>
+    <h2><a th:href="@{/admin/list}">User</a></h2>
+    <h2><a th:href="@{/user/list}">Admin</a></h2>
+    <h2><a th:href="@{/lecture/list}">Lecturer</a></h2>
+    <h2><a th:href="@{/course/list}">Courses</a></h2>
+    <h2><a th:href="@{/enrollment/list}">Enrollment</a></h2>
+</body>
+
+</html>

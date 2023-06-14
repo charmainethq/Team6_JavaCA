@@ -104,3 +104,6 @@ h1 {
     filter: brightness(1.2);
 }
 
+.logout-link {
+    text-align: right;
+}
