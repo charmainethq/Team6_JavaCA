@@ -18,4 +18,15 @@ public class CourseClassServiceImpl implements CourseClassService{
         //System.out.println(classRepo.findByCourseId(courseId).size());
         return classRepo.findAllByCourseCourseId(courseId);
     }
+
+    @Override
+    public CourseClass findByClassId(Long classId){
+        return classRepo.findByClassId(classId);
+    }
+
+
+
+
+
+
 }
