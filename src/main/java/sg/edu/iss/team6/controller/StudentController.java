@@ -6,10 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sg.edu.iss.team6.model.*;
 import sg.edu.iss.team6.repository.EnrollmentRepository;
-import sg.edu.iss.team6.service.CourseClassService;
-import sg.edu.iss.team6.service.CourseService;
-import sg.edu.iss.team6.service.EmailService;
-import sg.edu.iss.team6.service.StudentService;
+import sg.edu.iss.team6.service.*;
+import sg.edu.iss.team6.utility.EmailUtility;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -28,12 +26,16 @@ public class StudentController {
 
     @Autowired
     EnrollmentRepository enrollmentRepository;
+    @Autowired
+    EnrollmentService enrollmentService;
 
     @Autowired
     CourseService courseService;
 
     @Autowired
     EmailService emailService;
+    @Autowired
+    EmailUtility emailUtility;
 
     private static Long testId = 3L;
     @RequestMapping(value = "/all")
@@ -82,30 +84,36 @@ public class StudentController {
 
 
 
-
-
-
     @GetMapping(value = "{courseId}/viewAvailableClasses")
     public String getClassesByCourseId(@PathVariable("courseId") Long courseId, Model model) {
         //TODO: remove and use session instead
-        Student s =  studentService.findByStudentId(testId);
-        model.addAttribute("student",s);
+        Student student =  studentService.findByStudentId(testId);
+        model.addAttribute("student",student);
 
         Course course = courseService.findCourseByCourseId(courseId);
         model.addAttribute("course",course);
 
-        List<CourseClass> classes = classService.findByCourseId(courseId);
-        model.addAttribute("classes", classes);
+        List<CourseClass> allClasses = classService.findByCourseId(courseId);
+        /**
+        List<CourseClass> availableClasses = allClasses.stream()
+                .filter(classObj -> !enrollmentService.hasEnrollment(student.getStudentId(), classObj.getClassId()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("classes", availableClasses);**/
+
+
+        model.addAttribute("classes", allClasses);
 
         return "student-classList";
     }
 
     @PostMapping("/register")
-    public String registerClass(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId) throws MessagingException, UnsupportedEncodingException {
+    public String registerClass(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, @RequestParam("courseId") Long courseId) throws MessagingException, UnsupportedEncodingException {
 
         // Retrieve the student and class based on the provided IDs
         Student student = studentService.findByStudentId(studentId);
         CourseClass courseClass = classService.findByClassId(classId);
+        Course course = courseService.findCourseByCourseId(courseId);
 
         //TODO: exceptions
         /**    if (student == null || courseClass == null) {
@@ -126,28 +134,19 @@ public class StudentController {
         String testRecepientEmail= "sa56team6@outlook.com";
 
         // Send confirmation email with link
-        String confirmationLink = generateConfirmationLink(studentId, enrollment.getEnrollmentId());
+        String confirmationLink = emailUtility.generateConfirmationLink(studentId, enrollment.getEnrollmentId());
 
-        emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink);
+        emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink, student.getFullName(), course);
 
         return "redirect:/student/registerSuccess";
     }
 
-    private String generateConfirmationLink(long studentId, long enrollmentId) {
-        // Construct the confirmation link URL
-        String baseUrl = "http://localhost:2000/student/confirmEnrollment";
-        String encodedStudentId = URLEncoder.encode(String.valueOf(studentId), StandardCharsets.UTF_8);
-        String encodedEnrollmentId = URLEncoder.encode(String.valueOf(enrollmentId), StandardCharsets.UTF_8);
-        return baseUrl + "?studentId=" + encodedStudentId + "&enrollmentId=" + encodedEnrollmentId;
-    }
 
     @GetMapping("/confirmEnrollment")
     public String confirmEnrollment(){
 
         return "student-registerSuccess";
     }
-
-
 
 
     @GetMapping("/registerSuccess")

@@ -31,5 +31,9 @@ public class Student {
     @OneToMany(mappedBy="student")
     private List<Enrollment> studentEnrollments;
 
+    public String getFullName(){
+        return firstName + " " + lastName;
+    }
+
 
 }

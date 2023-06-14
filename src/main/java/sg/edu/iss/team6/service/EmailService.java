@@ -5,6 +5,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import sg.edu.iss.team6.model.Course;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -17,7 +18,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendConfirmationEmail(String recipientEmail, String confirmationLink) {
+    public void sendConfirmationEmail(String recipientEmail, String confirmationLink, String studentName, Course course) {
         MimeMessage message = mailSender.createMimeMessage();
 
         try {
@@ -26,7 +27,8 @@ public class EmailService {
             helper.setTo(recipientEmail);
             helper.setSubject("Confirmation Email");
 
-            String htmlContent = "<p>Please click the link below to confirm your enrollment:</p>" +
+            String htmlContent = "<p>Dear " + studentName + ",</p>" +
+                    "<p>Please click the link below to confirm your enrollment for Course ID: " + course.getCourseId() + " " + course.getName() + ":</p>" +
                     "<p><a href=\"" + confirmationLink + "\">Confirm enrollment</a></p>";
             helper.setText(htmlContent, true);
 
