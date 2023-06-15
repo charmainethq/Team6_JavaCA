@@ -16,6 +16,10 @@ public class AdminController {
     @Autowired
     private AdminService adminSvc;
 
+    @GetMapping("admin")
+    public String getAdminPage(){
+        return "adminPage";
+    }
     @GetMapping("/admin/list")
     public String getAllAdmin(Model model) {
         model.addAttribute("admin", adminSvc.findAll());
