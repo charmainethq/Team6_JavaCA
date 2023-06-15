@@ -5,10 +5,11 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.ArrayList;
 
 import sg.edu.iss.team6.model.Student;
+import sg.edu.iss.team6.model.User;
 
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
-    @Query("SELECT s from Student s")
-    ArrayList<Student> findAllStudents();
+    Student findByStudentId(Long studentId);
+    Student findByUserUsername(User u);
 }
 
