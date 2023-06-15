@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title class="theme">UserLogin</title>
+    <link ref="stylesheet" th:href="@{css/login.css}">
+</head>
+<body>
+
+<form action="/index/login" method="post">
+    Username：<input type="text" name="username"><br>
+    Password： <input type="password" name="password"><br>
+    <input type="submit" value="登录">
+</form>
+
+</body>
+</html>
