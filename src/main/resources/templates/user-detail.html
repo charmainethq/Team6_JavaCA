@@ -17,8 +17,8 @@
         </div>
         
         <div class="actions">
-            <a class="btn btn-info" th:href="@{/user/update/{username}(username=${user.username})}">Edit</a>
-            <a class="btn btn-danger" th:href="@{/user/delete/{username}(username=${user.username})}" onclick="return confirmDelete()">Delete</a>
+            <a class="btn btn-info" th:href="@{update/{username}(username=${user.username})}">Edit</a>
+            <a class="btn btn-danger" th:href="@{delete/{username}(username=${user.username})}" onclick="return confirmDelete()">Delete</a>
         </div>
         
         <script>

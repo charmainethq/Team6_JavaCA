@@ -25,17 +25,17 @@ public class HomeController {
 
 	@PostMapping("/login")
 	public String login(@ModelAttribute("user") User user, @RequestParam("usertype") String userType, Model model) {
-
 		String username = user.getUsername();
-		if (userType.equals("Admin") && !username.startsWith("adm")) {
-			model.addAttribute("error", "Invalid username format for Admin");
+		boolean isValidUsername = (userType.equals("Admin") && username.startsWith("adm"))
+				|| (userType.equals("Lecturer") && username.startsWith("lec"))
+				|| (userType.equals("Student") && username.startsWith("stu"));
+
+		if (!isValidUsername) {
+			model.addAttribute("error", "Invalid user type");
 			return "login";
 		}
-		if (authenticate(user)) {
-			// User authentication successful
-			// Add code to set authentication session later
 
-			// Return the appropriate view or redirect based on the user type
+		if (authenticate(user)) {
 			if (userType.equals("Admin")) {
 				return "redirect:/admin";
 			} else if (userType.equals("Lecturer")) {
@@ -43,11 +43,9 @@ public class HomeController {
 			} else if (userType.equals("Student")) {
 				return "redirect:/student/list";
 			} else {
-				// Handle invalid user type
 				return "redirect:/login";
 			}
 		} else {
-			// User authentication failed
 			model.addAttribute("error", "Invalid username or password");
 			return "login";
 		}
@@ -57,11 +55,9 @@ public class HomeController {
 		String enteredUsername = user.getUsername();
 		String enteredPassword = user.getPassword();
 
-		// Assuming you have a UserRepository or UserService to access the user data
 		User actualUser = userService.findByUsername(enteredUsername);
 
 		if (actualUser != null) {
-			String actualUsername = actualUser.getUsername();
 			String actualPassword = actualUser.getPassword();
 
 			// Compare the entered password with the actual password

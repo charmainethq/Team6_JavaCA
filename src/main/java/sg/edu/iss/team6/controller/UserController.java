@@ -21,51 +21,51 @@ public class UserController{
     @Autowired
     private UserService userSvc;
 
-    @GetMapping("/user/list")
+    @GetMapping("admin/user/list")
     public String getAllUser(Model model) {
         model.addAttribute("user", userSvc.findAll());
         return "user-list";
     }
 
-    @GetMapping("/user/{username}")
+    @GetMapping("admin/user/{username}")
     public String getUserByUsername(@PathVariable("username") String username, Model model){
         User user = userSvc.findByUsername(username);
         model.addAttribute("user", user);
         return "user-detail";
     }
 
-    @GetMapping("/user/create")
+    @GetMapping("admin/user/create")
     public String createUser(Model model, User user){
         model.addAttribute("user", user);
         return "user-create";
     }
 
-    @PostMapping("user/create")
-    public String saveUser(@ModelAttribute("admin") User user, Model model){
+    @PostMapping("admin/user/create")
+    public String saveUser(@ModelAttribute("user") User user, Model model){
         User newUser = new User();
 
         newUser.setUsername(user.getUsername());
         newUser.setPassword(user.getPassword());
 
         userSvc.create(newUser);
-        return "redirect:/user";
+        return "redirect:/admin/user/list";
     }
 
     @Transactional
-    @GetMapping("/user/delete/{username}")
+    @GetMapping("admin/user/delete/{username}")
     public String deleteUserByUsername(@PathVariable("username") String username) {
         userSvc.delete(username);
-        return "redirect:/user";
+        return "redirect:/admin/user/list";
     }
 
-    @GetMapping("/user/update/{username}")
+   @GetMapping("admin/user/update/{username}")
     public String showUpdateForm(@PathVariable("username") String username, Model model) {
         User user = userSvc.findByUsername(username);
         model.addAttribute("user", user);
         return "user-update";
     }
 
-    @PostMapping("/user/update/{username}")
+    @PostMapping("admin/user/update/{username}")
     public String updateUser(@PathVariable("username") String username, @ModelAttribute("user") User user) {
         User existingUser = userSvc.findByUsername(username);
 
@@ -73,6 +73,9 @@ public class UserController{
         existingUser.setPassword(user.getPassword());
 
         userSvc.update(existingUser);
-        return "redirect:/user";
+        return "redirect:/admin/user/list";
     }
+
+
+
 }

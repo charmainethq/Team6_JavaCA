@@ -3,18 +3,76 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Welcome Page</title>
+    <title>Admin Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #caecea;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .manage-link {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px 20px;
+            background-color: #539feb;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .manage-link:hover {
+            background-color: #0056b3;
+        }
+
+        .logout-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .logout-link a {
+            color: #555;
+            text-decoration: none;
+        }
+
+        .logout-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
-    <h3>Admin Page</h3>
-    <a th:href="@{/login}">LOGOUT</a>
-    <br><br><br>
-    <h2><a th:href="@{/user/list}">User</a></h2>
-    <h2><a th:href="@{/admin/list}">Admin</a></h2>
-    <h2><a th:href="@{/lecture/list}">Lecturer</a></h2>
-    <h2><a th:href="@{/course/list}">Courses</a></h2>
-    <h2><a th:href="@{/enrollment/list}">Enrollment</a></h2>
+    <div class="container">
+        <h2>Admin Page</h2>
+
+        <a class="manage-link" th:href="@{admin/user/list}">Manage User</a>
+        <a class="manage-link" th:href="@{/admin/list}">Manage Admin</a>
+        <a class="manage-link" th:href="@{admin/lecture/list}">Manage Lecturer</a>
+        <a class="manage-link" th:href="@{admin/course/list}">Manage Courses</a>
+        <a class="manage-link" th:href="@{admin/enrollment/list}">Manage Enrollment</a>
+
+        <div class="logout-link">
+            <a th:href="@{/login}">LOGOUT</a>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -29,15 +29,15 @@
                         <input type="password" value="********" disabled>
                     </td>
                     <td>
-                        <a class="btn btn-primary" th:href="@{/user/{username}(username=${user.username})}">View</a>
-                        <a class="btn btn-info" th:href="@{/user/update/{username}(username=${user.username})}">Edit</a>
-                        <a class="btn btn-danger" th:href="@{/user/delete/{username}(username=${user.username})}" onclick="return confirmDelete()">Delete</a>
+                        <a class="btn btn-primary" th:href="@{{username}(username=${user.username})}">View</a>
+                        <a class="btn btn-info" th:href="@{update/{username}(username=${user.username})}">Edit</a>
+                        <a class="btn btn-danger" th:href="@{delete/{username}(username=${user.username})}" onclick="return confirmDelete()">Delete</a>
                     </td>
                 </tr>
             </tbody>        
         </table>
 
-        <a class="btn btn-success" href="/user/create">Create New User</a>
+        <a class="btn btn-success" href="create">Create New User</a>
 
         <script>
             function filterTable() {
