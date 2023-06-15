@@ -4,6 +4,6 @@ import sg.edu.iss.team6.model.*;
 
 public interface AdminRepository extends JpaRepository<Admin, Integer> {
 
-    Admin findByUsername(User u);
+    Admin findByUserUsername(User u);
 
 }

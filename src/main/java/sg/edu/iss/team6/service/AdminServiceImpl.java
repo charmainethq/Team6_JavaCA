@@ -19,6 +19,6 @@ public class AdminServiceImpl implements AdminService{
     @Override
     @Transactional
     public Admin findByUsername(User u){
-        return arepo.findByUsername(u);
+        return arepo.findByUserUsername(u);
     }
 }
