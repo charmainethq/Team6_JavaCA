@@ -35,6 +35,10 @@ public class LoginController {
     @Autowired
     LecturerService lecturerService;
 
+    @RequestMapping("/error")
+    public String error(){
+        return "Error";
+    }
 
     @RequestMapping("/login")
     public String login(HttpServletRequest request,Model model){
@@ -45,10 +49,12 @@ public class LoginController {
         User currentUser = userService.findByUsernameAndPassword(name, password);
 
         if(currentUser != null){
+
             UserSession userSession = new UserSession(currentUser,
-                    studentService.findByUsername(currentUser),
-                    lecturerService.findByUsername(currentUser),
-                    adminService.findByUsername(currentUser));
+                    studentService.findByuser(currentUser),
+                    lecturerService.findByuser(currentUser),
+                    adminService.findByuser(currentUser));
+
             model.addAttribute("userSession", userSession);
             if (name.charAt(0) == 'a'){
                 return "Admin";
@@ -57,14 +63,10 @@ public class LoginController {
                 return "Lecturer";
             }
             else if (name.charAt(0) == 's'){
-                return "Student";
+                return "redirect:/student/registerCourses";
             }
-            return "Error";
         }
-        //Wrong username or password
-        else{
-            return "login";
-        }
+        return "redirect:/index/error";
     }
 
 }

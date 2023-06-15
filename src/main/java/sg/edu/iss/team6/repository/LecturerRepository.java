@@ -3,5 +3,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import sg.edu.iss.team6.model.*;
 public interface LecturerRepository extends JpaRepository<Lecturer, Integer>{
 
-    Lecturer findByUserUsername(User u);
+    Lecturer findByuser(User u);
 }

@@ -4,5 +4,5 @@ import java.util.ArrayList;
 
 public interface AdminService {
 
-    Admin findByUsername(User u);
+    Admin findByuser(User u);
 }
