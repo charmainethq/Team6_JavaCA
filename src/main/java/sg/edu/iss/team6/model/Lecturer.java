@@ -20,7 +20,7 @@ public class Lecturer implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "username")
-    private User username;
+    private User user;
 
     private String firstName;
     private String lastName;

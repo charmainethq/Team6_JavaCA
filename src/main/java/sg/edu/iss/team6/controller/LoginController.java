@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 
 import sg.edu.iss.team6.model.*;
-
-import sg.edu.iss.team6.model.UserSession;
 import sg.edu.iss.team6.service.AdminService;
 import sg.edu.iss.team6.service.LecturerService;
 import sg.edu.iss.team6.service.StudentService;
@@ -46,9 +44,9 @@ public class LoginController {
  
         if(currentUser != null){
             UserSession userSession = new UserSession(currentUser, 
-                        studentService.findByUsername(currentUser), 
-                        lecturerService.findByUsername(currentUser), 
-                        adminService.findByUsername(currentUser));
+                        studentService.findByuser(currentUser), 
+                        lecturerService.findByuser(currentUser), 
+                        adminService.findByuser(currentUser));
             model.addAttribute("userSession", userSession);
             if (name.charAt(0) == 'a'){
                 return "Admin";
@@ -59,12 +57,13 @@ public class LoginController {
             else if (name.charAt(0) == 's'){
                 return "Student";
             }
-            return "Error";
         }
-        //Wrong username or password
-        else{
-            return "login";
-        }
+
+        return "redirect:/index/Error";
     }
 
+     @RequestMapping("/Error")
+    public String Error(){
+        return "Error";
+    }
 }

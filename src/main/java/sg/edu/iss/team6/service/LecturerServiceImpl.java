@@ -16,8 +16,8 @@ public class LecturerServiceImpl implements LecturerService{
 
     @Override
     @Transactional
-    public Lecturer findByUsername(User u){
-        return lrepo.findByUsername(u);
+    public Lecturer findByuser(User u){
+        return lrepo.findByuser(u);
     }
 
 }

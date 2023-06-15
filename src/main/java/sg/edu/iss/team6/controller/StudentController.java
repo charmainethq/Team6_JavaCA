@@ -15,6 +15,11 @@ public class StudentController {
     @Autowired
     StudentService studentService;
 
+    @RequestMapping(value = "/index")
+    public String StudentIndex(){
+        return "Student";
+    }
+
     @RequestMapping(value = "/all")
     public @ResponseBody List<String> findAllStudents(){
 

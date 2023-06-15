@@ -4,5 +4,5 @@ import java.util.ArrayList;
 
 public interface LecturerService {
 
-    Lecturer findByUsername(User u);
+    Lecturer findByuser(User u);
 }

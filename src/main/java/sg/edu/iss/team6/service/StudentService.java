@@ -7,6 +7,6 @@ public interface StudentService {
 
     ArrayList<Student> findAllStudents();
 
-    Student findByUsername(User u);
+    Student findByuser(User u);
 
 }

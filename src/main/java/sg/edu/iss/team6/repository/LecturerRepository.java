@@ -4,5 +4,5 @@ import sg.edu.iss.team6.model.*;
 
 public interface LecturerRepository extends JpaRepository<Lecturer, Integer>{
 
-    Lecturer findByUsername(User u);
+    Lecturer findByuser(User u);
 }

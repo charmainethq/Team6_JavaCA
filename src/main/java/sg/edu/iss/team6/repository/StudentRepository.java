@@ -9,6 +9,6 @@ import sg.edu.iss.team6.model.*;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
 
-    Student findByUsername(User u);
+    Student findByuser(User u);
 }
 

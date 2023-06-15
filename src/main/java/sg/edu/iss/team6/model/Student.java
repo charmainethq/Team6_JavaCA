@@ -19,7 +19,7 @@ public class Student {
 
     @OneToOne
     @JoinColumn(name = "username")
-    private User username;
+    private User user;
 
     private String firstName;
     private String lastName;
