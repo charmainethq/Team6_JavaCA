@@ -1,7 +1,6 @@
 package sg.edu.iss.team6.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,12 +20,12 @@ public class Lecturer implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "username")
-    private User user;
+    private User username;
 
     private String firstName;
     private String lastName;
     private String email;
-    private int contactNo;
+    private String contactNo;
     private String address;
 
     @OneToMany(mappedBy="lecturer")

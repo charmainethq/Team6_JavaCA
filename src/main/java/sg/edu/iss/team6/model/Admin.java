@@ -20,11 +20,11 @@ public class Admin implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "username")
-    private User user;
+    private User username;
 
     private String firstName;
     private String lastName;
     private String email;
-    private int contactNo;
+    private String contactNo;
     private String address;
 }
