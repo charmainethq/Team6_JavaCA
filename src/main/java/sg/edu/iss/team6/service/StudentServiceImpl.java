@@ -22,6 +22,7 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     public Student findByUsername(User u) {
         return srepo.findByUsername(u);
+    }
 
 
     @Override
