@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Data
@@ -35,15 +36,19 @@ public class CourseClass implements Serializable {
     @OneToMany(mappedBy="courseClass")
     private List<Enrollment> classEnrollment;
 
-
-    public Date getEndDate() {
-        return addDays(startDate, course.getDuration());
-    }
-    public Date addDays(Date date, int days) {
+    public String getFormatStartDate(){
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.DAY_OF_YEAR, days);
-        return calendar.getTime();
+        calendar.setTime(startDate);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(calendar.getTime());
+    }
+
+    public String getFormatEndDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        calendar.add(Calendar.DAY_OF_YEAR, course.getDuration());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(calendar.getTime());
     }
 
 
