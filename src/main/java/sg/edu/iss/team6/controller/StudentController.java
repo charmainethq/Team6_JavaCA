@@ -9,10 +9,6 @@ import sg.edu.iss.team6.repository.EnrollmentRepository;
 import sg.edu.iss.team6.service.*;
 import sg.edu.iss.team6.utility.EmailUtility;
 
-import javax.mail.MessagingException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,7 +33,7 @@ public class StudentController {
     @Autowired
     EmailUtility emailUtility;
 
-    private static Long testId = 3L;
+    private static final Long testId = 3L;
     @RequestMapping(value = "/all")
     public @ResponseBody List<String> findAllStudents(){
 
@@ -96,7 +92,7 @@ public class StudentController {
         List<CourseClass> allClasses = classService.findByCourseId(courseId);
         /**
         List<CourseClass> availableClasses = allClasses.stream()
-                .filter(classObj -> !enrollmentService.hasEnrollment(student.getStudentId(), classObj.getClassId()))
+                .filter(courseClass -> !enrollmentService.hasEnrollment(student.getStudentId(), courseClass.getClassId()))
                 .collect(Collectors.toList());
 
         model.addAttribute("classes", availableClasses);**/
@@ -108,7 +104,7 @@ public class StudentController {
     }
 
     @PostMapping("/register")
-    public String registerClass(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, @RequestParam("courseId") Long courseId) throws MessagingException, UnsupportedEncodingException {
+    public String registerClass(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, @RequestParam("courseId") Long courseId) {
 
         // Retrieve the student and class based on the provided IDs
         Student student = studentService.findByStudentId(studentId);
@@ -144,7 +140,7 @@ public class StudentController {
 
     @GetMapping("/confirmEnrollment")
     public String confirmEnrollment(){
-
+        // TODO
         return "student-registerSuccess";
     }
 
