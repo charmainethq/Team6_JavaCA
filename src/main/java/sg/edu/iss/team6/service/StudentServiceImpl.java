@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sg.edu.iss.team6.model.Student;
+import sg.edu.iss.team6.model.User;
 import sg.edu.iss.team6.repository.StudentRepository;
 import java.util.ArrayList;
 
@@ -24,5 +25,10 @@ public class StudentServiceImpl implements StudentService {
         return srepo.findByStudentId(studentId);
     }
 
+    @Override
+    @Transactional
+    public Student findByUsername(User u) {
+        return srepo.findByUsername(u);
+    }
 
 }
