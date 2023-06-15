@@ -19,7 +19,7 @@ public class Student {
 
     @OneToOne
     @JoinColumn(name = "username")
-    private User user;
+    private User username;
 
     private String firstName;
     private String lastName;
@@ -30,6 +30,10 @@ public class Student {
 
     @OneToMany(mappedBy="student")
     private List<Enrollment> studentEnrollments;
+
+    public String getFullName(){
+        return firstName + " " + lastName;
+    }
 
 
 }
