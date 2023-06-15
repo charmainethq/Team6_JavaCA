@@ -14,7 +14,6 @@ public class StudentServiceImpl implements StudentService {
     StudentRepository srepo;
 
     @Override
-    @Transactional
     public ArrayList<Student> findAllStudents() {
         return (ArrayList<Student>) srepo.findAll();
     }
@@ -23,5 +22,13 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     public Student findByUsername(User u) {
         return srepo.findByUsername(u);
+
+
+    @Override
+    @Transactional
+    public Student findByStudentId(Long studentId) {
+        return srepo.findByStudentId(studentId);
     }
+
+
 }

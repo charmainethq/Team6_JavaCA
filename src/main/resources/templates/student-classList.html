@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/student-class-course.css}" />
+    <script th:inline="javascript">
+        function showPopup(size, confirmed) {
+            console.log(`size: ${size}, confirmed: ${confirmed}`);
+            size = parseInt(size);
+            confirmed = parseInt(confirmed);
+
+            if (size == confirmed) {
+                alert("The class is already full. Cannot register.");
+                return false; // Prevent form submission
+            }
+            return true; // Allow form submission
+        }
+
+    </script>
+
+</head>
+
+<body>
+<h1 th:text="${course.courseNum + ' ' + course.name}"></h1>
+<h3 th:text="*{course.description}"></h3>
+<table>
+    <thead>
+    <tr>
+        <th>Class No.</th>
+        <th>Start Date</th>
+        <th>Size</th>
+        <th>Enrolled</th>
+        <th>Room Number</th>
+        <th>Register</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="courseClass : ${classes}">
+        <td th:text="*{courseClass.classId}"></td>
+        <td th:text="*{courseClass.startDate}"></td>
+        <td th:text="*{courseClass.size}"></td>
+        <td th:text="*{courseClass.confirmed}"></td>
+        <td th:text="*{courseClass.roomNum}"></td>
+
+        <td>
+            <form th:action="@{/student/register}" method="post">
+                <input type="hidden" name="courseId" th:value="${course.courseId}" />
+                <input type="hidden" name="classId" th:value="${courseClass.classId}" />
+                <input type="hidden" name="studentId" th:value="${student.studentId}"/>
+                <!-- <input type="hidden" name="studentId" th:value="${session.studentId}" /> -->
+                <button th:onclick="'return showPopup(' + ${courseClass.size} + ', ' + ${courseClass.confirmed} + ');'">Register</button>
+            </form>
+          </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

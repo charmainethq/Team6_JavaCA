@@ -7,5 +7,5 @@ import sg.edu.iss.team6.repository.EnrollmentRepository;
 import java.util.ArrayList;
 
 @Service
-public class EnrollmentServiceImpl {
+public class EnrollmentServiceImpl implements EnrollmentService {
 }
