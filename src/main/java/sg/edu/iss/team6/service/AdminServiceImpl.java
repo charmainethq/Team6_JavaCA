@@ -3,8 +3,11 @@ package sg.edu.iss.team6.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sg.edu.iss.team6.model.Admin;
+import sg.edu.iss.team6.model.User;
 import sg.edu.iss.team6.repository.AdminRepository;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -36,6 +39,12 @@ public class AdminServiceImpl implements AdminService {
     public int delete(int id){
         adminRepo.deleteById(id);
         return id;
+    }
+
+    @Override
+    @Transactional
+    public Admin findByUser(User u){
+        return adminRepo.findByUser(u);
     }
 
     

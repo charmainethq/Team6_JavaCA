@@ -14,4 +14,6 @@ public interface UserService {
     User update(User user);
 
     void delete(String username);
+
+    User findByUsernameAndPassword(String username,String password);
 }

@@ -16,7 +16,7 @@ public class AdminController {
     @Autowired
     private AdminService adminSvc;
 
-    @GetMapping("admin")
+    @GetMapping("/admin")
     public String getAdminPage(){
         return "adminPage";
     }

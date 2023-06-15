@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import sg.edu.iss.team6.model.User;
+import sg.edu.iss.team6.model.UserSession;
+import sg.edu.iss.team6.service.AdminService;
+import sg.edu.iss.team6.service.LecturerService;
+import sg.edu.iss.team6.service.StudentService;
 import sg.edu.iss.team6.service.UserService;
 
 @Controller
@@ -18,6 +22,15 @@ public class LoginController {
      
     @Autowired
 	private UserService userService;
+
+	@Autowired
+    AdminService adminService;
+	
+	@Autowired
+    StudentService studentService;
+
+    @Autowired
+    LecturerService lecturerService;
 
     @GetMapping("/login")
 	public String login() {
@@ -27,6 +40,10 @@ public class LoginController {
 	@PostMapping("/login")
 	public String login(@ModelAttribute("user") User user, @RequestParam("usertype") String userType, Model model, HttpSession session) {
 		String username = user.getUsername();
+		String password = user.getPassword();
+
+		User currentUser = userService.findByUsernameAndPassword(username, password);
+
 		boolean isValidUsername = (userType.equals("Admin") && username.startsWith("adm"))
 				|| (userType.equals("Lecturer") && username.startsWith("lec"))
 				|| (userType.equals("Student") && username.startsWith("stu"));
@@ -37,14 +54,17 @@ public class LoginController {
 		}
 
 		if (authenticate(user)) {
+			UserSession userSession = new UserSession(currentUser, 
+                        studentService.findByUser(currentUser), 
+                        lecturerService.findByUser(currentUser), 
+                        adminService.findByUser(currentUser));
+            session.setAttribute("userSession", userSession);
+
 			if (userType.equals("Admin")) {
-                session.setAttribute("username", username);
 				return "redirect:/admin";
 			} else if (userType.equals("Lecturer")) {
-                session.setAttribute("username", username);
 				return "redirect:/lecturer/list";
 			} else if (userType.equals("Student")) {
-                session.setAttribute("username", username);
 				return "redirect:/student/list";
 			} else {
 				return "redirect:/login";
