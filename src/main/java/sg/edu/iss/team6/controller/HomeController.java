@@ -37,7 +37,7 @@ public class HomeController {
 
 			// Return the appropriate view or redirect based on the user type
 			if (userType.equals("Admin")) {
-				return "redirect:/admin/list";
+				return "redirect:/admin";
 			} else if (userType.equals("Lecturer")) {
 				return "redirect:/lecturer/list";
 			} else if (userType.equals("Student")) {
