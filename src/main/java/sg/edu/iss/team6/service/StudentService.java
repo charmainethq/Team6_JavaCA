@@ -9,4 +9,7 @@ public interface StudentService {
 
     Student findByUsername(User u);
 
+    Student findByStudentId(Long studentId);
+
+
 }

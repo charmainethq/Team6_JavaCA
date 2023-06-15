@@ -36,4 +36,17 @@ public class CourseClass implements Serializable {
     private List<Enrollment> classEnrollment;
 
 
+    public Date getEndDate() {
+        return addDays(startDate, course.getDuration());
+    }
+    public Date addDays(Date date, int days) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_YEAR, days);
+        return calendar.getTime();
+    }
+
+
+
+
 }
