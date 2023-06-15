@@ -25,7 +25,7 @@ public class Lecturer implements Serializable {
     private String firstName;
     private String lastName;
     private String email;
-    private int contactNo;
+    private String contactNo;
     private String address;
 
     @OneToMany(mappedBy="lecturer")
