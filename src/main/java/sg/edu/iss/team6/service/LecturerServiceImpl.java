@@ -34,13 +34,13 @@ public class LecturerServiceImpl implements LecturerService{
     }
 
     @Override
-    public Lecturer create(Lecturer admin) {
-        return lrepo.save(admin);
+    public Lecturer create(Lecturer lect) {
+        return lrepo.save(lect);
     }
 
     @Override
-    public Lecturer update(Lecturer admin){
-        return lrepo.save(admin);
+    public Lecturer update(Lecturer lect){
+        return lrepo.save(lect);
     }
 
     @Override

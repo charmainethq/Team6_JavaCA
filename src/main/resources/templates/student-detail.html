@@ -5,6 +5,9 @@
   <link rel="stylesheet" href="/css/detail.css">
 </head>
 <body>
+  <header>
+    <div th:include="adminPage.html"></div>
+</header>
 <div class="container">
   <h1>Student Details</h1>
   <div class="details">
@@ -45,12 +48,17 @@
     <a class="btn" th:href="@{/admin/student/delete/{id}(id=${student.studentId})}"
        onclick="return confirmDelete()">Delete</a>
   </div>
+  <br><br>
+  <button onclick="goBack()">Back</button>
 
   <script>
-            function confirmDelete() {
-                return confirm('Are you sure you want to delete this student?');
-            }
-        </script>
+    function confirmDelete() {
+      return confirm('Are you sure you want to delete this student?');
+    }
+    function goBack() {
+      window.history.back();
+    }
+  </script>
 </div>
 </body>
 </html>

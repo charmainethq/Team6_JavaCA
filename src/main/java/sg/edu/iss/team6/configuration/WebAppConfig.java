@@ -17,6 +17,7 @@ public class WebAppConfig implements WebMvcConfigurer {
 		registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/admin/**")
 				.addPathPatterns("/student/**")
-				.addPathPatterns("/lecturer/**");
+				.addPathPatterns("/lecturer/**")
+				.excludePathPatterns("/home");
 	}	
 }

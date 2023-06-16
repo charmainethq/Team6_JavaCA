@@ -5,6 +5,9 @@
     <link rel="stylesheet" href="/css/create.css">
 </head>
 <body>
+    <header>
+        <div th:include="adminPage.html"></div>
+    </header>
 <h1>Create Course</h1>
 <form th:action="@{/admin/course/update/{id}(id=${course.courseId})}" th:object="${course}" method="post">
     <input type="hidden" th:field="*{courseId}"/>
@@ -25,6 +28,14 @@
     <input type="text" id="duration" th:field="*{duration}" required/><br/>
 
     <input type="submit" value="Update"/>
+
+    <br><br>
+    <button onclick="goBack()">Back</button>
 </form>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
 </html>

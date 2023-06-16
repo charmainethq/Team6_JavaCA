@@ -5,6 +5,9 @@
   <link rel="stylesheet" href="/css/update.css">
 </head>
 <body>
+  <header>
+    <div th:include="adminPage.html"></div>
+</header>
 <div class="container">
   <h1>Update Student</h1>
   <form th:action="@{/admin/student/update/{id}(id=${student.studentId})}" th:object="${student}" method="post">
@@ -29,7 +32,14 @@
     <input type="text" id="address" th:field="*{address}" required/><br/>
 
     <input type="submit" value="Update"/>
+    <br><br>
+    <button onclick="goBack()">Back</button>
   </form>
 </div>
+<script>
+  function goBack() {
+      window.history.back();
+  }
+</script>
 </body>
 </html>

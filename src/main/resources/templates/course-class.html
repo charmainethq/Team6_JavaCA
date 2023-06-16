@@ -5,12 +5,12 @@
     <link rel="stylesheet" href="/css/list.css">
 </head>
 <body>
+    <header>
+        <div th:include="adminPage.html"></div>
+    </header>
 <div class="container">
     <h1> Classes </h1>
     <h2>View all classes for <span th:text="${course.name}"></span> course below</h2>
-    <div class="logout-link">
-        <a th:href="@{/login}">LOGOUT</a>
-    </div>
     <h2>List of Classes</h2>
 
     <div class="mb-3">
