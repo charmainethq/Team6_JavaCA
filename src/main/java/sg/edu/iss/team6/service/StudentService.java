@@ -10,6 +10,6 @@ public interface StudentService {
     Student findByStudentId(Long studentId);
     Student create(Student student);
     Student update(Student student);
-    int delete(int id);
+    void delete(long id);
     Student findByUser(User u);
 }

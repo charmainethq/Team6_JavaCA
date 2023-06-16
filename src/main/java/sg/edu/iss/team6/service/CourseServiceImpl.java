@@ -23,22 +23,22 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public Course findByCourseId(long id) {
-        return null;
-    }
-
-
-    @Override
-    public Course create() {
-        return null;
+        return cRepo.findByCourseId(id);
     }
 
     @Override
-    public Course update() {
-        return null;
+    public Course create(Course course) {
+        return cRepo.save(course);
     }
 
     @Override
-    public int delete(int id) {
-        return 0;
+    public Course update(Course course) {
+        return cRepo.save(course);
+    }
+
+    @Override
+    @Transactional
+    public void delete(long id) {
+        cRepo.deleteByCourseId(id);
     }
 }

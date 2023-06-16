@@ -36,9 +36,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public int delete(int id) {
-        srepo.deleteById(id);
-        return id;
+    @Transactional
+    public void delete(long id) {
+        srepo.deleteByStudentId(id);
     }
 
     @Override

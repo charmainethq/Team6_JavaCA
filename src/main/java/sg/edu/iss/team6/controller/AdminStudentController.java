@@ -58,14 +58,14 @@ public class AdminStudentController {
         return "student-update";
     }
     @PostMapping(value = "/update/{id}")
-    public String updateStudent(@PathVariable("id") int id, @ModelAttribute("admin") Student student){
+    public String updateStudent(@PathVariable("id") int id, @ModelAttribute("student") Student student){
         User user = student.getUser();
         uService.update(user);
         sService.update(student);
         return "redirect:/admin/student/list";
     }
-    @GetMapping("/admin/student/delete/{id}")
-    public String deleteAdminById(@PathVariable("id") int id) {
+    @GetMapping("/delete/{id}")
+    public String deleteStudentById(@PathVariable("id") long id) {
         sService.delete(id);
         return "redirect:/admin/student/list";
     }
