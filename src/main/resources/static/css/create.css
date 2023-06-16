@@ -26,8 +26,7 @@ label {
 }
 
 input[type="text"],
-input[type="email"],
-input[type="duration"] {
+input[type="email"] {
     width: 100%;
     padding: 8px;
     border: 1px solid #ced4da;
