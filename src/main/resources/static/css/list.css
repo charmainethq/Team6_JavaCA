@@ -7,7 +7,7 @@ body {
 }
 
 .container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     background-color: #ffffff;
@@ -32,11 +32,13 @@ h1 {
 .table {
     margin-bottom: 30px;
     width: 98.5%;
+    border-collapse: collapse; /* Combine adjacent cell borders */
 }
 
 .table th {
     background-color: #4287f5;
     color: #ffffff;
+    text-align: center;
 }
 
 .table td {

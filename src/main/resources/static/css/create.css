@@ -9,6 +9,8 @@ body {
 h1 {
     color: #4287f5;
     margin-bottom: 20px;
+    text-align: left; /* Align the text to the left */
+    padding-left: 250px; /* Add some space on the left side */
 }
 
 form {
