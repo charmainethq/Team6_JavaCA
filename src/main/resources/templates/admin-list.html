@@ -5,13 +5,11 @@
     <link rel="stylesheet" href="/css/list.css">
 </head>
 <body>
-    <div class="container">
-        <h1> Admin </h1>
-        <h2>Welcome to Admin page.!!!</h2>
-        <div class="logout-link">
-            <a th:href="@{/logout}">LOGOUT</a>
-        </div>
-        <h2>List of Admins</h2>
+    <header>
+        <div th:include="adminPage.html"></div>
+    </header>
+    <div class="container" >
+        <h1> Admin List </h1>
 
         <div class="mb-3">
             <label for="searchInput">Search:</label>
