@@ -15,9 +15,36 @@ public class StudentServiceImpl implements StudentService {
     StudentRepository srepo;
 
     @Override
-    @Transactional
     public ArrayList<Student> findAllStudents() {
-        return (ArrayList<Student>) srepo.findAllStudents();
+        return (ArrayList<Student>) srepo.findAll();
+    }
+
+    @Override
+    @Transactional
+    public Student findByStudentId(Long studentId) {
+        return srepo.findByStudentId(studentId);
+    }
+
+    @Override
+    public Student create(Student student) {
+        return srepo.save(student);
+    }
+
+    @Override
+    public Student update(Student student) {
+        return srepo.save(student);
+    }
+
+    @Override
+    @Transactional
+    public void delete(long id) {
+        srepo.deleteByStudentId(id);
+    }
+
+    @Override
+    @Transactional
+    public Student findByUser(User u) {
+        return srepo.findByUserUsername(u);
     }
 
     @Override
