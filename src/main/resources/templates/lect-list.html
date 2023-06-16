@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-    <title>Admin</title>
+    <title>Lecturer</title>
     <link rel="stylesheet" href="/css/list.css">
 </head>
 <body>
@@ -9,7 +9,7 @@
         <div th:include="adminPage.html"></div>
     </header>
     <div class="container" >
-        <h1> Admin List </h1>
+        <h1> Lecturer List </h1>
 
         <div class="mb-3">
             <label for="searchInput">Search:</label>
@@ -19,7 +19,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Admin ID</th>
+                    <th>Lecturer ID</th>
                     <th>Username</th>
                     <th>First Name</th>
                     <th>Last Name</th>
@@ -31,37 +31,36 @@
             </thead>
             <tbody>
                 <!-- Iterate over the admins and display their information -->
-                <tr th:each="admin : ${admin}" id="adminRow">
-                    <td th:text="${admin.adminId}"></td>
-                    <td th:text="${admin.user.username}"></td>
-                    <td th:text="${admin.firstName}"></td>
-                    <td th:text="${admin.lastName}"></td>
-                    <td th:text="${admin.email}"></td>
-                    <td th:text="${admin.contactNo}"></td>
-                    <td th:text="${admin.address}"></td>
+                <tr th:each="lecturer : ${lecturer}" id="adminRow">
+                    <td th:text="${lecturer.lecturerId}"></td>
+                    <td th:text="${lecturer.user.username}"></td>
+                    <td th:text="${lecturer.firstName}"></td>
+                    <td th:text="${lecturer.lastName}"></td>
+                    <td th:text="${lecturer.email}"></td>
+                    <td th:text="${lecturer.contactNo}"></td>
+                    <td th:text="${lecturer.address}"></td>
                     <td>
-                        <a class="btn btn-primary" th:href="@{/admin/} + ${admin.adminId}">View</a>
-                        <a class="btn btn-info" th:href="@{/admin/update/} + ${admin.adminId}">Edit</a>
-                        <a class="btn btn-danger" th:href="@{/admin/delete/} + ${admin.adminId}" onclick="return confirmDelete()">Delete</a>
+                        <a class="btn btn-primary" th:href="@{/admin/lecturer/} + ${lecturer.lecturerId}">View</a>
+                        <a class="btn btn-info" th:href="@{/admin/lecturer/update/} + ${lecturer.lecturerId}">Edit</a>
+                        <a class="btn btn-danger" th:href="@{/admin/lecturer/delete/} + ${lecturer.lecturerId}" onclick="return confirmDelete()">Delete</a>
                     </td>
                 </tr>
             </tbody>
         </table>
         
-        <a class="btn btn-success" href="/admin/create">Create New Admin</a>
+        <a class="btn btn-success" href="/admin/lecturer/create">Create New Admin</a>
 
         <script>
             function filterTable() {
                 // Retrieve the search input value
                 const searchInput = document.querySelector('#searchInput').value.toLowerCase();
-                
-                // Retrieve all admin rows
-                const adminRows = document.querySelectorAll('#adminRow');
+
+                const lectRows = document.querySelectorAll('#lectRow');
                 
                 // Loop through admin rows and check if they match the search input
-                adminRows.forEach(function(row) {
+                lectRows.forEach(function(row) {
                     // Retrieve the admin information from the row
-                    const adminId = row.cells[0].textContent.toLowerCase();
+                    const lecturerId = row.cells[0].textContent.toLowerCase();
                     const firstName = row.cells[1].textContent.toLowerCase();
                     const lastName = row.cells[2].textContent.toLowerCase();
                     const email = row.cells[3].textContent.toLowerCase();
@@ -70,7 +69,7 @@
                     
                     // Check if any of the admin information matches the search input
                     if (
-                        adminId.includes(searchInput) ||
+                        lecturerId.includes(searchInput) ||
                         firstName.includes(searchInput) ||
                         lastName.includes(searchInput) ||
                         email.includes(searchInput) ||

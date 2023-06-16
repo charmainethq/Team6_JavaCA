@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-    <title>Update Admin</title>
+    <title>Update Lecturer</title>
     <link rel="stylesheet" href="/css/update.css">
 </head>
 <body>
@@ -10,8 +10,8 @@
     </header>
     <div class="container">
         <h1>Update Admin</h1>
-        <form th:action="@{/admin/update/{id}(id=${admin.adminId})}" th:object="${admin}" method="post">
-            <input type="hidden" th:field="*{adminId}"/>
+        <form th:action="@{/admin/lecturer/update/{id}(id=${lecturer.lecturerId})}" th:object="${lecturer}" method="post">
+            <input type="hidden" th:field="*{lecturerId}"/>
             
             <label for="username">Username:</label>
             <input type="text" id="username" th:field="*{user.username}" required/><br/>

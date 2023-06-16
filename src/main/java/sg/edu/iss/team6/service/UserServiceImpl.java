@@ -1,6 +1,8 @@
 package sg.edu.iss.team6.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import sg.edu.iss.team6.model.User;
 import sg.edu.iss.team6.repository.UserRepository;
 import java.util.List;
@@ -34,5 +36,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(String username){
         userRepo.deleteByUsername(username);
+    }
+
+    @Override
+    @Transactional
+    public User findByUsernameAndPassword(String username,String password) {
+        return userRepo.findByUsernameAndPassword(username,password);
     }
 }

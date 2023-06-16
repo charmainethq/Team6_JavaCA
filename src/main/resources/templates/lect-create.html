@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-    <title>Create Admin</title>
+    <title>Create Lecturer</title>
     <link rel="stylesheet" href="/css/create.css">
 </head>
 <body>
     <header>
         <div th:include="adminPage.html"></div>
     </header>
-    <h1>Create Admin</h1>
-    <form th:action="@{/admin/create}" th:object="${admin}" method="post">
+    <h1>Create Lecturer</h1>
+    <form th:action="@{/admin/lecturer/create}" th:object="${lecturer}" method="post">
         <label for="username">Username:</label>
         <input type="text" id="username" th:field="*{user.username}" required/><br/>
 

@@ -5,18 +5,28 @@
     <link rel="stylesheet" href="/css/update.css">
 </head>
 <body>
+    <header>
+        <div th:include="adminPage.html"></div>
+    </header>
     <div class="container">
         <h1>Update User</h1>
-        <form th:action="@{/user/update/{username}(username=${user.username})}" th:object="${user}" method="post">
+        <form th:action="@{{username}(username=${user.username})}" th:object="${user}" method="post">
 
             <label for="username">Username:</label>
             <input type="text" name="username" th:value="${user.username}" required><br>
             <label for="password">Password:</label><br>
             <input type="password" name="password" th:value="${user.password}" required><br>
-    
+            <br>
             <input type="submit" value="Update User">
         </form>
+        <br>
+        <button onclick="goBack()">Back</button>
     </div>
     
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
 </html>
