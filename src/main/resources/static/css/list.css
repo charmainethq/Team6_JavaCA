@@ -31,7 +31,9 @@ h1 {
 /* Table Styles */
 .table {
     margin-bottom: 30px;
-    width: 98.5%;
+    margin-right: 20px;
+    margin-left: 20px;
+    width: 96%;
 }
 
 .table th {
@@ -106,4 +108,34 @@ h1 {
 
 .logout-link {
     text-align: right;
+}
+
+/* dorp-down option */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 100px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }

@@ -40,10 +40,19 @@
       <td th:text="${c.credits}"></td>
       <td th:text="${c.duration}"></td>
       <td>
-        <a class="btn btn-primary" th:href="@{/admin/course/} + ${c.courseId}">View</a>
-        <a class="btn btn-info" th:href="@{/admin/course/update/} + ${c.courseId}">Edit</a>
-        <a class="btn btn-danger" th:href="@{/admin/course/delete/} + ${c.courseId}"
-           onclick="return confirmDelete()">Delete</a>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            ...
+          </button>
+          <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" th:href="@{/admin/course/} + ${c.courseId}">View</a>
+            <a class="dropdown-item" th:href="@{/admin/course/update/} + ${c.courseId}">Edit</a>
+            <a class="dropdown-item" th:href="@{/admin/course/delete/} + ${c.courseId}" onclick="return confirmDelete()">Delete</a>
+            <!-- Additional options -->
+            <a class="dropdown-item" th:href="@{/admin/course/class/} + ${c.courseId}">Class</a>
+          </div>
+        </div>
       </td>
     </tr>
     </tbody>

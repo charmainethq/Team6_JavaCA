@@ -5,15 +5,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sg.edu.iss.team6.model.Course;
+import sg.edu.iss.team6.model.CourseClass;
 import sg.edu.iss.team6.model.Student;
 import sg.edu.iss.team6.model.User;
+import sg.edu.iss.team6.service.CourseClassService;
 import sg.edu.iss.team6.service.CourseService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/admin/course")
 public class AdminCourseController {
     @Autowired
     private CourseService cService;
+    @Autowired
+    private CourseClassService ccService;
     @GetMapping(value = "/list")
     public String getAllCourses(Model model){
         model.addAttribute("allCourses", cService.findAllCourses());
@@ -51,5 +57,14 @@ public class AdminCourseController {
     public String deleteCourseById(@PathVariable("id") long id) {
         cService.delete(id);
         return "redirect:/admin/course/list";
+    }
+
+    @GetMapping(value = "/class/{id}")
+    public String getClassesById(Model model, @PathVariable long id){
+        Course course = cService.findByCourseId(id);
+        model.addAttribute("course", course);
+        List<CourseClass> courseClasses = ccService.findByCourse(course);
+        model.addAttribute("courseClasses", courseClasses);
+        return "course-class";
     }
 }
