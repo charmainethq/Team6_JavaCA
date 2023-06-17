@@ -17,6 +17,22 @@ public class CourseClassServiceImpl implements CourseClassService{
     private CourseClassRepository ccRepo;
     @Override
     public List<CourseClass> findByCourse(Course course) {
-        return null;
+        return ccRepo.findByCourse(course);
     }
+
+    @Override
+    public CourseClass findByClassId(long id) {
+        return ccRepo.findByClassId(id);
+    }
+
+    @Override
+    public CourseClass create(CourseClass c) {
+        return ccRepo.save(c);
+    }
+
+    @Override
+    public CourseClass update(CourseClass c) {
+        return ccRepo.save(c);
+    }
+
 }
