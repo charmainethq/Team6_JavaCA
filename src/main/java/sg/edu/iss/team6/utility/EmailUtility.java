@@ -10,8 +10,8 @@ public class EmailUtility {
         // Construct the confirmation link URL
         String baseUrl = "http://localhost:2000/student/confirmEnrollment";
         String encodedStudentId = URLEncoder.encode(String.valueOf(studentId), StandardCharsets.UTF_8);
-        String encodedEnrollmentId = URLEncoder.encode(String.valueOf(classId), StandardCharsets.UTF_8);
-        return baseUrl + "?studentId=" + encodedStudentId + "&classId=" + encodedEnrollmentId;
+        String encodedClassId = URLEncoder.encode(String.valueOf(classId), StandardCharsets.UTF_8);
+        return baseUrl + "?studentId=" + encodedStudentId + "&classId=" + encodedClassId;
     }
 
 }

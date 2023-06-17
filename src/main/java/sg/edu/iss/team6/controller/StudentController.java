@@ -1,14 +1,14 @@
 package sg.edu.iss.team6.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.reactive.result.view.RedirectView;
-import org.springframework.web.util.UriComponentsBuilder;
 import sg.edu.iss.team6.model.*;
 import sg.edu.iss.team6.repository.EnrollmentRepository;
 import sg.edu.iss.team6.service.*;
@@ -86,24 +86,22 @@ public class StudentController {
 
 
     @GetMapping(value = "{courseId}/viewClasses")
-    public String getClassesByCourseId(@PathVariable("courseId") Long courseId, Model model) {
+    public String getClassesByCourseId(@PathVariable("courseId") Long courseId,
+                                       @RequestParam(value = "page", defaultValue = "0") int page,
+                                       @RequestParam(value = "size", defaultValue = "1") int size,
+                                       Model model) {
+
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CourseClass> allClasses = classService.findByCourseId(courseId, pageable);
+        //List<CourseClass> allClasses = classService.findByCourseId(courseId);
+
         //TODO: remove and use session instead
         Student student =  studentService.findByStudentId(testId);
         model.addAttribute("student",student);
 
         Course course = courseService.findCourseByCourseId(courseId);
         model.addAttribute("course",course);
-
-        List<CourseClass> allClasses = classService.findByCourseId(courseId);
-
-
-        /**
-        List<CourseClass> availableClasses = allClasses.stream()
-                .filter(courseClass -> !enrollmentService.hasEnrollment(student.getStudentId(), courseClass.getClassId()))
-                .collect(Collectors.toList());
-
-        model.addAttribute("classes", availableClasses);**/
-
 
         model.addAttribute("classes", allClasses);
 
@@ -136,7 +134,7 @@ public class StudentController {
                         || existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.COMPLETED
                 )) {
             model.addAttribute("eStatus", existingEnrollment.getEnrollmentStatus());
-            return "student-duplicate-registration";
+            return "student-error-duplicate-registration";
         }
 
         // Else create a new enrollment object

@@ -7,4 +7,10 @@ import java.util.List;
 public interface CourseService {
     List<Course> getAllCourses();
     Course findCourseByCourseId(Long courseId);
+
+
+
+
+
+
 }
