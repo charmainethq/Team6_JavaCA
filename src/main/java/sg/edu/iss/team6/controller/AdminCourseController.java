@@ -92,4 +92,10 @@ public class AdminCourseController {
         ccService.update(cc);
         return "redirect:/admin/course/list";
     }
+
+    @GetMapping("/delete/class/{id}")
+    public String deleteClassById(@PathVariable("id") long id) {
+        ccService.delete(id);
+        return "redirect:/admin/course/list";
+    }
 }

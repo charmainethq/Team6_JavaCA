@@ -35,4 +35,9 @@ public class CourseClassServiceImpl implements CourseClassService{
         return ccRepo.save(c);
     }
 
+    @Override
+    public void delete(long id) {
+        ccRepo.deleteByClassId(id);
+    };
+
 }
