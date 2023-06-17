@@ -32,4 +32,5 @@ public class Enrollment implements Serializable {
 
     @Column(nullable = true)
     private Long score;
+
 }
