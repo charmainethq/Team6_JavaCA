@@ -1,6 +1,8 @@
 body {
     background-color: #e9f2fd;
-    font-family: 'Segoe UI', cursive, sans-serif;
+
+    font-family: Arial, Helvetica, sans-serif;
+
     color: #222222;
     margin: 0;
     padding: 0;
@@ -9,6 +11,8 @@ body {
 h1 {
     color: #4287f5;
     margin-bottom: 20px;
+    text-align: left; /* Align the text to the left */
+    padding-left: 250px; /* Add some space on the left side */
 }
 
 form {

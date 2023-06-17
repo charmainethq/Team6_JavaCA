@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-    <title>Admin Details</title>
+    <title>Lecturer Details</title>
     <link rel="stylesheet" href="/css/detail.css">
 </head>
 <body>
@@ -11,37 +11,37 @@
     <div class="container">
         <h1>Admin Details</h1>
         <div class="details">
-            <label>Admin ID:</label>
-            <span th:text="${admin.adminId}"></span>
+            <label>Lecturer ID:</label>
+            <span th:text="${lecturer.lecturerId}"></span>
         </div>
         <div class="details">
             <label>Username:</label>
-            <span th:text="${admin.user.username}"></span>
+            <span th:text="${lecturer.user.username}"></span>
         </div>
         <div class="details">
             <label>First Name:</label>
-            <span th:text="${admin.firstName}"></span>
+            <span th:text="${lecturer.firstName}"></span>
         </div>
         <div class="details">
             <label>Last Name:</label>
-            <span th:text="${admin.lastName}"></span>
+            <span th:text="${lecturer.lastName}"></span>
         </div>
         <div class="details">
             <label>Email:</label>
-            <span th:text="${admin.email}"></span>
+            <span th:text="${lecturer.email}"></span>
         </div>
         <div class="details">
             <label>Contact No:</label>
-            <span th:text="${admin.contactNo}"></span>
+            <span th:text="${lecturer.contactNo}"></span>
         </div>
         <div class="details">
             <label>Address:</label>
-            <span th:text="${admin.address}"></span>
+            <span th:text="${lecturer.address}"></span>
         </div>
         
         <div class="actions">
-            <a class="btn" th:href="@{/admin/update/{id}(id=${admin.adminId})}">Edit</a>
-            <a class="btn" th:href="@{/admin/delete/{id}(id=${admin.adminId})}" onclick="return confirmDelete()">Delete</a>
+            <a class="btn" th:href="@{/admin/lecturer/update/{id}(id=${lecturer.lecturerId})}">Edit</a>
+            <a class="btn" th:href="@{/admin/lecturer/delete/{id}(id=${lecturer.lecturerId})}" onclick="return confirmDelete()">Delete</a>
         </div>
         <br><br>
         <button onclick="goBack()">Back</button>
