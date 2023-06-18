@@ -5,7 +5,8 @@ body {
 
     color: #222222;
     margin: 0;
-    padding-left: 200px;
+    padding-left: 210px;
+    padding-right: 10px;
 }
 
 .container {
@@ -34,19 +35,24 @@ h1 {
 .table {
     margin-bottom: 30px;
     width: 98.5%;
-    border-collapse: collapse; /* Combine adjacent cell borders */
-
+    border-collapse: separate; /* Separate adjacent cell borders */
+    border-spacing: 0; /* Remove space between table cells */
+    padding: 15px
 }
 
 .table th {
-    background-color: #4287f5;
+    background-color: #387cb4;
     color: #ffffff;
     text-align: center;
+    border-bottom: 1px solid #ffffff; /* Add a white border at the bottom */
+    border-top-left-radius: 8px; /* Add border radius to the top-left corner */
+    border-top-right-radius: 8px; /* Add border radius to the top-right corner */
 }
 
 .table td {
-    background-color: #e6f0ff;
+    background-color: #ffffff; /* Set white background color */
     text-align: center;
+    border-bottom: 1px solid #ffffff; /* Add a white border at the bottom */
 }
 
 /* Search Input Styles */
@@ -61,74 +67,6 @@ h1 {
     border: 1px solid #cccccc;
     border-radius: 4px;
     background-color: #f2f8ff;
-}
-
-/* Action Button Styles */
-.btn {
-  height: 40px;
-  width: 40px;
-  border-radius: 20px;
-  background-color: transparent;
-  border: none;
-}
-.button-65 {
-  text-align: center;
-  appearance: none;
-  backface-visibility: hidden;
-  background-color: #2f80ed;
-  border-radius: 10px;
-  border-style: none;
-  box-shadow: none;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  display: inline-block;
-  font-weight: 500;
-  height: 50px;
-  letter-spacing: normal;
-  line-height: 1.5;
-  outline: none;
-  overflow: hidden;
-  padding: 14px 30px;
-  position: relative;
-  text-align: center;
-  text-decoration: none;
-  transform: translate3d(0, 0, 0);
-  transition: all .3s;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  vertical-align: top;
-  white-space: nowrap;
-}
-
-.button-65:hover {
-  background-color: #1366d6;
-  box-shadow: rgba(0, 0, 0, .05) 0 5px 30px, rgba(0, 0, 0, .05) 0 1px 4px;
-  opacity: 1;
-  transform: translateY(0);
-  transition-duration: .35s;
-}
-
-.button-65:hover:after {
-  opacity: .5;
-}
-
-.button-65:active {
-  box-shadow: rgba(0, 0, 0, .1) 0 3px 6px 0, rgba(0, 0, 0, .1) 0 0 10px 0, rgba(0, 0, 0, .1) 0 1px 4px -1px;
-  transform: translateY(2px);
-  transition-duration: .35s;
-}
-
-.button-65:active:after {
-  opacity: 1;
-}
-
-@media (min-width: 768px) {
-  .button-65 {
-    padding: 14px 22px;
-    width: 176px;
-  }
 }
 
 /* dorp-down option */

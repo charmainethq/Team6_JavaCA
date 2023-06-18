@@ -9,9 +9,7 @@
         <div th:include="adminPage.html"></div>
     </header>
 <div class="container">
-    <h1> Classes </h1>
-    <h2>View all classes for <span th:text="${course.name}"></span> course below</h2>
-    <h2>List of Classes</h2>
+    <h1> Classes For <span th:text="${course.name}"></span></h1>
 
     <div class="mb-3">
         <label for="searchInput">Search:</label>
@@ -58,7 +56,9 @@
         </tbody>
     </table>
 
-    <a class="button-65" href="/admin/course/class/create">Create New Class</a>
+    <a class="btn btn-success" th:href="@{/admin/course/class/create/{id}(id=${course.courseId})}">
+        Create New Class
+    </a>
 
     <script>
             function filterTable() {
