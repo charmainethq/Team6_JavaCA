@@ -85,10 +85,10 @@ public class StudentController {
 
 
 
-    @GetMapping(value = "{courseId}/viewClasses")
+    @GetMapping(value = "viewClasses/{courseId}")
     public String getClassesByCourseId(@PathVariable("courseId") Long courseId,
                                        @RequestParam(value = "page", defaultValue = "0") int page,
-                                       @RequestParam(value = "size", defaultValue = "1") int size,
+                                       @RequestParam(value = "size", defaultValue = "10") int size,
                                        Model model) {
 
 
