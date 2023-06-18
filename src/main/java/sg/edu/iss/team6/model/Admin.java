@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class Admin implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long adminId;
+    private int adminId;
 
 
     @OneToOne

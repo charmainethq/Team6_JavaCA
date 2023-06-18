@@ -8,11 +8,13 @@ import sg.edu.iss.team6.model.*;
 import java.util.List;
 
 public interface CourseClassRepository extends JpaRepository<CourseClass, Integer>{
+
+    List<CourseClass> findByCourse(Course course);
+
     //@Query("SELECT cc FROM CourseClass cc WHERE cc.course.courseId = :courseId")
     Page<CourseClass> findAllByCourseCourseId(Long courseId, Pageable pageable);
     List<CourseClass> findAllByCourseCourseId(Long courseId);
     CourseClass findByClassId(Long classId);
-
 
 
 }

@@ -6,8 +6,13 @@ import org.springframework.data.repository.query.Param;
 import sg.edu.iss.team6.model.*;
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>{
 
+    Enrollment findByEnrollmentId(long enrollmentId);
+    void deleteByEnrollmentId(long enrollmentId);
+
+
     Enrollment findByCourseClassClassIdAndStudentStudentId(long classId, long studentId);
     @Modifying
     @Query("UPDATE Enrollment e SET e.enrollmentStatus = :status WHERE e.enrollmentId = :enrollmentId")
     int updateEnrollmentStatus(@Param("enrollmentId") long enrollmentId, @Param("status") EnrollmentEnum status);
+
 }
