@@ -63,7 +63,7 @@ public class LoginController {
                 return "Lecturer";
             }
             else if (name.charAt(0) == 's'){
-                return "redirect:/student/registerCourses";
+                return "redirect:/student/selfInformation";
             }
         }
         return "redirect:/index/error";

@@ -1,5 +1,6 @@
 package sg.edu.iss.team6.controller;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,9 @@ import sg.edu.iss.team6.utility.EmailUtility;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping(value = "/student")
@@ -34,17 +38,6 @@ public class StudentController {
     EmailUtility emailUtility;
 
     private static final Long testId = 3L;
-    @RequestMapping(value = "/all")
-    public @ResponseBody List<String> findAllStudents(){
-
-        List<Student> students = studentService.findAllStudents();
-        List<String> studentNames = new ArrayList<>();
-        for (Student s: students
-             ) {studentNames.add(s.getFirstName());
-        }
-
-        return studentNames;
-    }
 
     @GetMapping(value = "/registerCourses")
     public String getUnenrolledAndFailedCourses(Model model) {
@@ -72,6 +65,7 @@ public class StudentController {
                     return !hasEnrollment || isWithdrawnOrFailed;
                 })
                 .collect(Collectors.toList());
+
         model.addAttribute("coursesToRegister", unenrolledAndFailedCourses);
         return "student-view-course-registration";
     }
@@ -150,6 +144,48 @@ public class StudentController {
         return "student-registerSuccess";
     }
 
+    @GetMapping("/selfInformation")
+    public String selfInformation(HttpSession session,Model model){
+        
+        UserSession curntUser= (UserSession) session.getAttribute("userSession");
+        Student curntStudent= curntUser.getStudent();
 
+        model.addAttribute("curntStudent",curntStudent);
+        
+        return "studentInformation";
+    }
 
+    @GetMapping("/enrollingCourses")
+    public String enrollingCourses(HttpSession session,Model model){
+
+        UserSession curntUser= (UserSession) session.getAttribute("userSession");
+        Student curntStudent= curntUser.getStudent();
+
+        Map<String, Long> courseAndscore = studentService.getCourseandScore(curntStudent.getStudentId());
+
+        model.addAttribute("courseAndscore", courseAndscore);
+        model.addAttribute("curntStudent", curntStudent);
+        model.addAttribute("gpa",studentService.computeStudentgpa(curntStudent.getStudentId()));
+        return "student-course-enroll";
+    }
+
+    @GetMapping(value = "/update")
+    public String studentUpdate(HttpSession session,Model model){
+
+        UserSession curntUser= (UserSession) session.getAttribute("userSession");
+        Student curntStudent= curntUser.getStudent();
+
+        model.addAttribute("curntStudent", curntStudent);
+
+        return "student-update";
+    }
+
+    @PostMapping("/save")
+    public String saveStudent(HttpServletRequest request,HttpSession session) {
+        UserSession curntUser= (UserSession) session.getAttribute("userSession");
+        Student stu= curntUser.getStudent();
+        stu.setAddress(request.getParameter("address"));
+        studentService.updateStudent(stu);
+        return "redirect:/student/selfInformation";
+    }
 }

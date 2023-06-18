@@ -24,11 +24,12 @@ public class Student {
     private String firstName;
     private String lastName;
     private String email;
-    private int contactNo;
+    private String contactNo;
     private String address;
     private long gpa;
-
-    @OneToMany(mappedBy="student")
+    
+    
+    @OneToMany(mappedBy="student",cascade = CascadeType.ALL)
     private List<Enrollment> studentEnrollments;
 
     public String getFullName(){

@@ -12,8 +12,8 @@ import sg.edu.iss.team6.model.User;
 
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
-    Student findByStudentId(Long studentId);
 
+    Student findByStudentId(Long studentId);
 
     Student findByuser(User u);
 }
