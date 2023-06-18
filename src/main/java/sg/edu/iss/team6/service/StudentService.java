@@ -6,4 +6,6 @@ import java.util.ArrayList;
 public interface StudentService {
     ArrayList<Student> findAllStudents();
 
+	Student findStudentByStudentID(long id);
+
 }

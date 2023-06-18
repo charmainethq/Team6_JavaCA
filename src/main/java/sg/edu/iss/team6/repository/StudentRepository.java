@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import sg.edu.iss.team6.model.Student;
 
 
-public interface StudentRepository extends JpaRepository<Student, Integer> {
-    @Query("SELECT s from Student s")
-    ArrayList<Student> findAllStudents();
+public interface StudentRepository extends JpaRepository<Student, Long> {
+
 }
 
