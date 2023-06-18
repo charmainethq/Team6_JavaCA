@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import sg.edu.iss.team6.model.Admin;
 import sg.edu.iss.team6.model.Course;
@@ -50,25 +51,29 @@ public class AdminEnrollmentController {
         model.addAttribute("enrollments", enroll);
         return "enrollment-update";
     }
-
+    
     @PostMapping("/enrollment/{enrollmentId}/status")
-    public ResponseEntity<Map<String, String>> updateEnrollmentStatus(
+    public ModelAndView updateEnrollmentStatus(
             @PathVariable("enrollmentId") long enrollmentId,
             @RequestParam("status") String newStatus) {
         enrollmentService.updateEnrollmentStatus(enrollmentId, EnrollmentEnum.valueOf(newStatus));
-        
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Enrollment status updated successfully.");
-        
-        return ResponseEntity.ok(response);
+
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin/enrollment/list");
+        modelAndView.addObject("message", "Enrollment status updated successfully.");
+        return modelAndView;
     }
 
+
+
     @DeleteMapping("/student/{studentId}/course/{courseId}/remove")
-    public ResponseEntity<String> removeStudentFromCourse(
+    public ModelAndView removeStudentFromCourse(
             @PathVariable("studentId") long studentId,
             @PathVariable("courseId") long courseId) {
         enrollmentService.removeStudentFromCourse(studentId, courseId);
-        return ResponseEntity.ok("Student removed from the course successfully.");
+
+        ModelAndView modelAndView = new ModelAndView("remove-student-from-course");
+        modelAndView.addObject("message", "Student removed from the course successfully.");
+        return modelAndView;
     }
 
     @GetMapping("/student/{studentId}/course/{courseId}/remove")
@@ -77,7 +82,6 @@ public class AdminEnrollmentController {
             @PathVariable("courseId") long courseId,
             Model model) {
 
-        // Populate the model with necessary data
         Student student = studentService.findByStudentId(studentId);
         Course course = courseService.findByCourseId(courseId);
 

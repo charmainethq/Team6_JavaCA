@@ -125,9 +125,16 @@ h1 {
 }
 
 @media (min-width: 768px) {
-  .button-65 {
-    padding: 14px 22px;
-    width: 176px;
+  .btn {
+      height: 35px;
+      width: 50px;
+  }
+}
+
+@media (min-width: 992px) {
+  .btn {
+      height: 32px;
+      width: 60px;
   }
 }
 
