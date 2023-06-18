@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 public class CourseServiceImpl implements CourseService{
-  /**
+
     @Autowired
     private CourseRepository cRepo;
 
@@ -42,19 +42,18 @@ public class CourseServiceImpl implements CourseService{
     @Transactional
     public void delete(long id) {
         cRepo.deleteByCourseId(id);
-*/
+    }
 
-    @Resource
-    private CourseRepository courseRepo;
+
 
     @Override
     public List<Course> getAllCourses(){
-        return courseRepo.findAll();
+        return cRepo.findAll();
     }
 
     @Override
     public Course findCourseByCourseId(Long courseId){
-        return courseRepo.findCourseByCourseId(courseId);
+        return cRepo.findCourseByCourseId(courseId);
 
     }
 }

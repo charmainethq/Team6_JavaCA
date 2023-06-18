@@ -14,7 +14,7 @@ public interface StudentService {
     Student update(Student student);
     void delete(long id);
 
-    Student findByUser(User u);
+    //Student findByUser(User u);
 
 
 }
