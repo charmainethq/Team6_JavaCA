@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Update Enrollment Status</title>
+    <link rel="stylesheet" href="/css/update.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            $('form').on('submit', function(event) {
+                event.preventDefault();
+                var enrollmentId = $(this).attr('action').split('/').slice(-2, -1);
+                
+                var newStatus = $('#status').val();
+                alert(newStatus);
+                $.ajax({
+                    url: '/admin/enrollment/' + enrollmentId + '/status',
+                    type: 'POST',
+                    data: {status: newStatus},
+                    success: function(response) {
+                        alert(response.message);
+                        window.location.href = '/admin/enrollment/list';
+                    },
+                    error: function() {
+                        alert('Error occurred while updating enrollment status.');
+                    }
+                });
+            });
+        });
+    </script>    
+</head>
+<body>
+    <div class="container">
+        <h1>Update Enrollment Status</h1>
+        
+        <form th:action="@{'/admin/enrollment/' + ${enrollments.enrollmentId} + '/status'}" th:object="${enrollments}" method="post">
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select name="status" id="status" class="form-control">
+                    <option value="SUBMITTED" th:selected="${enrollments.enrollmentStatus == 'SUBMITTED'}">SUBMITTED</option>
+                    <option value="CONFIRMED" th:selected="${enrollments.enrollmentStatus == 'CONFIRMED'}">CONFIRMED</option>
+                    <option value="WITHDRAWN" th:selected="${enrollments.enrollmentStatus == 'DROPPED'}">WITHDRAWN</option>
+                    <option value="FAILED" th:selected="${enrollments.enrollmentStatus == 'FAILED'}">FAILED</option>
+                    <option value="COMPLETED" th:selected="${enrollments.enrollmentStatus == 'COMPLETED'}">COMPLETED</option>
+                </select>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Update Status</button>
+            <br><br>
+            <a th:href="@{/admin/enrollment/list}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

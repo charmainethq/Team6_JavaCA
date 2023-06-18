@@ -12,7 +12,7 @@ import sg.edu.iss.team6.model.Lecturer;
 import sg.edu.iss.team6.service.LecturerService;
 
 @Controller
-public class LecturerController {
+public class AdminLecturerController {
 
     @Autowired
     private LecturerService lectSvc;
@@ -28,7 +28,7 @@ public class LecturerController {
     }
 
     @GetMapping("/admin/lecturer/{id}")
-    public String getLecturerById(@PathVariable int id, Model model){
+    public String getLecturerById(@PathVariable Long id, Model model){
         Lecturer lect = lectSvc.findById(id);
         model.addAttribute("lecturer", lect);
         return "lect-detail";
@@ -56,20 +56,20 @@ public class LecturerController {
     }
 
     @GetMapping("/admin/lecturer/delete/{id}")
-    public String deleteAdminById(@PathVariable(value = "id") int id) {
+    public String deleteAdminById(@PathVariable(value = "id") Long id) {
         lectSvc.delete(id);
         return "redirect:/admin/lecturer/list";
     }
 
     @GetMapping("/admin/lecturer/update/{id}")
-    public String showUpdateForm(@PathVariable("id") int id, Model model) {
+    public String showUpdateForm(@PathVariable("id") Long id, Model model) {
         Lecturer lect  = lectSvc.findById(id);
         model.addAttribute("lecturer", lect);
         return "lect-update";
     }
 
     @PostMapping("/admin/lecturer/update/{id}")
-    public String updateLecturer(@PathVariable("id") int id, @ModelAttribute("lecturer") Lecturer lecturer) {
+    public String updateLecturer(@PathVariable("id") Long id, @ModelAttribute("lecturer") Lecturer lecturer) {
         Lecturer existingLecturer = lectSvc.findById(id);
 
         existingLecturer.setFirstName(lecturer.getFirstName());

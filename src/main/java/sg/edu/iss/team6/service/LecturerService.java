@@ -10,12 +10,12 @@ public interface LecturerService {
 
     List<Lecturer> findAll();
 	
-	Lecturer findById(int id);
+	Lecturer findById(Long id);
  
     Lecturer create(Lecturer l);
  
     Lecturer update(Lecturer l);
 
-    int delete(int id);
+    Long delete(Long id);
 
 }

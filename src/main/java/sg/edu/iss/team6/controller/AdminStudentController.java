@@ -15,15 +15,15 @@ import sg.edu.iss.team6.service.UserServiceImpl;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/admin/student")
 public class AdminStudentController {
     @Autowired
-    private StudentService sService;
+    StudentService sService;
     @Autowired
-    private UserService uService;
+    UserService uService;
 
     @GetMapping(value = "/list")
     public String getAllStudents(Model model){
@@ -58,7 +58,7 @@ public class AdminStudentController {
         return "student-update";
     }
     @PostMapping(value = "/update/{id}")
-    public String updateStudent(@PathVariable("id") int id, @ModelAttribute("student") Student student){
+    public String updateStudent(@PathVariable("id") long id, @ModelAttribute("student") Student student){
         User user = student.getUser();
         uService.update(user);
         sService.update(student);

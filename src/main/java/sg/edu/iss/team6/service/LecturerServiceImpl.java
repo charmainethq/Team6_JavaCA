@@ -29,7 +29,7 @@ public class LecturerServiceImpl implements LecturerService{
     }
 
     @Override
-    public Lecturer findById(int id){
+    public Lecturer findById(Long id){
         return lrepo.findById(id).orElse(null);
     }
 
@@ -44,7 +44,7 @@ public class LecturerServiceImpl implements LecturerService{
     }
 
     @Override
-    public int delete(int id){
+    public Long delete(Long id){
         lrepo.deleteById(id);
         return id;
     }

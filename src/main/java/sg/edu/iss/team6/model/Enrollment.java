@@ -17,7 +17,6 @@ public class Enrollment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long enrollmentId;
 
-
     @ManyToOne
     @JoinColumn(name="student_id")
     private Student student;
@@ -25,6 +24,10 @@ public class Enrollment implements Serializable {
     @ManyToOne
     @JoinColumn(name="class_id")
     private CourseClass courseClass;
+
+    @ManyToOne
+    @JoinColumn(name="course_id")
+    private Course course;
 
     @Column(columnDefinition = "ENUM('SUBMITTED', 'CONFIRMED', 'COMPLETED', 'WITHDRAWN', 'FAILED')")
     @Enumerated(EnumType.STRING)
