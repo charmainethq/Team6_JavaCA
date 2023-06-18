@@ -41,7 +41,7 @@ public class StudentServiceImpl implements StudentService {
         srepo.deleteByStudentId(id);
     }
 
-    @Override
+    /**@Override
     @Transactional
     public Student findByUser(User u) {
         return srepo.findByUserUsername(u);
@@ -51,6 +51,7 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     public Student findByUser(User u) {
         return srepo.findByUser(u);
-
+    }
+    **/
 
 }
