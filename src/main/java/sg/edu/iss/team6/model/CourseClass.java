@@ -43,7 +43,7 @@ public class CourseClass implements Serializable {
     public String getFormatStartDate(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
         return sdf.format(calendar.getTime());
     }
 
@@ -51,7 +51,7 @@ public class CourseClass implements Serializable {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
         calendar.add(Calendar.DAY_OF_YEAR, course.getDuration());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
         return sdf.format(calendar.getTime());
     }
 
