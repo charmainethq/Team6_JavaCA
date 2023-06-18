@@ -6,5 +6,5 @@ import sg.edu.iss.team6.model.*;
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long>{
     Enrollment findByEnrollmentId(long enrollmentId);
     void deleteByEnrollmentId(long enrollmentId);
-    Optional<Enrollment> findByStudentAndCourse(Student student, Course course);
+    Optional<Enrollment> findByStudentAndCourseClass(Student student, CourseClass courseclass);
 }

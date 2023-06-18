@@ -3,9 +3,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sg.edu.iss.team6.model.Course;
+import sg.edu.iss.team6.model.CourseClass;
 import sg.edu.iss.team6.model.Enrollment;
 import sg.edu.iss.team6.model.EnrollmentEnum;
 import sg.edu.iss.team6.model.Student;
+import sg.edu.iss.team6.repository.CourseClassRepository;
 import sg.edu.iss.team6.repository.CourseRepository;
 import sg.edu.iss.team6.repository.EnrollmentRepository;
 import sg.edu.iss.team6.repository.StudentRepository;
@@ -20,7 +22,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     EnrollmentRepository enrollmentRepository;
 
     @Autowired
-    CourseRepository courseRepository;
+    CourseClassRepository ccRepository;
 
     @Autowired
     StudentRepository studentRepository;
@@ -60,32 +62,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             enrollmentRepository.save(enrollment);
         } else {
             throw new IllegalArgumentException("Enrollment not found with ID: " + enrollmentId);
-        }
-    }
-
-    @Override
-    public void removeStudentFromCourse(long studentId, long courseId) {
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found with ID: " + studentId));
-
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("Course not found with ID: " + courseId));
-
-        Optional<Enrollment> enrollmentOptional = enrollmentRepository.findByStudentAndCourse(student, course);
-
-        if (enrollmentOptional.isPresent()) {
-            Enrollment enrollment = enrollmentOptional.get();
-
-            // Remove the enrollment from the student's enrollments list
-            student.getStudentEnrollments().remove(enrollment);
-
-            // Remove the enrollment from the course's enrollments list
-            course.getEnrollments().remove(enrollment);
-
-            // Delete the enrollment entity
-            enrollmentRepository.delete(enrollment);
-        } else {
-            throw new IllegalArgumentException("Enrollment not found for student ID: " + studentId + " and course ID: " + courseId);
         }
     }
 }
