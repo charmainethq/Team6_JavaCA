@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Remove Student from Course</title>
+    <link rel="stylesheet" href="/css/form.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Remove Student from Course</h1>
+
+        <h3>Student Information</h3>
+        <p><strong>Student ID:</strong> <span th:text="${studentId}"></span></p>
+        <p><strong>Name:</strong> <span th:text="${student.name}"></span></p>
+
+        <h3>Course Information</h3>
+        <p><strong>Course ID:</strong> <span th:text="${courseId}"></span></p>
+        <p><strong>Course Name:</strong> <span th:text="${course.name}"></span></p>
+
+        <h3>Confirmation</h3>
+        <p>Are you sure you want to remove the student <strong th:text="${student.name}"></strong> from the course <strong th:text="${course.name}"></strong>?</p>
+
+        <form action="#" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-danger">Remove Student</button>
+            <a th:href="@{/admin/enrollment/list}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

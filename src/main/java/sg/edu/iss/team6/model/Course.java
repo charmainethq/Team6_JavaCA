@@ -5,7 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -25,5 +27,8 @@ public class Course implements Serializable {
 
     @OneToMany(mappedBy = "course")
     private List<CourseClass> courseClasses;
+
+    @OneToMany(mappedBy = "course")
+    private List<Enrollment> enrollments;
 
 }

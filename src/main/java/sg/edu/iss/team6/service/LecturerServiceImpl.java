@@ -28,22 +28,25 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
     @Override
-    public Lecturer findById(int id){
+    public Lecturer findById(Long id){
         return lrepo.findById(id).orElse(null);
     }
 
     @Override
-    public Lecturer create(Lecturer l) {
-        return lrepo.save(l);
+
+    public Lecturer create(Lecturer lect) {
+        return lrepo.save(lect);
     }
 
     @Override
-    public Lecturer update(Lecturer l){
-        return lrepo.save(l);
+    public Lecturer update(Lecturer lect){
+        return lrepo.save(lect);
+
     }
 
+
     @Override
-    public int delete(int id){
+    public Long delete(Long id){
         lrepo.deleteById(id);
         return id;
     }

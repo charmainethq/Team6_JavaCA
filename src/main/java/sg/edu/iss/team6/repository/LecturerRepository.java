@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import sg.edu.iss.team6.model.*;
 
-public interface LecturerRepository extends JpaRepository<Lecturer, Integer>{
+public interface LecturerRepository extends JpaRepository<Lecturer, Long>{
     
     Lecturer findByUser(User u);
 
