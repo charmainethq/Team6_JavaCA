@@ -8,11 +8,13 @@ import sg.edu.iss.team6.model.Admin;
 import sg.edu.iss.team6.model.Course;
 import sg.edu.iss.team6.model.Student;
 import sg.edu.iss.team6.repository.CourseRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CourseServiceImpl implements CourseService{
+  /**
     @Autowired
     private CourseRepository cRepo;
 
@@ -40,5 +42,19 @@ public class CourseServiceImpl implements CourseService{
     @Transactional
     public void delete(long id) {
         cRepo.deleteByCourseId(id);
+*/
+
+    @Resource
+    private CourseRepository courseRepo;
+
+    @Override
+    public List<Course> getAllCourses(){
+        return courseRepo.findAll();
+    }
+
+    @Override
+    public Course findCourseByCourseId(Long courseId){
+        return courseRepo.findCourseByCourseId(courseId);
+
     }
 }

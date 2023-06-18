@@ -26,10 +26,11 @@ public class Enrollment implements Serializable {
     @JoinColumn(name="class_id")
     private CourseClass courseClass;
 
-    @Column(columnDefinition = "ENUM('SUBMITTED', 'CONFIRMED', 'COMPLETED', 'WITHDRAWN', 'FAILED')")
+    @Column(columnDefinition = "ENUM('SUBMITTED', 'CONFIRMED', 'COMPLETED', 'WITHDRAWN', 'FAILED', 'REMOVED')")
     @Enumerated(EnumType.STRING)
     private EnrollmentEnum enrollmentStatus;
 
     @Column(nullable = true)
     private Long score;
+
 }

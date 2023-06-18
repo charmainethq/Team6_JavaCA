@@ -51,5 +51,6 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     public Student findByUser(User u) {
         return srepo.findByUser(u);
-    }
+
+
 }
