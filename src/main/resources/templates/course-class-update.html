@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<head>
+    <title>Update Class</title>
+    <link rel="stylesheet" href="/css/create.css">
+</head>
+<body>
+<h1>Create Course</h1>
+<form th:action="@{/admin/course/class/update/{id}(id=${class.classId})}" th:object="${class}" method="post">
+
+    <label for="roomNum">Room Number:</label>
+    <input type="text" id="roomNum" th:field="*{roomNum}" required/><br/>
+
+    <label for="size">Size:</label>
+    <input type="text" id="size" th:field="*{size}" required/><br/>
+
+    <label for="startDate">Start Date:</label>
+    <input type="text" id="startDate" th:field="*{startDate}" required/><br/>
+
+    <script>
+      $(function() {
+        $("#startDate").datepicker();
+      });
+    </script>
+
+<!--    <label for="lecturer">Lecturer:</label>-->
+<!--    <input type="text" id="lecturer" th:field="*{lecturer}" required/><br/>-->
+<!--    <div id="lecturerOptions" class="dropdown-content">-->
+<!--        <div class="option" th:each="l : ${lecturer}" th:text="${l.firstName + ' ' + l.lastName}">Lecturer 1</div>-->
+<!--    </div>-->
+
+    <input type="submit" value="Update"/>
+</form>
+</body>
+</html>

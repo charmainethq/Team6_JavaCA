@@ -65,52 +65,70 @@ h1 {
 
 /* Action Button Styles */
 .btn {
-    display: inline-block;
-    font-weight: bold;
-    color: #ffffff;
-    text-align: center;
-    vertical-align: middle;
-    user-select: none;
-    background-color: #4287f5;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    line-height: 1.5;
-    border-radius: 30px;
-    transition: background-color 0.3s ease;
-    text-decoration: none;
-    cursor: pointer;
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  background-color: transparent;
+  border: none;
+}
+.button-65 {
+  text-align: center;
+  appearance: none;
+  backface-visibility: hidden;
+  background-color: #2f80ed;
+  border-radius: 10px;
+  border-style: none;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 500;
+  height: 50px;
+  letter-spacing: normal;
+  line-height: 1.5;
+  outline: none;
+  overflow: hidden;
+  padding: 14px 30px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transform: translate3d(0, 0, 0);
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
 }
 
-.btn:hover {
-    background-color: #316fe6;
+.button-65:hover {
+  background-color: #1366d6;
+  box-shadow: rgba(0, 0, 0, .05) 0 5px 30px, rgba(0, 0, 0, .05) 0 1px 4px;
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: .35s;
 }
 
-.btn-primary {
-    background-color: #4287f5;
+.button-65:hover:after {
+  opacity: .5;
 }
 
-.btn-info {
-    background-color: #17a2b8;
+.button-65:active {
+  box-shadow: rgba(0, 0, 0, .1) 0 3px 6px 0, rgba(0, 0, 0, .1) 0 0 10px 0, rgba(0, 0, 0, .1) 0 1px 4px -1px;
+  transform: translateY(2px);
+  transition-duration: .35s;
 }
 
-.btn-danger {
-    background-color: #dc3545;
+.button-65:active:after {
+  opacity: 1;
 }
 
-.btn-success {
-    background-color: #28a745;
-}
-
-.btn-primary:hover,
-.btn-info:hover,
-.btn-danger:hover,
-.btn-success:hover {
-    filter: brightness(1.2);
-}
-
-.logout-link {
-    text-align: right;
+@media (min-width: 768px) {
+  .button-65 {
+    padding: 14px 22px;
+    width: 176px;
+  }
 }
 
 /* dorp-down option */
@@ -123,8 +141,10 @@ h1 {
   display: none;
   position: absolute;
   min-width: 100px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.7);
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  backdrop-filter: blur(4px);
   z-index: 1;
 }
 
@@ -136,7 +156,7 @@ h1 {
 }
 
 .dropdown-content a:hover {
-  background-color: #f1f1f1;
+  background-color: #e6f0ff;
 }
 
 .dropdown:hover .dropdown-content {

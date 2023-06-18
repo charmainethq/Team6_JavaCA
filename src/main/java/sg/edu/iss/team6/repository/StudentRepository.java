@@ -6,8 +6,11 @@ import java.util.function.LongBinaryOperator;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import org.springframework.data.jpa.repository.Query;
 import sg.edu.iss.team6.model.Student;
 import sg.edu.iss.team6.model.User;
+
+import java.util.ArrayList;
 
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
