@@ -36,6 +36,7 @@ public class CourseClassServiceImpl implements CourseClassService{
     }
 
     @Override
+    @Transactional
     public void delete(long id) {
         ccRepo.deleteByClassId(id);
     };

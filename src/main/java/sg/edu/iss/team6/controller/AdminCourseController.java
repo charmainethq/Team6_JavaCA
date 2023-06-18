@@ -18,8 +18,6 @@ public class AdminCourseController {
     private CourseService cService;
     @Autowired
     private CourseClassService ccService;
-    @Autowired
-    private LecturerService lService;
 
     @GetMapping(value = "/list")
     public String getAllCourses(Model model){
@@ -71,31 +69,28 @@ public class AdminCourseController {
     @GetMapping(value = "/class/create")
     public String createClassPage(Model model){
         model.addAttribute("class", new CourseClass());
-        List<Lecturer> lecturers = lService.findAll();
-        model.addAttribute("lecturer", lecturers);
         return "course-class-create";
     }
-
     @PostMapping(value = "/class/create")
     public String createClass(@ModelAttribute("class") CourseClass cc){
         ccService.create(cc);
-        return "redirect:/admin/course/list";
+        return "course-class";
     }
     @GetMapping("/class/update/{id}")
     public String updateClassPage(@PathVariable("id") long id, Model model){
         CourseClass cc = ccService.findByClassId(id);
-        model.addAttribute("course", cc);
+        model.addAttribute("class", cc);
         return "course-class-update";
     }
-    @PostMapping(value = "/update/class/{id}")
+    @PostMapping(value = "/class/update/{id}")
     public String updateClass(@PathVariable("id") long id, @ModelAttribute("class") CourseClass cc){
         ccService.update(cc);
-        return "redirect:/admin/course/list";
+        return "course-class";
     }
 
-    @GetMapping("/delete/class/{id}")
+    @GetMapping("/class/delete/{id}")
     public String deleteClassById(@PathVariable("id") long id) {
         ccService.delete(id);
-        return "redirect:/admin/course/list";
+        return "course-class";
     }
 }

@@ -27,12 +27,11 @@
       });
     </script>
 
-    <label for="lecturer">Lecturer:</label>
-    <input type="text" id="lecturer" th:field="*{lecturer}" required/><br/>
-    <div id="lecturerOptions" class="dropdown-content">
-        <div class="option" th:each="l : ${lecturer}" th:text="${l.firstName + ' ' + l.lastName}">Lecturer 1</div>
-    </div>
-
+<!--    <label for="lecturer">Lecturer:</label>-->
+<!--    <input type="text" id="lecturer" th:field="*{lecturer}" required/><br/>-->
+<!--    <div id="lecturerOptions" class="dropdown-content">-->
+<!--        <div class="option" th:each="l : ${lecturer}" th:text="${l.firstName + ' ' + l.lastName}">Lecturer 1</div>-->
+<!--    </div>-->
 
     <input type="submit" value="Update"/>
 </form>

@@ -74,13 +74,13 @@
                     const classId = row.cells[0].textContent.toLowerCase();
                     const roomNum = row.cells[1].textContent.toLowerCase();
                     const size = row.cells[2].textContent.toLowerCase();
-                    const description = row.cells[3].textContent.toLowerCase();
-                    const credits = row.cells[4].textContent.toLowerCase();
-                    const duration = row.cells[5].textContent.toLowerCase();
+                    const lecturer = row.cells[3].textContent.toLowerCase();
+                    const confirmed = row.cells[4].textContent.toLowerCase();
+                    const startDate = row.cells[5].textContent.toLowerCase();
 
                     // Check if any of the admin information matches the search input
                     if (
-                        courseId.includes(searchInput) ||
+                        classId.includes(searchInput) ||
                         roomNum.includes(searchInput) ||
                         size.includes(searchInput) ||
                         lecturer.includes(searchInput) ||
