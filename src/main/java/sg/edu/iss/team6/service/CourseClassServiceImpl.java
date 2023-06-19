@@ -18,17 +18,23 @@ import java.util.List;
 @Service
 public class CourseClassServiceImpl implements CourseClassService{
 
-    //@Autowired
-    //private CourseClassRepository ccRepo;
-    
-    @Override
-    public List<CourseClass> findByCourse(Course course) {
-        return null;
-    }
-
 
     @Resource
     private CourseClassRepository classRepo;
+    @Autowired
+    private CourseClassRepository ccRepo;
+
+    @Override
+    public List<CourseClass> findByCourse(Course course) {
+        return ccRepo.findByCourse(course);
+    }
+
+    @Override
+    public CourseClass findByClassId(long id) {
+        return ccRepo.findByClassId(id);
+    }
+
+
 
     @Override
     public Page<CourseClass> findByCourseId(Long courseId,Pageable pageable) {
@@ -46,16 +52,29 @@ public class CourseClassServiceImpl implements CourseClassService{
     }
 
 
-	@Override
-	public CourseClass findById(long id) {
-		return classRepo.findById((int) id).orElse(null);
-	}
-	
+
 	public List<Long> findDistinctCourseId(long lecturerId){
 		return classRepo.findDistinctCourseId(lecturerId);
 	}
 	public ArrayList<CourseClass> findByLecturerId(long lecturerId){
 		return classRepo.findByLecturerId(lecturerId);
 	}
+
+
+    @Override
+    public CourseClass create(CourseClass c) {
+        return ccRepo.save(c);
+    }
+
+    @Override
+    public CourseClass update(CourseClass c) {
+        return ccRepo.save(c);
+    }
+
+    @Override
+    @Transactional
+    public void delete(long id) {
+        ccRepo.deleteByClassId(id);
+    }
 
 }

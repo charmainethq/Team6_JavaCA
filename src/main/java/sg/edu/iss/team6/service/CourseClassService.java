@@ -17,10 +17,14 @@ public interface CourseClassService {
     CourseClass findByClassId(Long classId);
 
     
-	CourseClass findById(long Id);
+	//CourseClass findById(long Id);
 	
 	List<Long> findDistinctCourseId(long lecturerId);
 	
 	ArrayList<CourseClass> findByLecturerId(long lecturerId);
 
+    CourseClass findByClassId(long id);
+    CourseClass create(CourseClass c);
+    CourseClass update(CourseClass c);
+    void delete(long id);
 }

@@ -5,25 +5,29 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sg.edu.iss.team6.model.Admin;
+import sg.edu.iss.team6.model.Enrollment;
 import sg.edu.iss.team6.model.Student;
 import sg.edu.iss.team6.model.User;
 import sg.edu.iss.team6.repository.StudentRepository;
 import sg.edu.iss.team6.repository.UserRepository;
+import sg.edu.iss.team6.service.EnrollmentService;
 import sg.edu.iss.team6.service.StudentService;
 import sg.edu.iss.team6.service.UserService;
 import sg.edu.iss.team6.service.UserServiceImpl;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/admin/student")
 public class AdminStudentController {
     @Autowired
-    private StudentService sService;
+    StudentService sService;
     @Autowired
-    private UserService uService;
+    UserService uService;
+    @Autowired
+    EnrollmentService eService;
 
     @GetMapping(value = "/list")
     public String getAllStudents(Model model){
@@ -58,7 +62,7 @@ public class AdminStudentController {
         return "student-update";
     }
     @PostMapping(value = "/update/{id}")
-    public String updateStudent(@PathVariable("id") int id, @ModelAttribute("student") Student student){
+    public String updateStudent(@PathVariable("id") long id, @ModelAttribute("student") Student student){
         User user = student.getUser();
         uService.update(user);
         sService.update(student);
@@ -66,6 +70,9 @@ public class AdminStudentController {
     }
     @GetMapping("/delete/{id}")
     public String deleteStudentById(@PathVariable("id") long id) {
+        Student student = sService.findByStudentId(id);
+        List<Enrollment> enrollments = eService.findByStudent(student);
+        eService.deleteList(enrollments);
         sService.delete(id);
         return "redirect:/admin/student/list";
     }

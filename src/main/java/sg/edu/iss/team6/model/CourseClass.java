@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.util.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Entity
 public class CourseClass implements Serializable {
     @Id
@@ -25,7 +27,7 @@ public class CourseClass implements Serializable {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
-
+    @Temporal(TemporalType.DATE)
     private Date startDate;
     private int size;
     private int confirmed;
@@ -37,7 +39,6 @@ public class CourseClass implements Serializable {
     private Lecturer lecturer;
 
     @OneToMany(mappedBy="courseClass")
-    @JsonIgnore
     private List<Enrollment> classEnrollment;
 
     public String getFormatStartDate(){

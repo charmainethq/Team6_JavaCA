@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
+
 import java.io.Serializable;
 
 @Data
@@ -15,16 +18,24 @@ import java.io.Serializable;
 public class Admin implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int adminId;
-
+    private long adminId;
 
     @OneToOne
     @JoinColumn(name = "username")
     private User user;
 
+    @Size(min=2, max=30, message="Name must be 2-30 characters long")
     private String firstName;
+
+    @Size(min=2, max=30, message="Name must be 2-30 characters long")
     private String lastName;
+
+    @Email(message = "Invalid email format")
     private String email;
+
+    @Size(min=2, max=10, message="Contact Number must be 2-10 characters long")
     private String contactNo;
+    
+    @Size(min=2, max=50, message="Address must be 2-30 characters long")
     private String address;
 }
