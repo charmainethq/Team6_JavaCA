@@ -44,7 +44,7 @@
           <li><a class="manage-link" th:href="@{/lecturer/courseEnrollment/} + ${lecturerId}">View Course Enrollment</a></li>
           <li><a class="manage-link" th:href="@{/lecturer/gradeList/} + ${classId}">View Course Grades</a></li>
           <li><a class="manage-link" th:href="@{/lecturer/grade/} +${enrollmentId}">(test) Grade a student</a></li>
-          <li><a class="manage-link" th:href="@{/lecturer/list}">(chitsu to update) View a Student Performance</a></li>
+          <li><a class="manage-link" th:href="@{/lecturer/performance/}  + ${lecturerId}">(chitsu to update) View a Student Performance</a></li>
         </ul>
       </div>
     </div>

@@ -48,4 +48,9 @@ public class LecturerServiceImpl implements LecturerService{
         lrepo.deleteById(id);
         return id;
     }
+    
+    @Override
+    public List<Lecturer> findByUser_Username(String username){
+    	return lrepo.findByUser_Username(username);
+    }
 }

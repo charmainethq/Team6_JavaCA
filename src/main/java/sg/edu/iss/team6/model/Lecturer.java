@@ -16,7 +16,7 @@ import java.util.List;
 public class Lecturer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int lecturerId;
+    private long lecturerId;
 
     @OneToOne
     @JoinColumn(name = "username")
