@@ -16,6 +16,7 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     @Id
+    
     private String username;
     private String password;
 
