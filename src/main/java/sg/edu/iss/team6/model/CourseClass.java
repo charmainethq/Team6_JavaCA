@@ -23,7 +23,7 @@ public class CourseClass implements Serializable {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.DATE)
     private Date startDate;
     private int size;
     private int confirmed;

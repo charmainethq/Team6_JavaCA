@@ -65,7 +65,7 @@ public class AdminCourseController {
     }
 
     @GetMapping(value = "/class/{id}")
-    public String getClassesById(Model model, @PathVariable long id){
+    public String getClassesByCourseId(Model model, @PathVariable long id){
         Course course = cService.findByCourseId(id);
         model.addAttribute("course", course);
         List<CourseClass> courseClasses = ccService.findByCourse(course);
@@ -114,6 +114,14 @@ public class AdminCourseController {
         eService.deleteList(enrollments);
         ccService.delete(id);
         return "redirect:/admin/course/list";
+    }
+
+    @GetMapping("/class/enrollments/{id}")
+    public String getEnrollmentsByClassId(Model model, @PathVariable long id){
+        CourseClass courseClass = ccService.findByClassId(id);
+        List<Enrollment> enrollments = eService.findByCourseClass(courseClass);
+        model.addAttribute("enrollments", enrollments);
+        return "course-class-enrollments";
     }
 
 }
