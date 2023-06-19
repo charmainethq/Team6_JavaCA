@@ -53,13 +53,13 @@ public class AdminController {
         newAdmin.setUser(admin.getUser());
 
         adminSvc.create(newAdmin);
-        return "redirect:/admin";
+        return "redirect:/admin/list";
     }
 
     @GetMapping("/admin/delete/{id}")
     public String deleteAdminById(@PathVariable(value = "id") Long id) {
         adminSvc.delete(id);
-        return "redirect:/admin";
+        return "redirect:/admin/list";
     }
 
     @GetMapping("/admin/update/{id}")
@@ -81,7 +81,7 @@ public class AdminController {
         existingAdmin.setUser(admin.getUser());
 
         adminSvc.update(existingAdmin);
-        return "redirect:/admin";
+        return "redirect:/admin/list";
     }
 
 }
