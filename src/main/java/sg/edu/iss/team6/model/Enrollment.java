@@ -17,7 +17,6 @@ public class Enrollment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long enrollmentId;
 
-
     @ManyToOne
     @JoinColumn(name="student_id")
     private Student student;

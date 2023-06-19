@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+
 import sg.edu.iss.team6.model.Admin;
 import sg.edu.iss.team6.service.AdminService;
 
@@ -18,7 +20,7 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String getAdminPage(){
-        return "adminPage";
+        return "admin";
     }
     @GetMapping("/admin/list")
     public String getAllAdmin(Model model) {
@@ -27,7 +29,7 @@ public class AdminController {
     }
 
     @GetMapping("/admin/{id}")
-    public String getAdminById(@PathVariable int id, Model model){
+    public String getAdminById(@PathVariable Long id, Model model){
         Admin admin = adminSvc.findById(id);
         model.addAttribute("admin", admin);
         return "admin-detail";
@@ -55,20 +57,20 @@ public class AdminController {
     }
 
     @GetMapping("/admin/delete/{id}")
-    public String deleteAdminById(@PathVariable(value = "id") int id) {
+    public String deleteAdminById(@PathVariable(value = "id") Long id) {
         adminSvc.delete(id);
         return "redirect:/admin";
     }
 
     @GetMapping("/admin/update/{id}")
-    public String showUpdateForm(@PathVariable("id") int id, Model model) {
+    public String showUpdateForm(@PathVariable("id") Long id, Model model) {
         Admin admin = adminSvc.findById(id);
         model.addAttribute("admin", admin);
         return "admin-update";
     }
 
     @PostMapping("/admin/update/{id}")
-    public String updateAdmin(@PathVariable("id") int id, @ModelAttribute("admin") Admin admin) {
+    public String updateAdmin(@PathVariable("id") Long id, @ModelAttribute("admin") Admin admin) {
         Admin existingAdmin = adminSvc.findById(id);
 
         existingAdmin.setFirstName(admin.getFirstName());

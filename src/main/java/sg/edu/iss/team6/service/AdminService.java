@@ -12,14 +12,14 @@ import java.util.List;
 public interface AdminService {
     List<Admin> findAll();
 	
-	Admin findById(int id);
+	Admin findById(Long id);
  
     Admin create(Admin admin);
  
     Admin update(Admin admin);
 
     @Transactional
-    int delete(int id);
+    Long delete(Long id);
 
     Admin findByUser(User u);
 }

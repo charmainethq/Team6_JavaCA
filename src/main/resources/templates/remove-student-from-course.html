@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Remove Student from Course</title>
+    <link rel="stylesheet" href="/css/detail.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Remove Student from Course</h1>
+
+        <h2>Student Information</h2>
+        <p><strong>Student ID:</strong> <span th:text="${enrollment.student.studentId}"></span></p>
+        <p><strong>First Name:</strong> <span th:text="${enrollment.student.firstName}"></span></p>
+        <p><strong>Last Name:</strong> <span th:text="${enrollment.student.lastName}"></span></p>
+        
+        <h2>Course Information</h2>
+        <p><strong>Class ID:</strong> <span th:text="${enrollment.courseClass.classId}"></span></p>
+        <p><strong>Course Name:</strong> <span th:text="${enrollment.courseClass.course.name}"></span></p>
+
+        <h2>Confirmation</h2>
+        <p>Are you sure you want to remove the student from the course <strong th:text="${enrollment.courseClass.course.name}"></strong>?</p>
+
+        <form th:action="@{/admin/enrollment/student/{enrollmentId}/remove(enrollmentId=${enrollment.enrollmentId})}" th:object="${enrollment}" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-danger" style="background-color: red; color: white; border-radius: 5px; padding: 10px 20px; font-size: 16px;">Remove Student</button>
+            <br><br>
+            <a th:href="@{/admin/enrollment/list}" class="btn btn-secondary">Cancel</a>
+        </form>
+        
+    </div>
+</body>
+</html>

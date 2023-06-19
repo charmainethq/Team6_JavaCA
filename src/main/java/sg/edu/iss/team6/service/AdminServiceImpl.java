@@ -21,7 +21,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Admin findById(int id){
+    public Admin findById(Long id){
         return adminRepo.findById(id).orElse(null);
     }
 
@@ -36,7 +36,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public int delete(int id){
+    public Long delete(Long id){
         adminRepo.deleteById(id);
         return id;
     }

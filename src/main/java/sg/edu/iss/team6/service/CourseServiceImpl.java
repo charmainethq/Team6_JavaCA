@@ -59,6 +59,6 @@ public class CourseServiceImpl implements CourseService{
 
 	@Override
 	public Course findById(long id) {
-		return cRepo.findById((int) id).orElse(null);
+		return cRepo.findById(id).orElse(null);
 	}
 }
