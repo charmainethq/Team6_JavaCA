@@ -162,8 +162,32 @@ public class LecturerController {
 		model.addAttribute(enrollmentList);
 		return "lecturer-course-enrollment";
 	}
+	
+	@RequestMapping(value = "/lecturer/classList/{lecturerId}", method = RequestMethod.GET)
+	public String viewClassList(@PathVariable long lecturerId, Model model) {
+		ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
+		ArrayList<Long> courseIdList = new ArrayList<>();
+		ArrayList<Integer> courseNumList = new ArrayList<>();
+		ArrayList<String> courseNameList = new ArrayList<>();
+		ArrayList<String> courseDescriptionList = new ArrayList<>();
 
-	@RequestMapping(value = "/lecturer/gradeList/{classId}", method = RequestMethod.GET)
+		for (CourseClass current : courseClassList) {
+			Course course = cseSvc.findById(current.getCourse().getCourseId());
+			courseIdList.add(course.getCourseId());
+			courseNumList.add(course.getCourseNum());
+			courseNameList.add(course.getName());
+			courseDescriptionList.add(course.getDescription());
+		}
+
+		model.addAttribute("courseClassList", courseClassList);
+		model.addAttribute("courseIdList", courseIdList);
+		model.addAttribute("courseNumList", courseNumList);
+		model.addAttribute("courseNameList", courseNameList);
+		model.addAttribute("courseDescriptionList", courseDescriptionList);
+		return "lecturer-class-list";
+	}
+
+	@RequestMapping(value = "/lecturer/class/{classId}", method = RequestMethod.GET)
 	public String enrollmentList(@PathVariable long classId, Model model) {
 		ArrayList<Enrollment> enrollmentList = enrlSvc.findByClassId(classId);
 		ArrayList<String> studentFirstName = new ArrayList<>();
@@ -184,17 +208,19 @@ public class LecturerController {
 		model.addAttribute("course", courseGet);
 		model.addAttribute("firstName", studentFirstName);
 		model.addAttribute("lastName", studentLastName);
-		return "lecturer-class-list-grade";
+		return "lecturer-class-view";
 	}
 
 	@RequestMapping(value = "/lecturer/grade/{enrollmentId}", method = RequestMethod.GET)
 	public String showGradeCourse(@PathVariable long enrollmentId, Model model) {
 		Enrollment enrollment = enrlSvc.findById(enrollmentId);
 		Course course = cseSvc.findById(enrollment.getCourseClass().getCourse().getCourseId());
+		CourseClass courseClass = cseClsSvc.findById(enrollment.getCourseClass().getClassId());
 		Student student = stuSvc.findById(enrollment.getStudent().getStudentId());
 
 		model.addAttribute("enrollment", enrollment);
 		model.addAttribute("course", course);
+		model.addAttribute("courseClass", courseClass);
 		model.addAttribute("student", student);
 
 		return "lecturer-grade-student";
@@ -213,6 +239,6 @@ public class LecturerController {
 		currentEnrollment.setScore(enrollment.getScore());
 		enrlSvc.update(currentEnrollment);
 		long classId = currentEnrollment.getCourseClass().getClassId();
-		return "redirect:/lecturer/gradeList/" + classId;
+		return "redirect:/lecturer/class/" + classId;
 	}
 }

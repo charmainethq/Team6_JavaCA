@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-<title>Grade A Student</title>
-<link rel="stylesheet" href="/css/update.css">
+    <title>Lecturer</title>
+    <link rel="stylesheet" href="/css/list.css">
 </head>
 <body>
-	<header>
-		<div th:include="lecturer-home-page.html"></div>
-	</header>
-
+    <header>
+        <div th:include="lecturer-home-page.html"></div>
+    </header>
 	<div class="container">
-		<h1>Grade A Student</h1>
+		<div class="row">
+			<h1>Class Details</h1>
+		</div>
 		<br/>
 
 		<h4>Course Details</h4>
+		
 		<div class="details">
 			<label>Course Name:</label> <span th:text="${course.name}"></span>
 		</div>
@@ -23,36 +25,34 @@
 		</div>
 		<br/>
 		
-		<h4></h4>
-		<div class="details">
-			<label>Class Number:</label> <span
-				th:text="${courseClass.classId}"></span>
+		<div class="mb-3">
+			<label for="searchInput">Search:</label> <input type="text"
+				class="form-control" id="searchInput" placeholder="Enter keywords"
+				oninput="filterTable()">
 		</div>
-		<div class="details">
-			<label>Class Start Date:</label> <span
-				th:text="${courseClass.startDate}"></span>
-		</div>
-		<br/>
-
-		<h4>Student Details</h4>
-		<form
-			th:action="@{/lecturer/grade/{enrollmentId}(enrollmentId=${enrollment.enrollmentId})}"
-			th:object="${enrollment}" method="post">
-			<input type="hidden" th:field="*{enrollmentId}" />
-
-			<div class="details">
-				<label>First Name:</label> <span th:text="${student.firstName}"></span>
-			</div>
-
-			<div class="details">
-				<label>Last Name:</label> <span th:text="${student.lastName}"></span>
-			</div>
-			<br />
-
-			<label for="score">Score:</label>
-			<input type="text" id="score" th:field="*{score}" required /><br /> 
-			<input type="submit" value="Submit / Update" />
-		</form>
+		
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Enrollment Id</th>
+					<th>Student Id</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Score</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="current, index: ${enrollmentList}">
+					<td th:text="${current.enrollmentId}"></td>
+					<td th:text="${current.student.studentId}"></td>
+					<td th:text="${firstName.get(index.index)}"></td>
+					<td th:text="${lastName.get(index.index)}"></td>
+					<td th:text="${current.score}"></td>
+					<td><a class="btn btn-primary" th:href="@{/lecturer/grade/} + ${current.enrollmentId}">Grade Student</a></td>
+				</tr>
+			</tbody>
+		</table>
 		<br><br>
 		<button onclick="goBack()">Back</button>
 	</div>
@@ -95,4 +95,5 @@
 		}
 	</script>
 </body>
+
 </html>
