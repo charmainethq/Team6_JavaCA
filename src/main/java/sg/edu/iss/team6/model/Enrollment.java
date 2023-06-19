@@ -25,10 +25,6 @@ public class Enrollment implements Serializable {
     @JoinColumn(name="class_id")
     private CourseClass courseClass;
 
-    @ManyToOne
-    @JoinColumn(name="course_id")
-    private Course course;
-
     @Column(columnDefinition = "ENUM('SUBMITTED', 'CONFIRMED', 'COMPLETED', 'WITHDRAWN', 'FAILED')")
     @Enumerated(EnumType.STRING)
     private EnrollmentEnum enrollmentStatus;

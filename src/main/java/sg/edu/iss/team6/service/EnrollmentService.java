@@ -17,6 +17,5 @@ public interface EnrollmentService {
     void deleteList(List<Enrollment> enrollments);
 
     void updateEnrollmentStatus(long enrollmentId, EnrollmentEnum newStatus);
-    void removeStudentFromCourse(long studentId, long courseId);
 
 }

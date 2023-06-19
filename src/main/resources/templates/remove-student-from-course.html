@@ -10,20 +10,23 @@
 
         <h3>Student Information</h3>
         <p><strong>Student ID:</strong> <span th:text="${studentId}"></span></p>
-        <p><strong>Name:</strong> <span th:text="${student.name}"></span></p>
+        <p><strong>First Name:</strong> <span th:text="${studentId != null ? studentService.getFirstName(studentId) : ''}"></span></p>
+        <p><strong>Last Name:</strong> <span th:text="${studentId != null ? studentService.getLastName(studentId) : ''}"></span></p>
+        
 
         <h3>Course Information</h3>
-        <p><strong>Course ID:</strong> <span th:text="${courseId}"></span></p>
-        <p><strong>Course Name:</strong> <span th:text="${course.name}"></span></p>
+        <p><strong>Course ID:</strong> <span th:text="${classId}"></span></p>
+        <p><strong>Course Name:</strong> <span th:text="${courseClass.course.name}"></span></p>
 
         <h3>Confirmation</h3>
-        <p>Are you sure you want to remove the student <strong th:text="${student.name}"></strong> from the course <strong th:text="${course.name}"></strong>?</p>
+        <p>Are you sure you want to remove the student <strong th:text="${student.firstName}"></strong> from the course <strong th:text="${courseClass.course.name}"></strong>?</p>
 
-        <form action="#" method="post">
+        <form th:action="@{'/student/' + ${enrollment.enrollmentId} + '/remove'}" th:object="${enrollments}" method="post">
             <input type="hidden" name="_method" value="DELETE">
             <button type="submit" class="btn btn-danger">Remove Student</button>
             <a th:href="@{/admin/enrollment/list}" class="btn btn-secondary">Cancel</a>
         </form>
+        
     </div>
 </body>
 </html>
