@@ -42,6 +42,12 @@ public class LecturerController {
 	@Autowired
 	private StudentService stuSvc;
 
+	@GetMapping("/lecturer")
+	public String lecturerHomePage(Model model) {
+//		model.addAttribute("lecturer",lectSvc.findAll());
+		return "lecturer-home-page";
+	}
+	
     @GetMapping("/admin/lecturer")
     public String getLecturerPage(){
         return "adminPage";
