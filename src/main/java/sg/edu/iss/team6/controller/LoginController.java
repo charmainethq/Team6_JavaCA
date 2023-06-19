@@ -39,7 +39,7 @@ public class LoginController {
 		if (authenticate(user)) {
 			if (userType.equals("Admin")) {
                 session.setAttribute("username", username);
-				return "adminPage";
+				return "admin";
 			} else if (userType.equals("Lecturer")) {
                 session.setAttribute("username", username);
 				return "redirect:/lecturer";
