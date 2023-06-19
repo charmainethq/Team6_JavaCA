@@ -22,7 +22,6 @@
             <th>EnrollmentID</th>
             <th>Status</th>
             <th>Student</th>
-            <th>Score</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -31,9 +30,8 @@
             <td th:text="${e.enrollmentId}"></td>
             <td th:text="${e.enrollmentStatus}"></td>
             <td th:text="${e.student.firstName + ' ' + e.student.lastName}"></td>
-            <td th:text="${e.score}"></td>
             <td>
-                <a class="btn btn-primary" th:href="@{/admin/}">View</a>
+                <a class="btn btn-primary" th:href="@{/admin/enrollment/{Id}/detail(Id=${e.enrollmentId})}">View</a>
             </td>
         </tr>
         </tbody>
@@ -53,14 +51,12 @@
                     const enId = row.cells[0].textContent.toLowerCase();
                     const status = row.cells[1].textContent.toLowerCase();
                     const student = row.cells[2].textContent.toLowerCase();
-                    const score = row.cells[3].textContent.toLowerCase();
 
                     // Check if any of the admin information matches the search input
                     if (
                         enId.includes(searchInput) ||
                         status.includes(searchInput) ||
-                        student.includes(searchInput) ||
-                        score.includes(searchInput) ||
+                        student.includes(searchInput)
                     ) {
                         // Show the row if it matches the search input
                         row.style.display = '';
