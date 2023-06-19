@@ -16,7 +16,7 @@
         <input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
     </div>
 
-    <table class="table table-striped">
+    <table class="table table-striped" id="stuTable">
         <thead>
         <tr>
             <th>StudentID</th>
@@ -61,48 +61,55 @@
         </tbody>
     </table>
 
-    <a class="btn btn-success" href="/admin/student/create">Create New Student</a>
-
+    <a class="btn btn-success custom-button" href="/admin/student/create">Create New Student</a>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
     <script>
-            function filterTable() {
-                // Retrieve the search input value
-                const searchInput = document.querySelector('#searchInput').value.toLowerCase();
+        function filterTable() {
+            // Retrieve the search input value
+            const searchInput = document.querySelector('#searchInput').value.toLowerCase();
 
-                // Retrieve all student rows
-                const studentRows = document.querySelectorAll('#studentRow');
+            // Retrieve all student rows
+            const studentRows = document.querySelectorAll('#studentRow');
 
-                // Loop through student rows and check if they match the search input
-                studentRows.forEach(function(row) {
-                    // Retrieve the student information from the row
-                    const studentId = row.cells[0].textContent.toLowerCase();
-                    const firstName = row.cells[1].textContent.toLowerCase();
-                    const lastName = row.cells[2].textContent.toLowerCase();
-                    const email = row.cells[3].textContent.toLowerCase();
-                    const contactNo = row.cells[4].textContent.toLowerCase();
-                    const address = row.cells[5].textContent.toLowerCase();
+            // Loop through student rows and check if they match the search input
+            studentRows.forEach(function(row) {
+                // Retrieve the student information from the row
+                const studentId = row.cells[0].textContent.toLowerCase();
+                const firstName = row.cells[1].textContent.toLowerCase();
+                const lastName = row.cells[2].textContent.toLowerCase();
+                const email = row.cells[3].textContent.toLowerCase();
+                const contactNo = row.cells[4].textContent.toLowerCase();
+                const address = row.cells[5].textContent.toLowerCase();
 
-                    // Check if any of the admin information matches the search input
-                    if (
-                        studentId.includes(searchInput) ||
-                        firstName.includes(searchInput) ||
-                        lastName.includes(searchInput) ||
-                        email.includes(searchInput) ||
-                        contactNo.includes(searchInput) ||
-                        address.includes(searchInput)
-                    ) {
-                        // Show the row if it matches the search input
-                        row.style.display = '';
-                    } else {
-                        // Hide the row if it doesn't match the search input
-                        row.style.display = 'none';
-                    }
-                });
-            }
+                // Check if any of the admin information matches the search input
+                if (
+                    studentId.includes(searchInput) ||
+                    firstName.includes(searchInput) ||
+                    lastName.includes(searchInput) ||
+                    email.includes(searchInput) ||
+                    contactNo.includes(searchInput) ||
+                    address.includes(searchInput)
+                ) {
+                    // Show the row if it matches the search input
+                    row.style.display = '';
+                } else {
+                    // Hide the row if it doesn't match the search input
+                    row.style.display = 'none';
+                }
+            });
+        }
 
-            function confirmDelete() {
-                return confirm('Are you sure you want to delete this student?');
-            }
-        </script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this student?');
+        }
+        $(document).ready(function() {
+            $('#stuTable').DataTable({
+                searching: false
+            });
+        });
+    </script>
 
 </div>
 </body>

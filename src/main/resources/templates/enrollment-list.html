@@ -5,11 +5,14 @@
 <head>
     <title>Enrollment List</title>
     <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 </head>
 <body>
     <header>
         <div th:include="adminPage.html"></div>
     </header>
+    
     <div class="container">
         <h1>Enrollment List</h1>
         <div th:if="${param.message}" class="alert alert-success" role="alert">
@@ -20,21 +23,24 @@
             <input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
         </div>
 
-        <table class="table table-striped">
+        <table id="enrollmentTable" class="table table-striped">      
             <thead>
                 <tr>
-                    <th>Enrollment ID</th>
-                    <th>Student ID</th>
-                    <th>Class ID</th>
-                    <th>Status</th>
+                    <th onclick="sortTable('enrollmentTable', 0)"><button class="transparent-btn"><span class="sort-text">Enrollment ID</span> <i class="fas fa-sort"></i></button></th>
+                    <th onclick="sortTable('enrollmentTable', 1)"><button class="transparent-btn"><span class="sort-text">Student ID</span> <i class="fas fa-sort"></i></button></th>
+                    <th onclick="sortTable('enrollmentTable', 2)"><button class="transparent-btn"><span class="sort-text">Student Username</span> <i class="fas fa-sort"></i></button></th>
+                    <th onclick="sortTable('enrollmentTable', 3)"><button class="transparent-btn"><span class="sort-text">Class ID</span> <i class="fas fa-sort"></i></button></th>
+                    <th onclick="sortTable('enrollmentTable', 4)"><button class="transparent-btn"><span class="sort-text">Status</span> <i class="fas fa-sort"></i></button></th>
                     <th>Actions</th>
                 </tr>
-            </thead>
+            </thead>            
+            
             <tbody>
                 <!-- Iterate over the enrollments and display their information -->
                 <tr th:each="enrollment : ${enrollments}" id="enrollmentRow">
                     <td th:text="${enrollment.enrollmentId}"></td>
                     <td th:text="${enrollment.student.studentId}"></td>
+                    <td th:text="${enrollment.student.user.username}"></td>
                     <td th:text="${enrollment.courseClass.classId}"></td>
                     <td th:text="${enrollment.enrollmentStatus}"></td>
                     <td>
@@ -44,7 +50,7 @@
                                 ...
                             </button>
                             <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" th:href="@{student/{enrollmentId}/detail(enrollmentId=${enrollment.enrollmentId})}">View</a>
+                                <a class="dropdown-item" th:href="@{{enrollmentId}/detail(enrollmentId=${enrollment.enrollmentId})}">View</a>
                                 <a class="dropdown-item" th:href="@{{enrollmentId}/status(enrollmentId=${enrollment.enrollmentId})}">Update</a>
                                 <a class="dropdown-item" th:href="@{student/{enrollmentId}/remove(enrollmentId=${enrollment.enrollmentId})}">Remove</a>
                             </div>
@@ -53,7 +59,9 @@
                 </tr>
             </tbody>
         </table>
-
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
         <script>
             function filterTable() {
                 // Retrieve the search input value
@@ -91,6 +99,12 @@
             function confirmDelete() {
                 return confirm('Are you sure you want to delete this enrollment?');
             }
+
+            $(document).ready(function() {
+                $('#enrollmentTable').DataTable({
+                    searching: false
+                });
+            });
         </script>
     </div>
 </body>

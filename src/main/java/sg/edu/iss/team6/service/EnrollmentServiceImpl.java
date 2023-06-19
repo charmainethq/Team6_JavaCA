@@ -7,7 +7,6 @@ import sg.edu.iss.team6.model.*;
 
 import sg.edu.iss.team6.repository.CourseClassRepository;
 
-import sg.edu.iss.team6.repository.CourseRepository;
 import sg.edu.iss.team6.repository.EnrollmentRepository;
 import sg.edu.iss.team6.repository.StudentRepository;
 
