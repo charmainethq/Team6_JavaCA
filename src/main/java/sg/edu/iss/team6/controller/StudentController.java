@@ -17,6 +17,9 @@ import sg.edu.iss.team6.utility.EmailUtility;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping(value = "/student")
 public class StudentController {
@@ -186,6 +189,30 @@ public class StudentController {
         return "student-registerSuccess";
     }
 
+    @GetMapping("/selfInformation")
+    public String selfInformation(HttpSession session,Model model){
+        
+        String username= (String)session.getAttribute("username");
+        Student curntStudent= studentService.findByUserUsername(username);
 
+
+        model.addAttribute("curntStudent",curntStudent);
+        
+        return "stu-Information";
+    }
+
+    @GetMapping("/enrollingCourses")
+    public String enrollingCourses(HttpSession session,Model model){
+
+        String username= (String)session.getAttribute("username");
+        Student curntStudent= studentService.findByUserUsername(username);
+
+        Map<String, Long> courseAndscore = studentService.getCourseandScore(curntStudent.getStudentId());
+
+        model.addAttribute("courseAndscore", courseAndscore);
+        model.addAttribute("curntStudent", curntStudent);
+        model.addAttribute("gpa",studentService.computeStudentgpa(curntStudent.getStudentId()));
+        return "stu-classlist";
+    }
 
 }
