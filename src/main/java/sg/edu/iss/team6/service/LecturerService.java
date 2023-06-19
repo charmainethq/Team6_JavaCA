@@ -9,13 +9,19 @@ public interface LecturerService {
     Lecturer findByUser(User u);
 
     List<Lecturer> findAll();
-	
-	Lecturer findById(int id);
+
+	Lecturer findById(long id);
+
  
     Lecturer create(Lecturer l);
  
     Lecturer update(Lecturer l);
 
+
     int delete(int id);
+
+    long delete(long id);
+
+    List<Lecturer>findByUser_Username(String username);
 
 }

@@ -29,8 +29,9 @@ public class LecturerServiceImpl implements LecturerService{
     }
 
     @Override
-    public Lecturer findById(int id){
-        return lrepo.findById(id).orElse(null);
+
+    public Lecturer findById(long id){
+        return lrepo.findById((int) id).orElse(null);
     }
 
     @Override
@@ -44,8 +45,20 @@ public class LecturerServiceImpl implements LecturerService{
     }
 
     @Override
-    public int delete(int id){
-        lrepo.deleteById(id);
+    public long delete(long id){
+        lrepo.deleteById((int) id);
         return id;
     }
+
+    @Override
+    public int delete(int id){
+        lrepo.deleteById((int) id);
+        return id;
+    }
+
+    @Override
+    public List<Lecturer> findByUser_Username(String username){
+    	return lrepo.findByUser_Username(username);
+    }
+
 }

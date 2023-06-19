@@ -15,4 +15,12 @@ public interface CourseClassService {
     List<CourseClass> findByCourseId(Long courseId);
     Page<CourseClass> findByCourseId(Long courseId, Pageable pageable);
     CourseClass findByClassId(Long classId);
+
+    
+	CourseClass findById(long Id);
+	
+	List<Long> findDistinctCourseId(long lecturerId);
+	
+	ArrayList<CourseClass> findByLecturerId(long lecturerId);
+
 }

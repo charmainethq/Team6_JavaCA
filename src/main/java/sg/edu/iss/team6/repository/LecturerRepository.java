@@ -7,10 +7,13 @@ import org.springframework.data.repository.query.Param;
 
 import sg.edu.iss.team6.model.*;
 
+
 public interface LecturerRepository extends JpaRepository<Lecturer, Integer>{
+
     
     Lecturer findByUser(User u);
 
     @Query("SELECT l from Lecturer l where l.user.username = :username")
     public List<Lecturer>findByUser_Username(@Param("username")String username);
+
 }
