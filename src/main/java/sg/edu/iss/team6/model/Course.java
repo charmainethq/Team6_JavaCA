@@ -28,7 +28,4 @@ public class Course implements Serializable {
     @OneToMany(mappedBy = "course")
     private List<CourseClass> courseClasses;
 
-    @OneToMany(mappedBy = "course")
-    private List<Enrollment> enrollments;
-
 }
