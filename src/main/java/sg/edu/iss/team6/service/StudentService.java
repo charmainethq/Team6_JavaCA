@@ -1,5 +1,6 @@
 package sg.edu.iss.team6.service;
 
+
 import sg.edu.iss.team6.model.Course;
 import sg.edu.iss.team6.model.Enrollment;
 import sg.edu.iss.team6.model.Student;
@@ -7,10 +8,17 @@ import sg.edu.iss.team6.model.User;
 
 import java.util.*;
 
+import sg.edu.iss.team6.model.Student;
+import sg.edu.iss.team6.model.User;
+
+import java.util.ArrayList;
+
+
 public interface StudentService {
     ArrayList<Student> findAllStudents();
 
     Student findByStudentId(Long studentId);
+
     Student findByUserUsername(String username);
 
     Student create(Student student);

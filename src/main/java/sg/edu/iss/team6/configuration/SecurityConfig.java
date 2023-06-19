@@ -1,4 +1,4 @@
-/*
+
 package sg.edu.iss.team6.configuration;
 
 import org.springframework.context.annotation.Configuration;
@@ -17,4 +17,3 @@ public class SecurityConfig extends
         security.httpBasic().disable();
     }
 }
-*/
