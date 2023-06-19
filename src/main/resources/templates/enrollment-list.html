@@ -25,6 +25,7 @@
                 <tr>
                     <th>Enrollment ID</th>
                     <th>Student ID</th>
+                    <th>Student Username</th>
                     <th>Class ID</th>
                     <th>Status</th>
                     <th>Actions</th>
@@ -35,6 +36,7 @@
                 <tr th:each="enrollment : ${enrollments}" id="enrollmentRow">
                     <td th:text="${enrollment.enrollmentId}"></td>
                     <td th:text="${enrollment.student.studentId}"></td>
+                    <td th:text="${enrollment.student.user.username}"></td>
                     <td th:text="${enrollment.courseClass.classId}"></td>
                     <td th:text="${enrollment.enrollmentStatus}"></td>
                     <td>
@@ -44,7 +46,7 @@
                                 ...
                             </button>
                             <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" th:href="@{student/{enrollmentId}/detail(enrollmentId=${enrollment.enrollmentId})}">View</a>
+                                <a class="dropdown-item" th:href="@{{enrollmentId}/detail(enrollmentId=${enrollment.enrollmentId})}">View</a>
                                 <a class="dropdown-item" th:href="@{{enrollmentId}/status(enrollmentId=${enrollment.enrollmentId})}">Update</a>
                                 <a class="dropdown-item" th:href="@{student/{enrollmentId}/remove(enrollmentId=${enrollment.enrollmentId})}">Remove</a>
                             </div>
