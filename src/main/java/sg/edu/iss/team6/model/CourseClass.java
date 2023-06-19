@@ -5,6 +5,7 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.*;
@@ -22,7 +23,7 @@ public class CourseClass implements Serializable {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startDate;
     private int size;
     private int confirmed;

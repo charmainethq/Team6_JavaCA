@@ -10,27 +10,35 @@
 </head>
 <body>
 <h1>Create Course</h1>
-<form th:action="@{/admin/course/class/create}" th:object="${class}" method="post">
+<form th:action="@{/admin/course/class/create}" th:object="${courseClass}" method="post">
+    <input type="hidden" name="course.courseId" th:value="${course.courseId}" />
+
     <label for="roomNum">Room Number:</label>
     <input type="text" id="roomNum" th:field="*{roomNum}" required/><br/>
 
     <label for="size">Size:</label>
     <input type="text" id="size" th:field="*{size}" required/><br/>
 
+    <label for="lecturer">Lecturer:</label>
+    <select id="lecturer" name="lecturer" required>
+        <option th:each="l : ${lecturers}" th:value="${l.lecturerId}" th:text="${l.firstName + ' ' + l.lastName}"></option>
+    </select><br/>
+
     <label for="startDate">Start Date:</label>
     <input type="text" id="startDate" th:field="*{startDate}" required/><br/>
 
     <script>
-      $(function() {
-        $("#startDate").datepicker();
-      });
+    $(function() {
+      // Initialize the datepicker
+      $("#startDate").datepicker();
+
+      // Set the desired date format
+      $("#startDate").datepicker("option", "dateFormat", "yy-mm-dd 00:00:00.000000");
+    });
     </script>
 
-<!--    <label for="lecturer">Lecturer:</label>-->
-<!--    <input type="text" id="lecturer" th:field="*{lecturer}" required/><br/>-->
-<!--    <div id="lecturerOptions" class="dropdown-content">-->
-<!--        <div class="option" th:each="l : ${lecturer}" th:text="${l.firstName + ' ' + l.lastName}">Lecturer 1</div>-->
-<!--    </div>-->
+
+
 
     <input type="submit" value="Create"/>
 </form>

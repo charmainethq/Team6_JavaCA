@@ -5,10 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sg.edu.iss.team6.model.Admin;
+import sg.edu.iss.team6.model.Enrollment;
 import sg.edu.iss.team6.model.Student;
 import sg.edu.iss.team6.model.User;
 import sg.edu.iss.team6.repository.StudentRepository;
 import sg.edu.iss.team6.repository.UserRepository;
+import sg.edu.iss.team6.service.EnrollmentService;
 import sg.edu.iss.team6.service.StudentService;
 import sg.edu.iss.team6.service.UserService;
 import sg.edu.iss.team6.service.UserServiceImpl;
@@ -24,6 +26,8 @@ public class AdminStudentController {
     StudentService sService;
     @Autowired
     UserService uService;
+    @Autowired
+    EnrollmentService eService;
 
     @GetMapping(value = "/list")
     public String getAllStudents(Model model){
@@ -66,6 +70,9 @@ public class AdminStudentController {
     }
     @GetMapping("/delete/{id}")
     public String deleteStudentById(@PathVariable("id") long id) {
+        Student student = sService.findByStudentId(id);
+        List<Enrollment> enrollments = eService.findByStudent(student);
+        eService.deleteList(enrollments);
         sService.delete(id);
         return "redirect:/admin/student/list";
     }
