@@ -23,10 +23,6 @@ public class StudentServiceImpl implements StudentService {
     @Resource
     StudentRepository srepo;
 
-    @Override
-    public ArrayList<Student> findAllStudents() {
-        return (ArrayList<Student>) srepo.findAll();
-    }
 
     @Override
     @Transactional

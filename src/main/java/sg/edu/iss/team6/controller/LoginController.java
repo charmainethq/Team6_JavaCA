@@ -45,7 +45,7 @@ public class LoginController {
 				return "redirect:/lecturer";
 			} else if (userType.equals("Student")) {
                 session.setAttribute("username", username);
-				return "redirect:/student";
+				return "redirect:/student/selfInformation";
 			} else {
 				return "redirect:/login";
 			}

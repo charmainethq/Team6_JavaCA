@@ -25,11 +25,6 @@ public class AdminStudentController {
     @Autowired
     private UserService uService;
 
-    @GetMapping(value = "/list")
-    public String getAllStudents(Model model){
-        model.addAttribute("allStudents", sService.findAllStudents());
-        return "student-list";
-    }
     @GetMapping(value = "/{id}")
     public String getStudentById(Model model, @PathVariable long id){
         model.addAttribute("student", sService.findByStudentId(id));

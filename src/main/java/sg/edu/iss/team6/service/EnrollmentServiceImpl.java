@@ -33,7 +33,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     @Transactional
     public List<Enrollment> findAll(){
-        return erepo.findAll();
+        return eRepo.findAll();
     }
 
 }
