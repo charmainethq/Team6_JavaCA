@@ -2,17 +2,20 @@ package sg.edu.iss.team6.model;
 
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Entity
 public class CourseClass implements Serializable {
     @Id
@@ -30,10 +33,29 @@ public class CourseClass implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "lecturer_id")
+    @JsonIgnore
     private Lecturer lecturer;
 
     @OneToMany(mappedBy="courseClass")
+    @JsonIgnore
     private List<Enrollment> classEnrollment;
+
+    public String getFormatStartDate(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(calendar.getTime());
+    }
+
+    public String getFormatEndDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        calendar.add(Calendar.DAY_OF_YEAR, course.getDuration());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(calendar.getTime());
+    }
+
+
 
 
 }

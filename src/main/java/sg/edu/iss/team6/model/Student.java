@@ -1,5 +1,7 @@
 package sg.edu.iss.team6.model;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Entity
 public class Student {
     @Id
@@ -24,12 +25,17 @@ public class Student {
     private String firstName;
     private String lastName;
     private String email;
-    private int contactNo;
+    private String contactNo;
     private String address;
     private long gpa;
 
     @OneToMany(mappedBy="student")
+    @JsonIgnore
     private List<Enrollment> studentEnrollments;
+
+    public String getFullName(){
+        return firstName + " " + lastName;
+    }
 
 
 }

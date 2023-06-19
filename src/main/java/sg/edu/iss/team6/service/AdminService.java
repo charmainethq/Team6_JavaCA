@@ -1,5 +1,25 @@
 package sg.edu.iss.team6.service;
 import sg.edu.iss.team6.model.Admin;
-import java.util.ArrayList;
+
+
+import javax.transaction.Transactional;
+
+import sg.edu.iss.team6.model.User;
+
+
+import java.util.List;
+
 public interface AdminService {
+    List<Admin> findAll();
+	
+	Admin findById(int id);
+ 
+    Admin create(Admin admin);
+ 
+    Admin update(Admin admin);
+
+    @Transactional
+    int delete(int id);
+
+    Admin findByUser(User u);
 }
