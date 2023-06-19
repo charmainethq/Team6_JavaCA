@@ -1,8 +1,21 @@
 package sg.edu.iss.team6.service;
+import java.util.List;
+
 import sg.edu.iss.team6.model.Lecturer;
 import sg.edu.iss.team6.model.User;
 
-import java.util.ArrayList;
 public interface LecturerService {
-    Lecturer findByuser(User u);
+
+    Lecturer findByUser(User u);
+
+    List<Lecturer> findAll();
+	
+	Lecturer findById(int id);
+ 
+    Lecturer create(Lecturer l);
+ 
+    Lecturer update(Lecturer l);
+
+    int delete(int id);
+
 }

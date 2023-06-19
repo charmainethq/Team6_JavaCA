@@ -31,7 +31,7 @@
       <td th:text="${course.credits}"></td>
       <td th:text="${course.duration}"></td>
       <td>
-        <form th:action="@{'/student/' + ${course.courseId} + '/viewClasses'}" method="get">
+        <form th:action="@{'/student/viewClasses/' + ${course.courseId}}" method="get">
           <button type="submit" class="btn btn-primary">View Classes</button>
         </form>
       </td>

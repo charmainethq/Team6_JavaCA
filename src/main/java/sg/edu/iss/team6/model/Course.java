@@ -1,8 +1,11 @@
 package sg.edu.iss.team6.model;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,7 +13,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Entity
 public class Course implements Serializable {
     @Id
@@ -24,6 +26,7 @@ public class Course implements Serializable {
     private int duration;
 
     @OneToMany(mappedBy = "course")
+    @JsonIgnore
     private List<CourseClass> courseClasses;
 
 }

@@ -28,7 +28,9 @@ public class EmailService {
             helper.setSubject("Confirmation Email");
 
             String htmlContent = "<p>Dear " + studentName + ",</p>" +
-                    "<p>Please click the link below to confirm your enrollment for Course ID: " + course.getCourseId() + " " + course.getName() + ":</p>" +
+                    "<p>Please click the link below to confirm your enrollment for <br>" +
+                    "Course ID: " + course.getCourseId() + " " + course.getName() +
+                    "<br> Class Id </p>" +
                     "<p><a href=\"" + confirmationLink + "\">Confirm enrollment</a></p>";
             helper.setText(htmlContent, true);
 

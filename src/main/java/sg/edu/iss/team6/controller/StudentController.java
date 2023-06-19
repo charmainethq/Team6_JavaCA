@@ -2,9 +2,14 @@ package sg.edu.iss.team6.controller;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import sg.edu.iss.team6.model.*;
 import sg.edu.iss.team6.repository.EnrollmentRepository;
 import sg.edu.iss.team6.service.*;
@@ -74,8 +79,17 @@ public class StudentController {
 
 
 
-    @GetMapping(value = "{courseId}/viewAvailableClasses")
-    public String getClassesByCourseId(@PathVariable("courseId") Long courseId, Model model) {
+    @GetMapping(value = "viewClasses/{courseId}")
+    public String getClassesByCourseId(@PathVariable("courseId") Long courseId,
+                                       @RequestParam(value = "page", defaultValue = "0") int page,
+                                       @RequestParam(value = "size", defaultValue = "10") int size,
+                                       Model model) {
+
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CourseClass> allClasses = classService.findByCourseId(courseId, pageable);
+        //List<CourseClass> allClasses = classService.findByCourseId(courseId);
+
         //TODO: remove and use session instead
         Student student =  studentService.findByStudentId(testId);
         model.addAttribute("student",student);
@@ -83,22 +97,13 @@ public class StudentController {
         Course course = courseService.findCourseByCourseId(courseId);
         model.addAttribute("course",course);
 
-        List<CourseClass> allClasses = classService.findByCourseId(courseId);
-        /**
-        List<CourseClass> availableClasses = allClasses.stream()
-                .filter(courseClass -> !enrollmentService.hasEnrollment(student.getStudentId(), courseClass.getClassId()))
-                .collect(Collectors.toList());
-
-        model.addAttribute("classes", availableClasses);**/
-
-
         model.addAttribute("classes", allClasses);
 
         return "student-classList";
     }
 
     @PostMapping("/register")
-    public String registerClass(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, @RequestParam("courseId") Long courseId) {
+    public String registerClass(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, @RequestParam("courseId") Long courseId, Model model) {
 
         // Retrieve the student and class based on the provided IDs
         Student student = studentService.findByStudentId(studentId);
@@ -111,21 +116,35 @@ public class StudentController {
          return "redirect:/student/registerFailure";
          }**/
 
-        // Create a new enrollment object
+        // Find the current enrollment status if any
+        Enrollment existingEnrollment = enrollmentService.findByStudentAndClass(classId,studentId).orElse(null);
+        if (existingEnrollment != null)
+        System.out.println(existingEnrollment.getEnrollmentStatus());
+
+        // Reject if completed or attempted to register before
+        if (existingEnrollment != null &&
+                (existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.SUBMITTED
+                        || existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.CONFIRMED
+                        || existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.COMPLETED
+                )) {
+            model.addAttribute("eStatus", existingEnrollment.getEnrollmentStatus());
+            return "student-error-duplicate-registration";
+        }
+
+        // Else create a new enrollment object
         Enrollment enrollment = new Enrollment();
         enrollment.setStudent(student);
         enrollment.setCourseClass(courseClass);
         enrollment.setEnrollmentStatus(EnrollmentEnum.SUBMITTED);
         System.out.print(enrollment.getEnrollmentId());
 
-        // Save the enrollment object to the database
         enrollmentRepository.save(enrollment);
 
-        String testRecepientEmail= "sa56team6@outlook.com";
 
         // Send confirmation email with link
-        String confirmationLink = emailUtility.generateConfirmationLink(studentId, enrollment.getEnrollmentId());
+        String testRecepientEmail= "sa56team6@outlook.com";
 
+        String confirmationLink = emailUtility.generateConfirmationLink(studentId, classId);
         emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink, student.getFullName(), course);
 
         return "redirect:/student/registerSuccess";
@@ -133,10 +152,27 @@ public class StudentController {
 
 
     @GetMapping("/confirmEnrollment")
-    public String confirmEnrollment(){
-        // TODO
+    public String createEnrollmentFromUrl(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId) {
+        Enrollment enrollment = enrollmentService.findByStudentAndClass(classId,studentId).orElse(null);
+
+        enrollmentService.updateEnrollmentStatus(enrollment.getEnrollmentId(), EnrollmentEnum.CONFIRMED);
+
+        //TODO: if (enrollment == null) some error
+        try {
+        } catch (NumberFormatException e) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invalid URL parameters");
+        }
+
+
         return "student-registerSuccess";
     }
+
+    /**private String getUrlParamValue(String url, String paramName) {
+        MultiValueMap<String, String> params = UriComponentsBuilder.fromUriString(url).build().getQueryParams();
+        return params.getFirst(paramName);
+    }**/
+
+
 
 
     @GetMapping("/registerSuccess")

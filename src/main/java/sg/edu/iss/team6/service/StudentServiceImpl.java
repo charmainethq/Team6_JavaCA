@@ -35,6 +35,35 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Student create(Student student) {
+        return srepo.save(student);
+    }
+
+    @Override
+    public Student update(Student student) {
+        return srepo.save(student);
+    }
+
+    @Override
+    @Transactional
+    public void delete(long id) {
+        srepo.deleteByStudentId(id);
+    }
+
+    /**@Override
+     @Transactional
+     public Student findByUser(User u) {
+     return srepo.findByUserUsername(u);
+     }
+
+     @Override
+     @Transactional
+     public Student findByUser(User u) {
+     return srepo.findByUser(u);
+     }
+     **/
+
+    @Override
     @Transactional
     public Student findByuser(User u) {
         return srepo.findByuser(u);
@@ -73,7 +102,7 @@ public class StudentServiceImpl implements StudentService {
     public long computeStudentgpa(long studentId){
 
         long gpa = 0;
-        
+
         Student student = srepo.findByStudentId(studentId);
         List<Enrollment> enrol = new ArrayList<>();
 
@@ -133,6 +162,7 @@ public class StudentServiceImpl implements StudentService {
         return CourseandScore;
 
     }
+
 
 
 }

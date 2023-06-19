@@ -1,5 +1,7 @@
 package sg.edu.iss.team6.model;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +32,7 @@ public class Student {
     
     
     @OneToMany(mappedBy="student",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Enrollment> studentEnrollments;
 
     public String getFullName(){

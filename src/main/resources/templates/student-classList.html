@@ -25,8 +25,9 @@
 <table>
     <thead>
     <tr>
-        <th>Class No.</th>
+        <th>Class ID</th>
         <th>Start Date</th>
+        <th>End Date</th>
         <th>Size</th>
         <th>Enrolled</th>
         <th>Room Number</th>
@@ -34,9 +35,10 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="courseClass : ${classes}">
+    <tr th:each="courseClass : ${classes.content}">
         <td th:text="*{courseClass.classId}"></td>
-        <td th:text="*{courseClass.startDate}"></td>
+        <td th:text="*{courseClass.getFormatStartDate()}"></td>
+        <td th:text="*{courseClass.getFormatEndDate()}"></td>
         <td th:text="*{courseClass.size}"></td>
         <td th:text="*{courseClass.confirmed}"></td>
         <td th:text="*{courseClass.roomNum}"></td>
@@ -53,5 +55,9 @@
     </tr>
     </tbody>
 </table>
+
+
+
+
 </body>
 </html>
