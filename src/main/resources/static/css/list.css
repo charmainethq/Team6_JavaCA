@@ -41,7 +41,7 @@ h1 {
 }
 
 .table th {
-    background-color: #387cb4;
+    background-color: #77aae8;
     color: #ffffff;
     text-align: center;
     border-bottom: 1px solid #ffffff; /* Add a white border at the bottom */
@@ -129,6 +129,8 @@ h1 {
   opacity: 1;
 }
 
+
+
 @media (min-width: 768px) {
   .btn {
       height: 35px;
@@ -141,6 +143,16 @@ h1 {
       height: 32px;
       width: 60px;
   }
+}
+
+.custom-button {
+  background-color: green;
+  color: white;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  height: 35px;
+  width: 150px;
 }
 
 /* dorp-down option */
@@ -174,3 +186,19 @@ h1 {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+.transparent-btn {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+.transparent-btn:focus {
+  outline: none;
+}
+
+.sort-text {
+  margin-right: 5px;
+}
+
+

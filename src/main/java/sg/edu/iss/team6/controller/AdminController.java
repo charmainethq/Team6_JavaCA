@@ -20,7 +20,7 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String getAdminPage(){
-        return "adminPage";
+        return "admin";
     }
     @GetMapping("/admin/list")
     public String getAllAdmin(Model model) {
