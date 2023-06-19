@@ -108,7 +108,7 @@ public class StudentController {
 
         model.addAttribute("classes", allClasses);
 
-        return "student-classList";
+        return "student-view-classes";
     }
 
     @PostMapping("/register")
@@ -173,7 +173,7 @@ public class StudentController {
         }
 
 
-        return "student-registerSuccess";
+        return "student-register-success";
     }
 
     /**private String getUrlParamValue(String url, String paramName) {
@@ -186,7 +186,7 @@ public class StudentController {
 
     @GetMapping("/registerSuccess")
     public String registerSuccess(){
-        return "student-registerSuccess";
+        return "student-register-success";
     }
 
     @GetMapping("/selfInformation")
