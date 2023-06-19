@@ -56,4 +56,9 @@ public class CourseServiceImpl implements CourseService{
         return cRepo.findCourseByCourseId(courseId);
 
     }
+
+	@Override
+	public Course findById(long id) {
+		return cRepo.findById((int) id).orElse(null);
+	}
 }

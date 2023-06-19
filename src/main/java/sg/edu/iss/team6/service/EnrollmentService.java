@@ -13,4 +13,11 @@ public interface EnrollmentService {
     Optional<Enrollment> findByStudentAndClass(long classId, long studentId);
     void updateEnrollmentStatus(long enrollmentId, EnrollmentEnum status);
 
+
+	Enrollment findById(long id);
+
+	Enrollment update(Enrollment currentEnrollment);
+    
+	ArrayList<Enrollment> findByClassId(long classId);
+
 }

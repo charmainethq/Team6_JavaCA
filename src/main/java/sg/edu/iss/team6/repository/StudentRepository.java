@@ -15,14 +15,16 @@ import sg.edu.iss.team6.model.Student;
 import sg.edu.iss.team6.model.User;
 
 
+
 public interface StudentRepository extends JpaRepository<Student, Integer> {
+
 
 
     Student findByStudentId(Long studentId);
     Student findByUserUsername(User u);
 
-
     Student findByUserUsername(String username);
+
 
     void deleteByStudentId(long id);
 

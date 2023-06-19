@@ -25,5 +25,22 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         eRepo.updateEnrollmentStatus(enrollmentId, status);
     }
 
+	@Override
+	@Transactional
+	public Enrollment findById(long id) {
+		return eRepo.findById((int) id).orElse(null);
+	}
+
+	@Override
+	@Transactional
+	public Enrollment update(Enrollment currentEnrollment) {
+		return eRepo.save(currentEnrollment);
+	}
+
+	@Override
+	@Transactional
+	public ArrayList<Enrollment> findByClassId(long classId){
+		return eRepo.findEnrollmentByCourseID(classId);
+	}
 
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Student Management System</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<style>
+		.table-smaller {
+			width: 100%;
+		}
+
+		.table-smaller th,
+		.table-smaller td {
+			padding: 5px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: 100px; /* Adjust the max-width as desired */
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<h1> Lecturer</h1>
+		</div>
+
+		<table class="table table-striped table-bordered table-smaller">
+			<thead class="table-dark">
+				<tr>
+					<th>Id</th>
+					<th>Lecturer First Name</th>
+					<th>Lecturer Last Name</th>
+					<th>Lecturer Email</th>
+					<th>Lecturer Contact No.</th>
+					<th>Lecturer Address</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td th:text="${lecturer.lecturerId}"></td>
+					<td th:text="${lecturer.firstName}"></td>
+					<td th:text="${lecturer.lastName}"></td>
+					<td th:text="${lecturer.email}"></td>
+					<td th:text="${lecturer.contactNo}"></td>
+					<td th:text="${lecturer.address}"></td>
+					<td>To put Action button</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+
+</html>

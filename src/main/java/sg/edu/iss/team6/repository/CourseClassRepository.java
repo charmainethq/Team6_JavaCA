@@ -6,8 +6,15 @@ import org.springframework.data.jpa.repository.Query;
 import sg.edu.iss.team6.model.*;
 
 import java.util.List;
+import org.springframework.data.repository.query.Param;
+
+import sg.edu.iss.team6.model.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public interface CourseClassRepository extends JpaRepository<CourseClass, Integer>{
+
 
     List<CourseClass> findByCourse(Course course);
 
@@ -15,6 +22,13 @@ public interface CourseClassRepository extends JpaRepository<CourseClass, Intege
     Page<CourseClass> findAllByCourseCourseId(Long courseId, Pageable pageable);
     List<CourseClass> findAllByCourseCourseId(Long courseId);
     CourseClass findByClassId(Long classId);
+
+	@Query ("SELECT DISTINCT cc.course.courseId FROM CourseClass cc WHERE cc.lecturer.lecturerId = :lecturerId")
+	public List<Long> findDistinctCourseId(@Param("lecturerId") long lecturerId);
+	
+	@Query ("SELECT cc FROM CourseClass cc WHERE cc.lecturer.lecturerId = :lecturerId")
+	public ArrayList<CourseClass> findByLecturerId(@Param("lecturerId") long lecturerId);
+
 
 
 }

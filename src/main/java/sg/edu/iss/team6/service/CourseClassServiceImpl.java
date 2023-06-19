@@ -45,4 +45,17 @@ public class CourseClassServiceImpl implements CourseClassService{
         return classRepo.findByClassId(classId);
     }
 
+
+	@Override
+	public CourseClass findById(long id) {
+		return classRepo.findById((int) id).orElse(null);
+	}
+	
+	public List<Long> findDistinctCourseId(long lecturerId){
+		return classRepo.findDistinctCourseId(lecturerId);
+	}
+	public ArrayList<CourseClass> findByLecturerId(long lecturerId){
+		return classRepo.findByLecturerId(lecturerId);
+	}
+
 }
