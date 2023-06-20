@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+  <header>
+    <div th:include="index.html"></div>
+  </header>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3 sidebar">
+        <ul class="nav nav-pills nav-stacked">
+          <li><a href="/admin" class="tab-link">Admin</a></li>
+          <li><a class="manage-link tab-link" th:href="@{/admin/user/list}">Manage User</a></li>
+          <li><a class="manage-link tab-link" th:href="@{/admin/list}">Manage Admin</a></li>
+          <li><a class="manage-link tab-link" th:href="@{/admin/student/list}">Manage Student</a></li>
+          <li><a class="manage-link tab-link" th:href="@{/admin/lecturer/list}">Manage Lecturer</a></li>
+          <li><a class="manage-link tab-link" th:href="@{/admin/course/list}">Manage Courses</a></li>
+          <li><a class="manage-link tab-link" th:href="@{/admin/enrollment/list}">Manage Enrollment</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    $(document).ready(function() {
+      // Retrieve the current URL path
+      var path = window.location.pathname;
+  
+      // Get the tab link that matches the current URL path
+      var activeLink = $('.tab-link[href="' + path + '"]');
+  
+      // Add 'active' class to the matched tab link's parent (list item)
+      activeLink.parent().addClass('active');
+    });
+  </script>
+  
+</body>
+</html>
