@@ -1,12 +1,23 @@
 package sg.edu.iss.team6.service;
-import sg.edu.iss.team6.model.CourseClass;
-import sg.edu.iss.team6.model.Enrollment;
+import sg.edu.iss.team6.model.*;
+
+import java.util.ArrayList;
 import sg.edu.iss.team6.model.EnrollmentEnum;
-import sg.edu.iss.team6.model.Student;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EnrollmentService {
+
+
+    Optional<Enrollment> findByStudentAndClass(long classId, long studentId);
+    void updateEnrollmentStatus(long enrollmentId, EnrollmentEnum newStatus);
+
+	Enrollment findById(long id);
+
+    
+	ArrayList<Enrollment> findByClassId(long classId);
+
     List<Enrollment> findAllEnrollments();
     List<Enrollment> findByCourseClass(CourseClass courseClass);
     List<Enrollment> findByStudent(Student student);
@@ -16,6 +27,6 @@ public interface EnrollmentService {
     void delete(long id);
     void deleteList(List<Enrollment> enrollments);
 
-    void updateEnrollmentStatus(long enrollmentId, EnrollmentEnum newStatus);
+
 
 }

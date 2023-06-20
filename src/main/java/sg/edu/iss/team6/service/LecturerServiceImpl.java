@@ -1,5 +1,4 @@
 package sg.edu.iss.team6.service;
-import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sg.edu.iss.team6.model.Lecturer;
 import sg.edu.iss.team6.model.User;
 import sg.edu.iss.team6.repository.LecturerRepository;
-import java.util.ArrayList;
+
 import java.util.List;
 
 
@@ -33,6 +32,11 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
     @Override
+    public Lecturer findById(long id) {
+        return null;
+    }
+
+    @Override
 
     public Lecturer create(Lecturer lect) {
         return lrepo.save(lect);
@@ -46,8 +50,25 @@ public class LecturerServiceImpl implements LecturerService {
 
 
     @Override
-    public Long delete(Long id){
+    public long delete(long id){
         lrepo.deleteById(id);
         return id;
     }
+
+    @Override
+    public Long delete(Long id) {
+         lrepo.deleteById(id);
+        return id;
+    }
+
+    @Override
+    public int delete(int id) {
+        return 0;
+    }
+
+    @Override
+    public List<Lecturer> findByUser_Username(String username){
+    	return lrepo.findByUser_Username(username);
+    }
+
 }

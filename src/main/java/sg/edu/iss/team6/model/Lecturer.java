@@ -21,6 +21,7 @@ public class Lecturer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long lecturerId;
 
+
     @OneToOne
     @JoinColumn(name = "username")
     private User user;
@@ -36,7 +37,7 @@ public class Lecturer implements Serializable {
 
     @Size(min=2, max=10, message="Contact Number must be 2-10 characters long")
     private String contactNo;
-    
+
     @Size(min=2, max=50, message="Address must be 2-30 characters long")
     private String address;
 
