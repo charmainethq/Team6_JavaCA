@@ -98,24 +98,24 @@ public class StudentController {
 
     @GetMapping(value = "viewClasses/{courseId}")
     public String getClassesByCourseId(@PathVariable("courseId") Long courseId,
-                                       @RequestParam(value = "page", defaultValue = "0") int page,
-                                       @RequestParam(value = "size", defaultValue = "10") int size,
                                        HttpSession session,
                                        Model model) {
 
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<CourseClass> allClasses = classService.findByCourseId(courseId, pageable);
-        //List<CourseClass> allClasses = classService.findByCourseId(courseId);
-
         String username= (String)session.getAttribute("username");
-        Student student= studentService.findByUserUsername(username);
+        //Student student= studentService.findByUserUsername(username);
         model.addAttribute("student",student);
+
+        List<CourseClass> allClasses = classService.findByCourseId(courseId);
+
+        List<String> lecturerNames = allClasses.stream()
+                .map(courseClass -> courseClass.getLecturer().getFullName())
+                .collect(Collectors.toList());
+
 
         Course course = courseService.findCourseByCourseId(courseId);
         model.addAttribute("course",course);
-
         model.addAttribute("classes", allClasses);
+        model.addAttribute("lecturerNames", lecturerNames);
 
         return "student-view-classes";
     }
@@ -137,16 +137,17 @@ public class StudentController {
 
         // Find the current enrollment status if any
         Enrollment existingEnrollment = enrollmentService.findByStudentAndClass(classId,studentId).orElse(null);
-        if (existingEnrollment != null)
-        System.out.println(existingEnrollment.getEnrollmentStatus());
 
         // Reject if completed or attempted to register before
         if (existingEnrollment != null &&
                 (existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.SUBMITTED
                         || existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.CONFIRMED
                         || existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.COMPLETED
+                        || existingEnrollment.getEnrollmentStatus() ==EnrollmentEnum.REMOVED
                 )) {
-            model.addAttribute("eStatus", existingEnrollment.getEnrollmentStatus());
+            model.addAttribute("eStatus", existingEnrollment.getEnrollmentStatus().toString());
+            System.out.println(existingEnrollment.getEnrollmentStatus());
+
             return "student-register-fail";
         }
 

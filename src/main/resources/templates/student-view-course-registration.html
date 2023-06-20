@@ -5,7 +5,8 @@
     <title>Course Registration</title>
 
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/student-enrollment-tables.css}"/>
+    <link rel="stylesheet" href="/css/student-enrollment-list.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <style>
         /* left align override for name and description */
@@ -22,41 +23,37 @@
 <body>
 <header>
     <div th:include="index.html"></div>
-    <div th:include="index.html"></div>
+
 </header>
 
 <div class="container">
     <h1>Course Registration</h1>
 
-    <div class="mb-3">
+    <div class="custom-search input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="searchAddon"><i class="bi bi-search"></i></span>
+        </div>
         <label for="searchInput">Search:</label>
-        <input type="text"
-               class="form-control"
-               id="searchInput"
-               placeholder="Search by Course Number, Name or Description"
-               oninput="filterTable()">
+        <input type="text" class="form-control" id="searchInput" placeholder="Search" aria-label="Search"
+               aria-describedby="searchAddon">
     </div>
-    <div class="mb-3">
-        <label for="filterSelect">Filter by Eligibility:</label>
-        <select class="form-control" id="filterSelect" onchange="filterTable()">
-            <option value="all">All Courses</option>
-            <option value="yes">Eligible to Register</option>
-            <option value="no">Not Eligible to Register</option>
-        </select>
-    </div>
-    <br>
-    <table class="table table-striped">
+
+
+    <table class="table table-striped" id="courseTable">
+
+        <!--TODO: format this shit properly-->
         <thead>
         <tr>
-            <th>Course Number</th>
-            <th>Course Name</th>
-            <th>Description</th>
-            <th>Credits</th>
-            <th>Duration</th>
-            <th>Eligible to Register</th>
+            <th onclick="sortTable('courseTable', 0)"><button class="transparent-btn"><span class="sort-text">Course Number</span> <i class="fas fa-sort"></i></button></th>
+            <th onclick="sortTable('courseTable', 1)"><button class="transparent-btn"><span class="sort-text">Course &nbsp; &nbsp; Name</span> <i class="fas fa-sort"></i></button></th>
+            <th th class="text-center" onclick="sortTable('courseTable', 2)"><button class="transparent-btn"><span class="sort-text">Description  </span> <i class="fas fa-sort"></i></button><br></th>
+            <th onclick="sortTable('courseTable', 3)"><button class="transparent-btn"><span class="sort-text">Credits</span> <i class="fas fa-sort"></i></button></th>
+            <th onclick="sortTable('courseTable', 4)"><button class="transparent-btn"><span class="sort-text">Duration</span> <i class="fas fa-sort"></i></button></th>
+            <th onclick="sortTable('courseTable', 4)"><button class="transparent-btn"><span class="sort-text">Eligible to Register</span> <i class="fas fa-sort"></i></button></th>
             <th>View Available Classes</th>
         </tr>
         </thead>
+
         <tbody>
         <tr th:each="course : ${courses}" id="courseRow">
             <td th:text="${course.courseNum}"></td>
@@ -66,47 +63,43 @@
             <td th:text="${course.duration}"></td>
             <td th:text="${canRegister[course.courseId] ? 'Yes' : 'No'}"></td>
             <td>
-                <form th:if="${canRegister[course.courseId]}" th:action="@{'/student/viewClasses/' + ${course.courseId}}" method="get">
-                    <button type="submit" class="btn btn-primary">View Classes</button>
+                <form th:if="${canRegister[course.courseId]}"
+                      th:action="@{'/student/viewClasses/' + ${course.courseId}}" method="get">
+                    <button type="submit" class="btn btn-primary btn-block">View Classes</button>
                 </form>
             </td>
         </tr>
+
 
         </tbody>
     </table>
 </div>
 
 <script th:src="@{/js/bootstrap.min.js}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 <script>
-    function filterTable() {
-        const searchInput = document.querySelector('#searchInput').value.toLowerCase();
-        const filterSelect = document.querySelector('#filterSelect').value;
-        const courseRows = document.querySelectorAll('tbody tr');
-
-        courseRows.forEach(function (row) {
-            const courseNum = row.cells[0].textContent.toLowerCase();
-            const name = row.cells[1].textContent.toLowerCase();
-            const description = row.cells[2].textContent.toLowerCase();
-            const eligibility = row.cells[5].textContent.toLowerCase();
-
-            const matchesSearchInput =
-                courseNum.includes(searchInput) ||
-                name.includes(searchInput) ||
-                description.includes(searchInput);
-
-            const matchesEligibility =
-                filterSelect === 'all' ||
-                (filterSelect === 'yes' && eligibility === 'yes') ||
-                (filterSelect === 'no' && eligibility === 'no');
-
-            if (matchesSearchInput && matchesEligibility) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
+    $(document).ready(function () {
+        var table = $('#courseTable').DataTable({
+            "lengthChange": false, // Disable the length change option
+            "pageLength": 5, // Set the initial number of rows per page
+            "dom": 'rtip', // Hide search filter input field
         });
-    }
 
+        // Apply DataTable options
+        table.on('draw', function () {
+            var info = table.page.info();
+            $('#pageInfo').text('Page ' + (info.page + 1) + ' of ' + info.pages);
+        });
+
+        // Add search functionality
+        $('#searchInput').on('keyup change', function () {
+            table.search(this.value).draw();
+        });
+    });
 </script>
+
+
 </body>
 </html>
