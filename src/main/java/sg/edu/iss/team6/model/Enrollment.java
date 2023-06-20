@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -31,5 +32,9 @@ public class Enrollment implements Serializable {
 
     @Column(nullable = true)
     private Long score;
+
+    @Column(name = "submitted_date")
+    private LocalDateTime submittedDate;
+
 
 }
