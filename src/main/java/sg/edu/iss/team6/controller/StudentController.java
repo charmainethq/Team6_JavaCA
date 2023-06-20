@@ -89,7 +89,6 @@ public class StudentController {
         model.addAttribute("courses", allCourses);
         model.addAttribute("canRegister", canRegister);
 
-
         return "student-view-course-registration";
     }
 
@@ -122,16 +121,15 @@ public class StudentController {
     }
 
     @PostMapping("/register")
-    public String registerClass(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, @RequestParam("courseId") Long courseId, HttpSession session, Model model) {
+    public String registerClass(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, HttpSession session, Model model) {
 
 
         // Retrieve the student and class based on the provided IDs
         String username= (String)session.getAttribute("username");
         Student student= studentService.findByUserUsername(username);
         CourseClass courseClass = classService.findByClassId(classId);
-        Course course = courseService.findCourseByCourseId(courseId);
 
-        if (student == null || courseClass == null || course == null) {
+        if (student == null || courseClass == null) {
             throw new ResourceNotFoundException("Resource not found");
         }
 
@@ -146,8 +144,6 @@ public class StudentController {
                         || existingEnrollment.getEnrollmentStatus() ==EnrollmentEnum.REMOVED
                 )) {
             model.addAttribute("eStatus", existingEnrollment.getEnrollmentStatus().toString());
-            System.out.println(existingEnrollment.getEnrollmentStatus());
-
             return "student-register-fail";
         }
 
@@ -165,7 +161,7 @@ public class StudentController {
         String testRecepientEmail= "sa56team6@outlook.com";
 
         String confirmationLink = emailUtility.generateConfirmationLink(studentId, classId);
-        emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink, student.getFullName(), course);
+        emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink, student.getFullName(), courseClass);
 
         return "redirect:/student/registerSuccess";
     }
