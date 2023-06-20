@@ -8,7 +8,11 @@
     <div class="container">
         <h1>Remove Student from Course</h1>
 
+<<<<<<< HEAD
         <h3>Student Information</h3>
+=======
+        <h2>Student Information</h2>
+>>>>>>> origin/tanya3
         <p><strong>Student ID:</strong> <span th:text="${enrollment.student.studentId}"></span></p>
         <p><strong>First Name:</strong> <span th:text="${enrollment.student.firstName}"></span></p>
         <p><strong>Last Name:</strong> <span th:text="${enrollment.student.lastName}"></span></p>
@@ -17,7 +21,7 @@
         <p><strong>Class ID:</strong> <span th:text="${enrollment.courseClass.classId}"></span></p>
         <p><strong>Course Name:</strong> <span th:text="${enrollment.courseClass.course.name}"></span></p>
 
-        <h2>Confirmation</h3>
+        <h2>Confirmation</h2>
         <p>Are you sure you want to remove the student from the course <strong th:text="${enrollment.courseClass.course.name}"></strong>?</p>
 
         <form th:action="@{/admin/enrollment/student/{enrollmentId}/remove(enrollmentId=${enrollment.enrollmentId})}" th:object="${enrollment}" method="post">
