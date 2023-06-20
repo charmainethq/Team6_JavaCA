@@ -22,6 +22,7 @@
 <body>
 <header>
     <div th:include="index.html"></div>
+    <div th:include="index.html"></div>
 </header>
 
 <div class="container">
@@ -35,32 +36,42 @@
                placeholder="Search by Course Number, Name or Description"
                oninput="filterTable()">
     </div>
-
+    <div class="mb-3">
+        <label for="filterSelect">Filter by Eligibility:</label>
+        <select class="form-control" id="filterSelect" onchange="filterTable()">
+            <option value="all">All Courses</option>
+            <option value="yes">Eligible to Register</option>
+            <option value="no">Not Eligible to Register</option>
+        </select>
+    </div>
     <br>
     <table class="table table-striped">
         <thead>
         <tr>
             <th>Course Number</th>
-            <th>Name</th>
+            <th>Course Name</th>
             <th>Description</th>
             <th>Credits</th>
             <th>Duration</th>
+            <th>Eligible to Register</th>
             <th>View Available Classes</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="course : ${coursesToRegister}" id="courseRow">
+        <tr th:each="course : ${courses}" id="courseRow">
             <td th:text="${course.courseNum}"></td>
             <td th:text="${course.name}"></td>
             <td th:text="${course.description}"></td>
             <td th:text="${course.credits}"></td>
             <td th:text="${course.duration}"></td>
+            <td th:text="${canRegister[course.courseId] ? 'Yes' : 'No'}"></td>
             <td>
-                <form th:action="@{'/student/viewClasses/' + ${course.courseId}}" method="get">
+                <form th:if="${canRegister[course.courseId]}" th:action="@{'/student/viewClasses/' + ${course.courseId}}" method="get">
                     <button type="submit" class="btn btn-primary">View Classes</button>
                 </form>
             </td>
         </tr>
+
         </tbody>
     </table>
 </div>
@@ -68,27 +79,34 @@
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script>
     function filterTable() {
-        // Retrieve the search input value
         const searchInput = document.querySelector('#searchInput').value.toLowerCase();
+        const filterSelect = document.querySelector('#filterSelect').value;
+        const courseRows = document.querySelectorAll('tbody tr');
 
-        // Retrieve all admin rows
-        const adminRows = document.querySelectorAll('#courseRow');
-
-        // Loop through admin rows and check if they match the search input
-        adminRows.forEach(function (row) {
-            // Retrieve the admin information from the row
+        courseRows.forEach(function (row) {
             const courseNum = row.cells[0].textContent.toLowerCase();
             const name = row.cells[1].textContent.toLowerCase();
             const description = row.cells[2].textContent.toLowerCase();
+            const eligibility = row.cells[5].textContent.toLowerCase();
 
-            // Check if any of the admin information matches the search input
-            if (
+            const matchesSearchInput =
                 courseNum.includes(searchInput) ||
                 name.includes(searchInput) ||
-                description.includes(searchInput)
-            ) {
-                // Show the row if it matches the search input
+                description.includes(searchInput);
+
+            const matchesEligibility =
+                filterSelect === 'all' ||
+                (filterSelect === 'yes' && eligibility === 'yes') ||
+                (filterSelect === 'no' && eligibility === 'no');
+
+            if (matchesSearchInput && matchesEligibility) {
                 row.style.display = '';
             } else {
-                // Hide the row if it doesn't match the search input
                 row.style.display = 'none';
+            }
+        });
+    }
+
+</script>
+</body>
+</html>
