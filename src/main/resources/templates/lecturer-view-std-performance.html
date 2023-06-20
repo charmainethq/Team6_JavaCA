@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Lecturer</title>
+	<link rel="stylesheet" href="/css/list.css">
+</head>
+
+<body>
+	<header>
+		<div th:include="lecturer-home-page.html"></div>
+	</header>
+	<div class="container">
+		<h1> View Student Performance </h1>
+
+		<div class="mb-3">
+			<label for="searchInput">Search:</label>
+			<input type="text" class="form-control" id="searchInput" placeholder="Enter keywords"
+				oninput="filterTable()">
+		</div>
+		<table class="table table-striped table-smaller">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Student First Name</th>
+					<th>Student Last Name</th>
+					<th>Student GPA</th>
+					<th>Student Contact No.</th>
+					<th>Student Address</th>
+					<th>Student email</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- Iterate over the admins and display their information -->
+				<tr th:each="student : ${stdList}">
+					<td th:text="${student.studentId}"></td>
+					<td th:text="${student.firstName}"></td>
+					<td th:text="${student.lastName}"></td>
+					<td th:text="${student.gpa}"></td>
+					<td th:text="${student.contactNo}"></td>
+					<td th:text="${student.address}"></td>
+					<td th:text="${student.email}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<br><br>
+		<script>
+			function filterTable() {
+				// Retrieve the search input value
+				const searchInput = document.querySelector('#searchInput').value.toLowerCase();
+
+				const studentRows = document.querySelectorAll('#studentRow');
+
+				// Loop through student rows and check if they match the search input
+				studentRows.forEach(function (row) {
+					// Retrieve the student information from the row
+					const studentId = row.cells[0].textContent.toLowerCase();
+					const firstName = row.cells[1].textContent.toLowerCase();
+					const lastName = row.cells[2].textContent.toLowerCase();
+					const gpa = row.cells[3].textContent.toLowerCase();
+					const contactNo = row.cells[4].textContent.toLowerCase();
+					const address = row.cells[5].textContent.toLowerCase();
+					const email = row.cells[6].textContent.toLowerCase();
+
+					// Check if any of the student information matches the search input
+					if (
+						studentId.includes(searchInput) ||
+						firstName.includes(searchInput) ||
+						lastName.includes(searchInput) ||
+						gpa.includes(searchInput) ||
+						contactNo.includes(searchInput) ||
+						address.includes(searchInput) ||
+						email.includes(searchInput)
+					) {
+						// Show the row if it matches the search input
+						row.style.display = '';
+					} else {
+						// Hide the row if it doesn't match the search input
+						row.style.display = 'none';
+					}
+				});
+			}
+
+			function goBack() {
+				window.history.back();
+			}
+		</script>
+
+		<button onclick="goBack()">Back</button>
+
+	</div>
+</body>
+
+</html>
