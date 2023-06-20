@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lecturer</title>
+    <link rel="stylesheet" href="/css/list.css">
+</head>
+<body>
+    <header>
+        <div th:include="lecturer-home-page.html"></div>
+    </header>
+	<div class="container">
+		<div class="row">
+			<h1>Class Details</h1>
+		</div>
+		<br/>
+
+		<h4>Course Details</h4>
+		
+		<div class="details">
+			<label>Course Name:</label> <span th:text="${course.name}"></span>
+		</div>
+		<div class="details">
+			<label>Course Description:</label> <span
+				th:text="${course.description}"></span>
+		</div>
+		<br/>
+		
+		<div class="mb-3">
+			<label for="searchInput">Search:</label> <input type="text"
+				class="form-control" id="searchInput" placeholder="Enter keywords"
+				oninput="filterTable()">
+		</div>
+		
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Enrollment Id</th>
+					<th>Student Id</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Score</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="current, index: ${enrollmentList}">
+					<td th:text="${current.enrollmentId}"></td>
+					<td th:text="${current.student.studentId}"></td>
+					<td th:text="${firstName.get(index.index)}"></td>
+					<td th:text="${lastName.get(index.index)}"></td>
+					<td th:text="${current.score}"></td>
+					<td><a class="btn btn-primary" th:href="@{/lecturer/grade/} + ${current.enrollmentId}">Grade Student</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<br><br>
+		<button onclick="goBack()">Back</button>
+	</div>
+
+	<script>
+		function filterTable() {
+			// Retrieve the search input value
+			const searchInput = document.querySelector('#searchInput').value
+					.toLowerCase();
+
+			const lectRows = document.querySelectorAll('#lectRow');
+
+			// Loop through admin rows and check if they match the search input
+			lectRows.forEach(function(row) {
+				// Retrieve the admin information from the row
+				const lecturerId = row.cells[0].textContent.toLowerCase();
+				const firstName = row.cells[1].textContent.toLowerCase();
+				const lastName = row.cells[2].textContent.toLowerCase();
+				const email = row.cells[3].textContent.toLowerCase();
+				const contactNo = row.cells[4].textContent.toLowerCase();
+				const address = row.cells[5].textContent.toLowerCase();
+
+				// Check if any of the admin information matches the search input
+				if (lecturerId.includes(searchInput)
+						|| firstName.includes(searchInput)
+						|| lastName.includes(searchInput)
+						|| email.includes(searchInput)
+						|| contactNo.includes(searchInput)
+						|| address.includes(searchInput)) {
+					// Show the row if it matches the search input
+					row.style.display = '';
+				} else {
+					// Hide the row if it doesn't match the search input
+					row.style.display = 'none';
+				}
+			});
+		}
+		function goBack() {
+			window.history.back();
+		}
+	</script>
+</body>
+
+</html>
