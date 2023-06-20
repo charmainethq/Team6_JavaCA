@@ -175,4 +175,35 @@ public class LecturerController {
         long classId = currentEnrollment.getCourseClass().getClassId();
         return "redirect:/lecturer/class/" + classId;
     }
+
+	@GetMapping(value = "/lecturer/performance/{lecturerId}")
+	public String studentperformancePage(@PathVariable long lecturerId, Model model) {
+
+		ArrayList<CourseClass> classIdList = cseClsSvc.findByLecturerId(lecturerId);
+		ArrayList<Enrollment> enrollmentList = new ArrayList<>();
+		for (CourseClass c : classIdList) {
+			enrollmentList.addAll(enrlSvc.findByClassId(c.getClassId()));
+		}
+
+		ArrayList<Student> stdList = new ArrayList<>();
+
+		for (Enrollment current : enrollmentList) {
+			long stdId = current.getStudent().getStudentId();
+			boolean isDuplicate = false;
+
+			for (Student std : stdList) {
+				if (stdId == std.getStudentId()) {
+					isDuplicate = true;
+					break;
+				}
+			}
+
+			if (!isDuplicate) {
+				stdList.add(stuSvc.findByStudentId(stdId));
+			}
+		}
+
+		model.addAttribute("stdList", stdList);
+		return "lecturer-view-std-performance";
+	}
 }
