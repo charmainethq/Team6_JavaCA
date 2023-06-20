@@ -14,6 +14,7 @@ import sg.edu.iss.team6.repository.EnrollmentRepository;
 import sg.edu.iss.team6.service.*;
 import sg.edu.iss.team6.utility.EmailUtility;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -144,6 +145,7 @@ public class StudentController {
         Enrollment enrollment = new Enrollment();
         enrollment.setStudent(student);
         enrollment.setCourseClass(courseClass);
+        enrollment.setSubmittedDate(LocalDateTime.now());
         enrollment.setEnrollmentStatus(EnrollmentEnum.SUBMITTED);
         System.out.print(enrollment.getEnrollmentId());
 
