@@ -1,22 +1,18 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<title>Lecturer</title>
 	<link rel="stylesheet" href="/css/list.css">
 </head>
-
 <body>
 	<header>
 		<div th:include="lecturer-home-page.html"></div>
 	</header>
 	<div class="container">
 		<h1> View Student Performance </h1>
-
 		<div class="mb-3">
 			<label for="searchInput">Search:</label>
-			<input type="text" class="form-control" id="searchInput" placeholder="Enter keywords"
-				oninput="filterTable()">
+			<input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
 		</div>
 		<table class="table table-striped table-smaller">
 			<thead>
@@ -32,7 +28,7 @@
 			</thead>
 			<tbody>
 				<!-- Iterate over the admins and display their information -->
-				<tr th:each="student : ${stdList}">
+				<tr th:each="student : ${stdList}" id="studentRow">
 					<td th:text="${student.studentId}"></td>
 					<td th:text="${student.firstName}"></td>
 					<td th:text="${student.lastName}"></td>
@@ -90,5 +86,4 @@
 
 	</div>
 </body>
-
 </html>
