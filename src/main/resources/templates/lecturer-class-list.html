@@ -31,7 +31,7 @@
             </thead>
             <tbody>
                 <!-- Iterate over the admins and display their information -->
-                <tr th:each="courseClass, index : ${courseClassList}" id="adminRow">
+                <tr th:each="courseClass, index : ${courseClassList}" id="classRow">
                     <td th:text="${courseClass.classId}"></td>
                     <td th:text="${courseClass.roomNum}"></td>
                     <td th:text="${courseClass.startDate}"></td>
@@ -50,34 +50,35 @@
 		<script>
 			function filterTable() {
 				// Retrieve the search input value
-				const searchInput = document.querySelector('#searchInput').value
-						.toLowerCase();
-
-				const lectRows = document.querySelectorAll('#lectRow');
-
+				const searchInput = document.querySelector('#searchInput').value.toLowerCase();
+	
+				const classRows = document.querySelectorAll('#classRow');
+	
 				// Loop through admin rows and check if they match the search input
-				lectRows.forEach(function(row) {
+				classRows.forEach(function(row) {
 					// Retrieve the admin information from the row
-					const lecturerId = row.cells[0].textContent.toLowerCase();
-					const firstName = row.cells[1].textContent.toLowerCase();
-					const lastName = row.cells[2].textContent.toLowerCase();
-					const email = row.cells[3].textContent.toLowerCase();
-					const contactNo = row.cells[4].textContent.toLowerCase();
-					const address = row.cells[5].textContent.toLowerCase();
-
+		            const classId = row.cells[0].textContent.toLowerCase();
+		            const roomNum = row.cells[1].textContent.toLowerCase();
+		            const startDate = row.cells[2].textContent.toLowerCase();
+		            const courseNum = row.cells[3].textContent.toLowerCase();
+		            const courseName = row.cells[4].textContent.toLowerCase();
+		            const courseDescription = row.cells[5].textContent.toLowerCase();
+	
 					// Check if any of the admin information matches the search input
-					if (lecturerId.includes(searchInput)
-							|| firstName.includes(searchInput)
-							|| lastName.includes(searchInput)
-							|| email.includes(searchInput)
-							|| contactNo.includes(searchInput)
-							|| address.includes(searchInput)) {
-						// Show the row if it matches the search input
-						row.style.display = '';
-					} else {
-						// Hide the row if it doesn't match the search input
-						row.style.display = 'none';
-					}
+		            if (
+		                classId.includes(searchInput) ||
+		                roomNum.includes(searchInput) ||
+		                startDate.includes(searchInput) ||
+		                courseNum.includes(searchInput) ||
+		                courseName.includes(searchInput) ||
+		                courseDescription.includes(searchInput)
+		            ) {
+		                // Show the row if it matches the search input
+		                row.style.display = '';
+		            } else {
+		                // Hide the row if it doesn't match the search input
+		                row.style.display = 'none';
+		            }
 				});
 			}
 			function goBack() {
