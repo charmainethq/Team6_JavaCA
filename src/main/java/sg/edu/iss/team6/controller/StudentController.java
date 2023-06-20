@@ -43,39 +43,40 @@ public class StudentController {
     @Autowired
     EmailUtility emailUtility;
 
+    /**
     //for testing only
     private Student student;
     @PostConstruct
     public void init() {
         student = studentService.findByUserUsername("stu_3_charlie");
-    }
+    }**/
 
 
-    @RequestMapping(value = "/all")
-    public @ResponseBody List<String> findAllStudents(){
+    @GetMapping
+    public String homePage(HttpSession session, Model model){
 
-        List<Student> students = studentService.findAllStudents();
-        List<String> studentNames = new ArrayList<>();
-        for (Student s: students
-             ) {studentNames.add(s.getFirstName());
-        }
+        String username= (String)session.getAttribute("username");
+        Student student = studentService.findByUserUsername(username);
 
-        return studentNames;
+        model.addAttribute("name",student.getFullName());
+        return "student";
     }
 
     @GetMapping(value = "/registerCourses")
     public String listCoursesForRegistration(HttpSession session, Model model) {
         String username= (String)session.getAttribute("username");
-        //Student student = studentService.findByUserUsername(username);
+        Student student = studentService.findByUserUsername(username);
         List<Enrollment> enrollments = enrollmentService.findByStudent(student);
         List<Course> allCourses = courseService.getAllCourses();
 
         Map<Long, Boolean> canRegister = new HashMap<>();
 
+        //set default value to can register to avoid nulls
         for (Course course : allCourses) {
             canRegister.put(course.getCourseId(), true);
         }
 
+        //set to false if student has completed, attempted to register or been removed.
         for (Enrollment enrollment : enrollments) {
             Course course = enrollment.getCourseClass().getCourse();
             if (enrollment.getEnrollmentStatus().equals(EnrollmentEnum.COMPLETED)
@@ -94,25 +95,25 @@ public class StudentController {
 
 
 
-
-
     @GetMapping(value = "viewClasses/{courseId}")
     public String getClassesByCourseId(@PathVariable("courseId") Long courseId,
                                        HttpSession session,
                                        Model model) {
 
         String username= (String)session.getAttribute("username");
-        //Student student= studentService.findByUserUsername(username);
-        model.addAttribute("student",student);
-
+        Student student= studentService.findByUserUsername(username);
+        Course course = courseService.findCourseByCourseId(courseId);
         List<CourseClass> allClasses = classService.findByCourseId(courseId);
 
         List<String> lecturerNames = allClasses.stream()
                 .map(courseClass -> courseClass.getLecturer().getFullName())
                 .collect(Collectors.toList());
 
+        if (student == null || allClasses == null || course == null || lecturerNames == null) {
+            throw new ResourceNotFoundException("Resource not found");
+        }
 
-        Course course = courseService.findCourseByCourseId(courseId);
+        model.addAttribute("student",student);
         model.addAttribute("course",course);
         model.addAttribute("classes", allClasses);
         model.addAttribute("lecturerNames", lecturerNames);
@@ -126,14 +127,13 @@ public class StudentController {
 
         // Retrieve the student and class based on the provided IDs
         String username= (String)session.getAttribute("username");
-        //Student student= studentService.findByUserUsername(username);
+        Student student= studentService.findByUserUsername(username);
         CourseClass courseClass = classService.findByClassId(classId);
         Course course = courseService.findCourseByCourseId(courseId);
 
         if (student == null || courseClass == null || course == null) {
             throw new ResourceNotFoundException("Resource not found");
         }
-
 
         // Find the current enrollment status if any
         Enrollment existingEnrollment = enrollmentService.findByStudentAndClass(classId,studentId).orElse(null);
@@ -170,35 +170,25 @@ public class StudentController {
         return "redirect:/student/registerSuccess";
     }
 
-
-    @GetMapping("/confirmEnrollment")
-    public String createEnrollmentFromUrl(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId) {
-        Enrollment enrollment = enrollmentService.findByStudentAndClass(classId,studentId).orElse(null);
-
-        enrollmentService.updateEnrollmentStatus(enrollment.getEnrollmentId(), EnrollmentEnum.CONFIRMED);
-
-        //TODO: if (enrollment == null) some error
-        try {
-        } catch (NumberFormatException e) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invalid URL parameters");
-        }
-
-
-        return "student-register-success";
-    }
-
-    /**private String getUrlParamValue(String url, String paramName) {
-        MultiValueMap<String, String> params = UriComponentsBuilder.fromUriString(url).build().getQueryParams();
-        return params.getFirst(paramName);
-    }**/
-
-
-
-
     @GetMapping("/registerSuccess")
     public String registerSuccess(){
         return "student-register-success";
     }
+
+    @GetMapping("/confirmEnrollment")
+    public String createEnrollmentFromUrl(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, Model model) {
+        Enrollment enrollment = enrollmentService.findByStudentAndClass(classId,studentId).orElse(null);
+
+        if (enrollment== null) {
+            throw new ResourceNotFoundException("Resource not found");
+        }
+        enrollmentService.updateEnrollmentStatus(enrollment.getEnrollmentId(), EnrollmentEnum.CONFIRMED);
+        String courseName = enrollment.getCourseClass().getCourse().getCourseNum() + " " + enrollment.getCourseClass().getCourse().getName();
+        model.addAttribute("courseName", courseName);
+        return "student-enrollment-success";
+    }
+
+
 
     @GetMapping("/selfInformation")
     public String selfInformation(HttpSession session,Model model){
