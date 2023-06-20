@@ -1,61 +1,34 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <link rel="stylesheet" th:href="@{/css/student-class-course.css}" />
+    <title>ClassList</title>
+    <link rel="stylesheet" href="/css/detail.css">
 </head>
-<header>
-    <div th:include="index.html"></div>
-  </header>
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="/home">Team 6 Java</a>
-      </div>
-      <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="/home">Home</a></li>
-          <li><a href="#">About</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-          </ul>
-      </div>
-    </div>
-  </nav>
 
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-sm-3 sidebar">
-        <ul class="nav nav-pills nav-stacked">
-          <li class="active">Welcome: <span th:text="${curntStudent.getFullName()}"></span></text></li>
-          <li><a class="manage-link" th:href="@{/student/selfInformation}">Self_Information</a></li>
-          <li><a class="manage-link" th:href="@{/student/registerCourses}">Register for courses</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
 <body>
-<table>
-    <thead>
-    <tr>
-        <th>Courses</th>
-        <th>Score</th>
+  <header>
+    <div th:include="studentPage.html"></div>
+  </header>
+  <div class="container" >
+    <div class="details">
+      GPA: <span th:text="${gpa}"></span>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Courses</th>
+            <th>Score</th>
 
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="courseAndscore : ${courseAndscore}">
-        <td th:text="*{courseAndscore.key}"></td>
-        <td th:text="*{courseAndscore.value}"></td>
-    </tr>
-    </tbody>
-</table>
-
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="courseAndscore : ${courseAndscore}">
+            <td th:text="*{courseAndscore.key}"></td>
+            <td th:text="*{courseAndscore.value}"></td>
+        </tr>
+        </tbody>
+    </table>
+  </div>
 
 
 
