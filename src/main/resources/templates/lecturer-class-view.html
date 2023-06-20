@@ -26,9 +26,8 @@
 		<br/>
 		
 		<div class="mb-3">
-			<label for="searchInput">Search:</label> <input type="text"
-				class="form-control" id="searchInput" placeholder="Enter keywords"
-				oninput="filterTable()">
+			<label for="searchInput">Search:</label>
+			<input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
 		</div>
 		
 		<table class="table table-striped">
@@ -43,13 +42,15 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="current, index: ${enrollmentList}">
+				<tr th:each="current, index: ${enrollmentList}" id="classRow">
 					<td th:text="${current.enrollmentId}"></td>
 					<td th:text="${current.student.studentId}"></td>
 					<td th:text="${firstName.get(index.index)}"></td>
 					<td th:text="${lastName.get(index.index)}"></td>
 					<td th:text="${current.score}"></td>
-					<td><a class="btn btn-primary" th:href="@{/lecturer/grade/} + ${current.enrollmentId}">Grade Student</a></td>
+					<td>
+					<a class="btn btn-primary" th:href="@{/lecturer/grade/} + ${current.enrollmentId}">Grade Student</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -63,25 +64,23 @@
 			const searchInput = document.querySelector('#searchInput').value
 					.toLowerCase();
 
-			const lectRows = document.querySelectorAll('#lectRow');
+			const classRows = document.querySelectorAll('#classRow');
 
 			// Loop through admin rows and check if they match the search input
-			lectRows.forEach(function(row) {
+			classRows.forEach(function(row) {
 				// Retrieve the admin information from the row
-				const lecturerId = row.cells[0].textContent.toLowerCase();
-				const firstName = row.cells[1].textContent.toLowerCase();
-				const lastName = row.cells[2].textContent.toLowerCase();
-				const email = row.cells[3].textContent.toLowerCase();
-				const contactNo = row.cells[4].textContent.toLowerCase();
-				const address = row.cells[5].textContent.toLowerCase();
+				const enrollmentId = row.cells[0].textContent.toLowerCase();
+				const studentId = row.cells[1].textContent.toLowerCase();
+				const firstName = row.cells[2].textContent.toLowerCase();
+				const lastName = row.cells[3].textContent.toLowerCase();
+				const score = row.cells[4].textContent.toLowerCase();
 
 				// Check if any of the admin information matches the search input
-				if (lecturerId.includes(searchInput)
+				if (enrollmentId.includes(searchInput)
+						|| studentId.includes(searchInput)
 						|| firstName.includes(searchInput)
 						|| lastName.includes(searchInput)
-						|| email.includes(searchInput)
-						|| contactNo.includes(searchInput)
-						|| address.includes(searchInput)) {
+						|| score.includes(searchInput)) {
 					// Show the row if it matches the search input
 					row.style.display = '';
 				} else {
