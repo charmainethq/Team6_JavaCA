@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
     <title>Create Student</title>
     <link rel="stylesheet" href="/css/create.css">
@@ -8,8 +9,12 @@
     <header>
         <div th:include="adminPage.html"></div>
     </header>
-<h1>Create Student</h1>
+
 <form th:action="@{/admin/student/create}" th:object="${student}" method="post">
+    <button class="icon-button" onclick="goBack()">
+        <i style="font-size:30px" class="fa">&#xf137;</i>
+    </button>
+    <h1>Create Student</h1>
     <label for="username">Username:</label>
     <input type="text" id="username" th:field="*{user.username}" required/><br/>
 
@@ -29,8 +34,7 @@
     <input type="text" id="address" th:field="*{address}" required/><br/>
 
     <input type="submit" value="Create"/>
-    <br><br>
-    <button onclick="goBack()">Back</button>
+    <br>
 </form>
 <script>
     function goBack() {

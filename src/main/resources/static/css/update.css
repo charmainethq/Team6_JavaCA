@@ -18,6 +18,7 @@ body {
 }
 
 h1 {
+    margin-top: -10px;
     text-align: center;
     color: #4287f5;
 }
@@ -39,7 +40,6 @@ input[type="email"]{
 
 input[type="submit"] {
     background-color: #4CAF50;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -58,4 +58,16 @@ select {
     border-radius: 4px;
     box-sizing: border-box;
     margin-bottom: 10px;
+}
+
+.icon-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            margin-top: -5px;
+            margin-bottom: -10px;
+            margin-left: -3px
+        }
+.fa {
+    color: #b5b5b5;
 }

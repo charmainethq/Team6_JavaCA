@@ -28,6 +28,7 @@ public class CourseClass implements Serializable {
     @JoinColumn(name = "course_id")
     private Course course;
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
     private int size;
     private int confirmed;
@@ -44,7 +45,7 @@ public class CourseClass implements Serializable {
     public String getFormatStartDate(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(calendar.getTime());
     }
 
@@ -52,7 +53,7 @@ public class CourseClass implements Serializable {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
         calendar.add(Calendar.DAY_OF_YEAR, course.getDuration());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         return sdf.format(calendar.getTime());
     }
 

@@ -10,6 +10,8 @@ import sg.edu.iss.team6.service.CourseService;
 import sg.edu.iss.team6.service.EnrollmentService;
 import sg.edu.iss.team6.service.LecturerService;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -89,7 +91,7 @@ public class AdminCourseController {
         cc.setCourse(course);
         cc.setLecturer(lecturer);
         ccService.create(cc);
-        return "redirect:/admin/course/list";
+        return "redirect:/admin/course/class/" + cc.getCourse().getCourseId();
     }
     @GetMapping("/class/update/{id}")
     public String updateClassPage(@PathVariable("id") long id, Model model){
@@ -104,7 +106,7 @@ public class AdminCourseController {
                               @ModelAttribute("courseClass") CourseClass cc,
                               @RequestParam("lecturer") Lecturer lecturer){
         ccService.update(cc);
-        return "redirect:/admin/course/list";
+        return "redirect:/admin/course/class/" + cc.getCourse().getCourseId();
     }
 
     @GetMapping("/class/delete/{id}")

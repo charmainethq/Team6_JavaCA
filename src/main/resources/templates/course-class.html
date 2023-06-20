@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
     <title>Classes</title>
     <link rel="stylesheet" href="/css/list.css">
@@ -35,7 +36,7 @@
             <td th:text="${cc.size}"></td>
             <td th:text="${cc.lecturer.firstName + ' ' + cc.lecturer.lastName}"></td>
             <td th:text="${cc.confirmed}"></td>
-            <td th:text="${cc.startDate}"></td>
+            <td th:text="${cc.startDate + ' - ' + cc.getFormatEndDate()}"></td>
             <td>
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -56,7 +57,7 @@
         </tbody>
     </table>
 
-    <a class="btn btn-success" th:href="@{/admin/course/class/create/{id}(id=${course.courseId})}">
+    <a class="btn btn-success custom-button" th:href="@{/admin/course/class/create/{id}(id=${course.courseId})}">
         Create New Class
     </a>
 
