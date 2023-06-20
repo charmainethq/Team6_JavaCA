@@ -31,6 +31,7 @@
                     <th onclick="sortTable('enrollmentTable', 2)"><button class="transparent-btn"><span class="sort-text">Student Username</span> <i class="fas fa-sort"></i></button></th>
                     <th onclick="sortTable('enrollmentTable', 3)"><button class="transparent-btn"><span class="sort-text">Class ID</span> <i class="fas fa-sort"></i></button></th>
                     <th onclick="sortTable('enrollmentTable', 4)"><button class="transparent-btn"><span class="sort-text">Status</span> <i class="fas fa-sort"></i></button></th>
+                    <th>Submitted Date</th>
                     <th>Actions</th>
                 </tr>
             </thead>            
@@ -43,6 +44,9 @@
                     <td th:text="${enrollment.student.user.username}"></td>
                     <td th:text="${enrollment.courseClass.classId}"></td>
                     <td th:text="${enrollment.enrollmentStatus}"></td>
+                    <td>
+                        <span th:text="${#temporals.format(enrollment.submittedDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                    </td>
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 

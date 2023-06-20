@@ -13,7 +13,7 @@ import sg.edu.iss.team6.model.Admin;
 import sg.edu.iss.team6.service.AdminService;
 
 @Controller
-public class AdminController {
+public class AdminController{
 
     @Autowired
     private AdminService adminSvc;
