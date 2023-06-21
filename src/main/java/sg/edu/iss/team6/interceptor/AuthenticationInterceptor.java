@@ -10,10 +10,12 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import io.netty.handler.ssl.util.TrustManagerFactoryWrapper;
 import sg.edu.iss.team6.exception.UnauthorizedException;
 
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor{
+
     @Override
     public boolean preHandle(HttpServletRequest request, 
     HttpServletResponse response, Object handler) throws IOException, UnauthorizedException {
@@ -37,21 +39,23 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
 
         String username = (String) session.getAttribute("username");
 
-        if (uri.startsWith("/admin") && username.charAt(0)!='a') {
-            throw new UnauthorizedException();
+        if (uri.startsWith("/admin") && username.charAt(0)=='a') {
+            return true;
         }
     
-        if (uri.startsWith("/student") && username.charAt(0)!='s') {
-            throw new UnauthorizedException();
+        if (uri.startsWith("/student") && username.charAt(0)=='s') {
+            return true;
         }
 
-        if (uri.startsWith("/lecturer") && username.charAt(0)!='l') {
-            throw new UnauthorizedException();
+        if (uri.startsWith("/lecturer") && username.charAt(0)=='l') {
+            return true;
         }
 
 
         
-        return true;
+        response.sendRedirect("/login");
+        return false;
 
     }
+
 }

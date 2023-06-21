@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<head>
+    <title>EnrolList</title>
+    <link rel="stylesheet" href="/css/detail.css">
+</head>
+
+<body>
+  <header>
+    <div th:include="studentPage.html"></div>
+  </header>    
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Courses</th>
+            <th>StartTime</th>            
+            <th>ClassRoom</th>
+            <th>EnrollmentStatus</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="enrol : ${enrollments}">
+            <td th:text="${enrol.CourseClass.Course.name}"></td>
+            <td th:text="${enrol.CourseClass.startDate}"></td>
+            <td th:text="${enrol.CourseClass.roomNum}"></td>
+            <td th:text="${enrol.enrollmentStatus}"></td>
+        </tr>
+        </tbody>
+    </table>
+  </div>
+
+
+
+</body>
+</html>
