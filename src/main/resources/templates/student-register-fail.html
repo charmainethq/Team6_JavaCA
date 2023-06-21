@@ -1,13 +1,34 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Registration Failed</title>
+    <link rel="stylesheet" href="/css/student-messages.css">
 </head>
 <body>
 <header>
-  <div th:include="index.html"></div>
-    </header>
-<p>Registration failed</p>
+    <div th:include="studentPage.html"></div>
+</header>
+<h2>Registration failed.</h2>
+
+<div th:switch="${eStatus}">
+    <div th:case="'SUBMITTED'">
+        <p>You have already attempted to register for this course. </p>
+    </div>
+    <div th:case="'CONFIRMED'">
+        <p>You have already successfully enrolled in this course. </p>
+    </div>
+    <div th:case="'COMPLETED'">
+        <p>You have already completed this course.</p>
+    </div>
+    <div th:case="'REMOVED'">
+        <p>You were removed from a class within this course and are no longer allowed to enroll in it.</p>
+    </div>
+    <div th:case="*">
+        <p>Registration failed. Please contact an administrator.</p>
+    </div>
+</div>
+
 </body>
 </html>

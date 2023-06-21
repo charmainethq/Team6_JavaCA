@@ -38,4 +38,8 @@ public class Admin implements Serializable {
     
     @Size(min=2, max=50, message="Address must be 2-30 characters long")
     private String address;
+
+    public String getFullName(){
+        return firstName + " " + lastName;
+    }
 }
