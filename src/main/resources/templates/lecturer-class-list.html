@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Grade A Course</title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div th:include="lecturer-home-page.html"></div>
+    </header>
+	<div class="container">
+		<div class="row">
+			<h1>Select The Class To Be Graded</h1>
+		</div>
+		<br/>
+		<div>
+			<h4>Course Details</h4>
+
+			<div class="details">
+				<label>Course Name:</label> <span th:text="${course.name}"></span>
+			</div>
+			<div class="details">
+				<label>Course Description:</label> <span
+					th:text="${course.description}"></span>
+			</div>
+			<br />
+		</div>
+
+		<div class="mb-3">
+			<label for="searchInput">Search:</label>
+			<input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
+		</div>
+		
+		<table id="classTable" class="table table-striped">
+			<thead>
+				<tr>
+					<th onclick="sortTable('classTable', 0)"><button class="transparent-btn"><span class="sort-text">Class Id</span><i class="fas fa-sort"></i></button></th>
+					<th onclick="sortTable('classTable', 1)"><button class="transparent-btn"><span class="sort-text">Class Room Number</span><i class="fas fa-sort"></i></button></th>
+					<th onclick="sortTable('classTable', 2)"><button class="transparent-btn"><span class="sort-text">Class Room Number</span>Class Start Date</span><i class="fas fa-sort"></i></button></th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="class: ${classList}" id="classRow">
+					<td th:text="${class.classId}"></td>
+					<td th:text="${class.roomNum}"></td>
+					<td th:text="${class.startDate}"></td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                            </svg>
+                            </button>
+                            <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" th:href="@{/lecturer/studentList/} + ${class.classId}">Select Class</a>
+                            </div>
+                        </div>
+                    </td>
+				</tr>
+			</tbody>
+		</table>
+		<br><br>
+		<a th:href="@{/lecturer/courseList/} + ${course.courseId}"><button>Back to Course List</button></a>
+	    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+	    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
+		<script>
+			function filterTable() {
+				// Retrieve the search input value
+				const searchInput = document.querySelector('#searchInput').value
+						.toLowerCase();
+	
+				const classRows = document.querySelectorAll('#classRow');
+	
+				// Loop through admin rows and check if they match the search input
+				classRows.forEach(function(row) {
+					// Retrieve the admin information from the row
+					const classId = row.cells[0].textContent.toLowerCase();
+					const roomNum = row.cells[1].textContent.toLowerCase();
+					const startDate = row.cells[2].textContent.toLowerCase();
+	
+					// Check if any of the admin information matches the search input
+					if (classId.includes(searchInput)
+							|| roomNum.includes(searchInput)
+							|| startDate.includes(searchInput)) {
+						// Show the row if it matches the search input
+						row.style.display = '';
+					} else {
+						// Hide the row if it doesn't match the search input
+						row.style.display = 'none';
+					}
+				});
+			}
+            $(document).ready(function() {
+                $('#classTable').DataTable({
+                    searching: false
+                });
+            });
+		</script>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Grade A Course</title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div th:include="lecturer-home-page.html"></div>
+    </header>
+    <div class="container" >
+        <h1> Select The Course To Be Graded</h1>
+
+        <div class="mb-3">
+            <label for="searchInput">Search:</label>
+            <input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
+        </div>
+
+        <table id="courseTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th onclick="sortTable('courseTable', 0)"><button class="transparent-btn"><span class="sort-text">Course ID</span><i class="fas fa-sort"></i></button></th>
+                    <th onclick="sortTable('courseTable', 1)"><button class="transparent-btn"><span class="sort-text">Course Number</span><i class="fas fa-sort"></i></button></th>
+                    <th onclick="sortTable('courseTable', 2)"><button class="transparent-btn"><span class="sort-text">Course Name</span><i class="fas fa-sort"></i></button></th>
+                    <th onclick="sortTable('courseTable', 3)"><button class="transparent-btn"><span class="sort-text">Course Description</span><i class="fas fa-sort"></i></button></th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate over the course list and display their information -->
+                <tr th:each="course : ${courseList}" id="courseRow">
+                    <td th:text="${course.courseId}"></td>
+                    <td th:text="${course.courseNum}"></td>
+                    <td th:text="${course.name}"></td>
+                    <td th:text="${course.description}"></td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                            </svg>
+                            </button>
+                            <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" th:href="@{/lecturer/classList/} + ${course.courseId}">Select Course</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+		<br><br>
+		<a th:href="@{/lecturer}"><button>Back to Home Page</button></a>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
+		<script>
+			function filterTable() {
+				// Retrieve the search input value
+				const searchInput = document.querySelector('#searchInput').value.toLowerCase();
+	
+				const courseRows = document.querySelectorAll('#courseRow');
+	
+				// Loop through admin rows and check if they match the search input
+				courseRows.forEach(function(row) {
+					// Retrieve the admin information from the row
+		            const courseId = row.cells[0].textContent.toLowerCase();
+		            const courseNum = row.cells[1].textContent.toLowerCase();
+		            const name = row.cells[2].textContent.toLowerCase();
+		            const description = row.cells[3].textContent.toLowerCase();
+	
+					// Check if any of the admin information matches the search input
+		            if (courseId.includes(searchInput) ||
+		                courseNum.includes(searchInput) ||
+		                name.includes(searchInput) ||
+		                description.includes(searchInput)
+		            ) {
+		                // Show the row if it matches the search input
+		                row.style.display = '';
+		            } else {
+		                // Hide the row if it doesn't match the search input
+		                row.style.display = 'none';
+		            }
+				});
+			}
+            $(document).ready(function() {
+                $('#courseTable').DataTable({
+                    searching: false
+                });
+            });
+		</script>
+	</div>
+</body>
+</html>
