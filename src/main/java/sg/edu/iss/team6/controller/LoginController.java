@@ -1,5 +1,6 @@
 package sg.edu.iss.team6.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import sg.edu.iss.team6.model.User;
 import sg.edu.iss.team6.service.UserService;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Controller
 public class LoginController {
@@ -60,20 +63,37 @@ public class LoginController {
 		String enteredPassword = user.getPassword();
 
 		User actualUser = userService.findByUsername(enteredUsername);
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		//String encodedPassword = encoder.encode(enteredPassword);
 
 		if (actualUser != null) {
 			String actualPassword = actualUser.getPassword();
 
 			// Compare the entered password with the actual password
-			return enteredPassword.equals(actualPassword);
+			//return enteredPassword.equals(actualPassword);
+			return encoder.matches(enteredPassword, actualPassword);
 		}
 
 		return false; // User not found
 	}
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
+
+	@GetMapping("/logout")
+    public String logout(HttpSession session, HttpServletRequest request) {
+        String referer = request.getHeader("Referer"); // Get the URL of the previous page
+        
         session.removeAttribute("username");
+        
+        if (referer != null) {
+            if (referer.contains("/admin")) {
+                return "redirect:/admin";
+            } else if (referer.contains("/student")) {
+                return "redirect:/student";
+            } else if (referer.contains("/lecturer")) {
+                return "redirect:/lecturer";
+            }
+        }
+        
         return "redirect:/home";
 	}
 }

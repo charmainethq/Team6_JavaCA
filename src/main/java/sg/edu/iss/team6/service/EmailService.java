@@ -6,6 +6,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import sg.edu.iss.team6.model.Course;
+import sg.edu.iss.team6.model.CourseClass;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -18,7 +19,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendConfirmationEmail(String recipientEmail, String confirmationLink, String studentName, Course course) {
+    public void sendConfirmationEmail(String recipientEmail, String confirmationLink, String studentName, CourseClass courseClass) {
         MimeMessage message = mailSender.createMimeMessage();
 
         try {
@@ -28,15 +29,14 @@ public class EmailService {
             helper.setSubject("Confirmation Email");
 
             String htmlContent = "<p>Dear " + studentName + ",</p>" +
-                    "<p>Please click the link below to confirm your enrollment for <br>" +
-                    "Course ID: " + course.getCourseId() + " " + course.getName() +
-                    "<br> Class Id </p>" +
-                    "<p><a href=\"" + confirmationLink + "\">Confirm enrollment</a></p>";
+                    "<p>Please click the link below to confirm your enrollment for <b>" + courseClass.getCourse().getCourseNum() + " " + courseClass.getCourse().getName()
+                    + "</b>.<br> Duration: " + courseClass.getFormatStartDate() + " " + courseClass.getFormatEndDate()
+                    +"<br><a href=\"" + confirmationLink + "\">Confirm enrollment</a></p>";
             helper.setText(htmlContent, true);
 
             mailSender.send(message);
         } catch (MessagingException e) {
-            // Handle exception
+            e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

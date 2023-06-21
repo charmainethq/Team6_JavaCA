@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,12 @@ public class Lecturer implements Serializable {
     private String address;
 
     @OneToMany(mappedBy="lecturer")
+    @JsonIgnore
     private List<CourseClass> CourseClasses;
+
+    public String getFullName(){
+        return firstName + " " + lastName;
+    }
+
 
 }
