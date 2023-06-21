@@ -138,7 +138,9 @@ h2,h3 {
   opacity: 1;
 }
 
-
+.dataTables_length .custom-select {
+  font-weight: bold;
+}
 
 @media (min-width: 768px) {
   .btn {
