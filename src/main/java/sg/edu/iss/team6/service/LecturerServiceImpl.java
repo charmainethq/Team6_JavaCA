@@ -32,10 +32,7 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
 
-    @Override
-    public Lecturer findById(long id) {
-         return null;
-    }
+
 
     @Override
 
