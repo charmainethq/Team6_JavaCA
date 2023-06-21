@@ -44,18 +44,30 @@ public class LecturerController {
     @Autowired
     private StudentService stuSvc;
 
-    @GetMapping("/lecturer")
-    public String lecturerHomePage(HttpSession sessionObj, Model model) {
+    private Long retrieveLecturerId(HttpSession sessionObj) {
         String lectuerUsername = (String) sessionObj.getAttribute("username");
         List<Lecturer> lecturerList = lectSvc.findByUser_Username(lectuerUsername);
-        long lecturerId = 0;
+        long lecturerId = 1; // mock up a lecturer ID
         for(Lecturer lecturer : lecturerList) {
             if(lecturer != null) {
                 lecturerId = lecturer.getLecturerId();
             }
         }
-        model.addAttribute("lecturerId",lecturerId);
-        return "lecturer-home-page";
+        return lecturerId;
+    }
+    
+    @GetMapping("/lecturer")
+    public String lecturerHomePage(HttpSession sessionObj, Model model) {
+//        String lectuerUsername = (String) sessionObj.getAttribute("username");
+//        List<Lecturer> lecturerList = lectSvc.findByUser_Username(lectuerUsername);
+//        long lecturerId = 0;
+//        for(Lecturer lecturer : lecturerList) {
+//            if(lecturer != null) {
+//                lecturerId = lecturer.getLecturerId();
+//            }
+//        }
+//        model.addAttribute("lecturerId",lecturerId);
+        return "lecturer";
     }
 
 
@@ -97,8 +109,9 @@ public class LecturerController {
         return "lecturer-course-enrollment";
     }
 // Lecturer Grade A Course
-    @RequestMapping(value = "/lecturer/courseList/{lecturerId}", method = RequestMethod.GET)
-    public String viewCourseList(@PathVariable long lecturerId, Model model) {
+    @RequestMapping(value = "/lecturer/courseList/", method = RequestMethod.GET)
+    public String viewCourseList(HttpSession sessionObj, Model model) {
+    	long lecturerId = retrieveLecturerId(sessionObj);
         ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
         ArrayList<Course> courseList = new ArrayList<>();
         for (CourseClass current : courseClassList) {
