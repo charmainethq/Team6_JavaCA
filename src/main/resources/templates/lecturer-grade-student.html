@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-<title>Grade A Student</title>
-<link rel="stylesheet" href="/css/update.css">
+	<title>Grade A Student</title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
 	<header>
@@ -13,30 +14,37 @@
 		<h1>Grade A Student</h1>
 		<br/>
 
-		<h4>Course Details</h4>
-		<div class="details">
-			<label>Course Name:</label> <span th:text="${course.name}"></span>
-		</div>
-		<div class="details">
-			<label>Course Description:</label> <span
-				th:text="${course.description}"></span>
-		</div>
-		<br/>
-		
-		<h4></h4>
-		<div class="details">
-			<label>Class Number:</label> <span
-				th:text="${courseClass.classId}"></span>
-		</div>
-		<div class="details">
-			<label>Class Start Date:</label> <span
-				th:text="${courseClass.startDate}"></span>
-		</div>
-		<br/>
+		<div>
+			<h4>Course Details</h4>
 
+			<div class="details">
+				<label>Course Name:</label> <span th:text="${course.name}"></span>
+			</div>
+			<div class="details">
+				<label>Course Description:</label> <span
+					th:text="${course.description}"></span>
+			</div>
+			<br/>
+			<h4>Class Details</h4>
+
+			<div class="details">
+				<label>Class ID:</label> <span th:text="${courseClass.classId}"></span>
+			</div>
+			<div class="details">
+				<label>Class Room Number:</label> <span
+					th:text="${courseClass.roomNum}"></span>
+			</div>
+			<div class="details">
+				<label>Class Start Date:</label> <span
+					th:text="${courseClass.startDate}"></span>
+			</div>
+			<br/>
+			
+		</div>
+		
 		<h4>Student Details</h4>
 		<form
-			th:action="@{/lecturer/grade/{enrollmentId}(enrollmentId=${enrollment.enrollmentId})}"
+			th:action="@{/lecturer/gradeStudent/{enrollmentId}(enrollmentId=${enrollment.enrollmentId})}"
 			th:object="${enrollment}" method="post">
 			<input type="hidden" th:field="*{enrollmentId}" />
 
@@ -58,38 +66,6 @@
 	</div>
 
 	<script>
-		function filterTable() {
-			// Retrieve the search input value
-			const searchInput = document.querySelector('#searchInput').value
-					.toLowerCase();
-
-			const lectRows = document.querySelectorAll('#lectRow');
-
-			// Loop through admin rows and check if they match the search input
-			lectRows.forEach(function(row) {
-				// Retrieve the admin information from the row
-				const lecturerId = row.cells[0].textContent.toLowerCase();
-				const firstName = row.cells[1].textContent.toLowerCase();
-				const lastName = row.cells[2].textContent.toLowerCase();
-				const email = row.cells[3].textContent.toLowerCase();
-				const contactNo = row.cells[4].textContent.toLowerCase();
-				const address = row.cells[5].textContent.toLowerCase();
-
-				// Check if any of the admin information matches the search input
-				if (lecturerId.includes(searchInput)
-						|| firstName.includes(searchInput)
-						|| lastName.includes(searchInput)
-						|| email.includes(searchInput)
-						|| contactNo.includes(searchInput)
-						|| address.includes(searchInput)) {
-					// Show the row if it matches the search input
-					row.style.display = '';
-				} else {
-					// Hide the row if it doesn't match the search input
-					row.style.display = 'none';
-				}
-			});
-		}
 		function goBack() {
 			window.history.back();
 		}
