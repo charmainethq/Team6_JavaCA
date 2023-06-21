@@ -53,6 +53,7 @@ public class StudentController {
     }**/
 
 
+
     @GetMapping
     public String homePage(HttpSession session, Model model){
 
@@ -69,6 +70,9 @@ public class StudentController {
         Student student = studentService.findByUserUsername(username);
         List<Enrollment> enrollments = enrollmentService.findByStudent(student);
         List<Course> allCourses = courseService.getAllCourses();
+
+        if (student == null || enrollments == null || allCourses == null)
+            throw new ResourceNotFoundException();
 
         Map<Long, Boolean> canRegister = new HashMap<>();
 
