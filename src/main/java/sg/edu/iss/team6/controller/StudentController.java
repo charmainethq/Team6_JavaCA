@@ -173,6 +173,7 @@ public class StudentController {
         return "student-register-success";
     }
 
+
     @GetMapping("/confirmEnrollment")
     public String createEnrollmentFromUrl(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, Model model) {
         Enrollment enrollment = enrollmentService.findByStudentAndClass(classId,studentId).orElse(null);
@@ -213,6 +214,16 @@ public class StudentController {
         model.addAttribute("gpa",studentService.computeStudentgpa(curntStudent.getStudentId()));
         model.addAttribute("avge",studentService.computeStudentavgScore(curntStudent.getStudentId()));
         return "stu-classlist";
+    }
+
+    @GetMapping("/EnrollmentStatus")
+    public String enrollmentStatus(HttpSession session,Model model){
+
+        String username= (String)session.getAttribute("username");
+        Student curntStudent= studentService.findByUserUsername(username);
+        
+        model.addAttribute("enrollments", studentService.getStudentEnroll(curntStudent.getStudentId()));
+        return "stu-enrollist";
     }
 
 }
