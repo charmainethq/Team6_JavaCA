@@ -30,7 +30,8 @@ public interface CourseClassRepository extends JpaRepository<CourseClass, Long>{
 	@Query ("SELECT cc FROM CourseClass cc WHERE cc.lecturer.lecturerId = :lecturerId")
 	public ArrayList<CourseClass> findByLecturerId(@Param("lecturerId") long lecturerId);
 
-
+	@Query ("SELECT cc FROM CourseClass cc WHERE cc.course.courseId = :courseId")
+	public ArrayList<CourseClass> findByCourseId(@Param("courseId") long courseId);
 
     CourseClass findByClassId(long id);
     void deleteByClassId(long id);
