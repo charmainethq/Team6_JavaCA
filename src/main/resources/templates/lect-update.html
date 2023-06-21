@@ -10,11 +10,11 @@
         <div th:include="adminPage.html"></div>
     </header>
     <div class="container">
-        <h1>Update Admin</h1>
         <form th:action="@{/admin/lecturer/update/{id}(id=${lecturer.lecturerId})}" th:object="${lecturer}" method="post">
             <button class="icon-button" onclick="goBack()">
                 <i style="font-size:30px" class="fa">&#xf137;</i>
             </button>
+            <h1>Update Lecturer</h1>
             <input type="hidden" th:field="*{lecturerId}"/>
             <label for="username">Username:</label>
             <input type="text" id="username" th:field="*{user.username}" required/><br/>

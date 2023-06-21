@@ -21,7 +21,8 @@
     <label for="roomNum">Room Number:</label>
     <input type="text" id="roomNum" th:field="*{roomNum}" required/><br/>
 
-    <label for="size">Size:</label>
+    <label for="size">Size:</label> <span th:if="${#fields.hasErrors('size')}" th:errors="*{size}"
+                                          style="color: #bf1111; font-size: 12px;"></span>
     <input type="text" id="size" th:field="*{size}" required/><br/>
 
     <label for="lecturer">Lecturer:</label>

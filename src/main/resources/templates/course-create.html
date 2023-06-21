@@ -15,10 +15,12 @@
     <i style="font-size:30px" class="fa">&#xf137;</i>
   </button><br/>
   <h1>Create Course</h1>
-  <label for="courseNum">Course Number:</label>
+  <label for="courseNum">Course Number:</label> <span th:if="${#fields.hasErrors('courseNum')}" th:errors="*{courseNum}"
+                                                      style="color: #bf1111; font-size: 12px;"></span>
   <input type="text" id="courseNum" th:field="*{courseNum}" required/><br/>
 
-  <label for="name">Name:</label>
+  <label for="name">Name:</label> <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                                         style="color: #bf1111; font-size: 12px;"></span>
   <input type="text" id="name" th:field="*{name}" required/><br/>
 
   <label for="description">Description:</label>
@@ -27,7 +29,8 @@
   <label for="credits">Credits:</label>
   <input type="text" id="credits" th:field="*{credits}" required/><br/>
 
-  <label for="duration">Duration:</label>
+  <label for="duration">Duration:</label> <span th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"
+                                                style="color: #bf1111; font-size: 12px;"></span>
   <input type="text" id="duration" th:field="*{duration}" required/><br/>
   <br/>
   <input type="submit" value="Create"/>

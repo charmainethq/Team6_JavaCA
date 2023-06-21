@@ -2,6 +2,8 @@ package sg.edu.iss.team6.model;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,7 @@ public class CourseClass implements Serializable {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
+    @Max(value=1000, message="Class size cannot exceed 1000")
     private int size;
     private String roomNum;
 
