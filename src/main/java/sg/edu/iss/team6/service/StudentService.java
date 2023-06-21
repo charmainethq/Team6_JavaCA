@@ -23,10 +23,13 @@ public interface StudentService {
 
     List<Enrollment> getCompletedEnrollmentsForStudent(long studentId);
     List<Course> getStudentcourse(long studentId);
-    long computeStudentgpa(long studentId);
-    Map<String, Long> getCourseandScore(long studentId);
 
 
 
+    double computeStudentavgScore(long studentId);
+    String[][] getCourseandScore(long studentId);
+    double computeStudentgpa(long studentId);
+
+    List<Enrollment> getStudentEnroll(long studentId);
 
 }

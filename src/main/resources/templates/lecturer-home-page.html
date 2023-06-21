@@ -37,13 +37,9 @@
         <ul class="nav nav-pills nav-stacked">
 
           <li><a href="/lecturer" class="tab-link">Lecturer</a></li>
-
           <li><a class="manage-link tab-link" th:href="@{/lecturer/coursesTaught/} + ${lecturerId}">View Courses Taught</a></li>
-
           <li><a class="manage-link tab-link" th:href="@{/lecturer/courseEnrollment/} + ${lecturerId}">View Course Enrollment</a></li>
-
           <li><a class="manage-link tab-link" th:href="@{/lecturer/courseList/} + ${lecturerId}">Grade A Course</a></li>
-
           <li><a class="manage-link tab-link" th:href="@{/lecturer/performanceList/}  + ${lecturerId}">View a Student Performance</a></li>
 
         </ul>
@@ -55,27 +51,16 @@
   </div>
 
   <script>
-
     $(document).ready(function() {
-
       // Retrieve the current URL path
-
       var path = window.location.pathname;
-
   
-
       // Get the tab link that matches the current URL path
-
       var activeLink = $('.tab-link[href="' + path + '"]');
-
   
-
       // Add 'active' class to the matched tab link's parent (list item)
-
       activeLink.parent().addClass('active');
-
     });
-
   </script>
 
 </body>

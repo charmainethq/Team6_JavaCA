@@ -11,6 +11,7 @@ import sg.edu.iss.team6.model.*;
 import sg.edu.iss.team6.repository.CourseClassRepository;
 
 import sg.edu.iss.team6.repository.EnrollmentRepository;
+
 import java.util.ArrayList;
 import java.util.Optional;
 import sg.edu.iss.team6.repository.StudentRepository;
@@ -24,6 +25,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Resource
     EnrollmentRepository eRepo;
 
+    @Autowired
+    CourseClassRepository ccRepository;
+
+    @Autowired
+    StudentRepository sRepo;
+
     @Override
     @Transactional
     public Optional<Enrollment> findByStudentAndClass(long classId, long studentId){
@@ -32,11 +39,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
 
     public void updateEnrollmentStatus(long enrollmentId, EnrollmentEnum newStatus) {
-        Optional<Enrollment> enrollmentOptional = enrollmentRepository.findById(enrollmentId);
+        Optional<Enrollment> enrollmentOptional = eRepo.findById(enrollmentId);
         if (enrollmentOptional.isPresent()) {
             Enrollment enrollment = enrollmentOptional.get();
             enrollment.setEnrollmentStatus(newStatus);
-            enrollmentRepository.save(enrollment);
+            eRepo.save(enrollment);
         } else {
             throw new IllegalArgumentException("Enrollment not found with ID: " + enrollmentId);
         }
@@ -59,49 +66,41 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 	public ArrayList<Enrollment> findByClassId(long classId){
 		return eRepo.findEnrollmentByCourseID(classId);
 	}
+    
 
-
-    @Autowired
-    EnrollmentRepository enrollmentRepository;
-
-    @Autowired
-    CourseClassRepository ccRepository;
-
-    @Autowired
-    StudentRepository studentRepository;
 
     @Override
     public List<Enrollment> findAllEnrollments() {
-        return enrollmentRepository.findAll();
+        return eRepo.findAll();
     }
     @Override
     public  List<Enrollment> findByCourseClass(CourseClass courseClass){
-        return enrollmentRepository.findByCourseClass(courseClass);
+        return eRepo.findByCourseClass(courseClass);
     }
 
     @Override
     public List<Enrollment> findByStudent(Student student) {
-        return enrollmentRepository.findByStudent(student);
+        return eRepo.findByStudent(student);
     }
 
     @Override
     public Enrollment findByEnrollmentId(long id) {
-        Optional<Enrollment> enrollmentOptional = enrollmentRepository.findById(id);
+        Optional<Enrollment> enrollmentOptional = eRepo.findById(id);
         return enrollmentOptional.orElse(null);
     }
 
     @Override
     public Enrollment create(Enrollment enrollment) {
-        return enrollmentRepository.save(enrollment);
+        return eRepo.save(enrollment);
     }
 
     @Override
     public void delete(long id) {
-        enrollmentRepository.deleteById(id);
+        eRepo.deleteById(id);
     }
     @Override
     public void deleteList(List<Enrollment> enrollments){
-        enrollmentRepository.deleteAll(enrollments);
+        eRepo.deleteAll(enrollments);
     }
 
 
