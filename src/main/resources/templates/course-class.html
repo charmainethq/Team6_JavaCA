@@ -35,7 +35,7 @@
             <td th:text="${cc.roomNum}"></td>
             <td th:text="${cc.size}"></td>
             <td th:text="${cc.lecturer.firstName + ' ' + cc.lecturer.lastName}"></td>
-            <td th:text="${cc.confirmed}"></td>
+            <td th:text="${cc.getConfirmedNumber()}"></td>
             <td th:text="${cc.startDate + ' - ' + cc.getFormatEndDate()}"></td>
             <td>
                 <div class="dropdown">

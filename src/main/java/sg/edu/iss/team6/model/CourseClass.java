@@ -31,7 +31,6 @@ public class CourseClass implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
     private int size;
-    private int confirmed;
     private String roomNum;
 
     @ManyToOne
@@ -57,7 +56,15 @@ public class CourseClass implements Serializable {
         return sdf.format(calendar.getTime());
     }
 
-
+    public int getConfirmedNumber() {
+        int confirmedCount = 0;
+        for (Enrollment e : classEnrollment) {
+            if (e.getEnrollmentStatus() == EnrollmentEnum.CONFIRMED) {
+                confirmedCount++;
+            }
+        }
+        return confirmedCount;
+    }
 
 
 }
