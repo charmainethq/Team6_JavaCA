@@ -57,8 +57,6 @@ public class LecturerController {
         model.addAttribute("lecturerId",lecturerId);
         return "lecturer-home-page";
     }
-
-
     @RequestMapping(value = "/lecturer/coursesTaught/{lecturerId}", method = RequestMethod.GET)
     public String coursesTaught(@PathVariable long lecturerId, Model model) {
         Lecturer lecturer = lectSvc.findById(lecturerId);
@@ -176,9 +174,8 @@ public class LecturerController {
         return "redirect:/lecturer/class/" + classId;
     }
 
-	@GetMapping(value = "/lecturer/performance/{lecturerId}")
+	@GetMapping(value = "/lecturer/performanceList/{lecturerId}")
 	public String studentperformancePage(@PathVariable long lecturerId, Model model) {
-
 		ArrayList<CourseClass> classIdList = cseClsSvc.findByLecturerId(lecturerId);
 		ArrayList<Enrollment> enrollmentList = new ArrayList<>();
 		for (CourseClass c : classIdList) {
@@ -202,8 +199,37 @@ public class LecturerController {
 				stdList.add(stuSvc.findByStudentId(stdId));
 			}
 		}
-
 		model.addAttribute("stdList", stdList);
 		return "lecturer-view-std-performance";
 	}
+	@GetMapping(value="/lecturer/performance/{studentId}")
+	public String viewStudentDetails(@PathVariable long studentId, HttpSession session, Model model) {
+	    //long lecturerId = (Long) session.getAttribute("lecturerId");
+        String lectuerUsername = (String) session.getAttribute("username");
+        List<Lecturer> lecturerList = lectSvc.findByUser_Username(lectuerUsername);
+        long lecturerId = 0;
+        for(Lecturer lecturer : lecturerList) {
+            if(lecturer != null) {
+                lecturerId = lecturer.getLecturerId();
+            }
+        }
+	    ArrayList<CourseClass> ccList = cseClsSvc.findByLecturerId(lecturerId);
+	    ArrayList<Enrollment> enrList = new ArrayList<>();
+	    for (CourseClass cc : ccList) {
+	        enrList.addAll(enrlSvc.findByClassId(cc.getClassId()));
+	    }
+	    ArrayList<Enrollment> updatedEnroll= new ArrayList<>();
+	    for(Enrollment e : enrList) {
+	    	if(e.getStudent().getStudentId()==studentId) {
+	    		updatedEnroll.add(e);
+	    	}
+	    	
+	    }
+	    model.addAttribute("enrollList", updatedEnroll);
+	    model.addAttribute("student",stuSvc.findByStudentId(studentId));
+	    
+	    return "lec-view-std-detail";
+	}
+
+
 }
