@@ -31,6 +31,12 @@ public class LecturerServiceImpl implements LecturerService {
         return lrepo.findById(id).orElse(null);
     }
 
+
+    @Override
+    public Lecturer findById(long id) {
+         return null;
+    }
+
     @Override
 
     public Lecturer create(Lecturer lect) {
