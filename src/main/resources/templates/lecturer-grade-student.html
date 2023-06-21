@@ -1,74 +1,91 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-	<title>Grade A Student</title>
-    <link rel="stylesheet" href="/css/list.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	<meta charset="ISO-8859-1">
+	<title>Student Management System</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<style>
+		.table-smaller {
+			width: 100%;
+		}
+
+		.table-smaller th,
+		.table-smaller td {
+			padding: 5px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: 100px; /* Adjust the max-width as desired */
+		}
+	</style>
 </head>
+
 <body>
-	<header>
-		<div th:include="lecturer-home-page.html"></div>
-	</header>
-
+	<h1>Grade A Student</h1>
+	<br/>
+	<h2>Edit the grades</h2>
+	<br/>
 	<div class="container">
-		<h1>Grade A Student</h1>
-		<br/>
-
-		<div>
-			<h4>Course Details</h4>
-
-			<div class="details">
-				<label>Course Name:</label> <span th:text="${course.name}"></span>
-			</div>
-			<div class="details">
-				<label>Course Description:</label> <span
-					th:text="${course.description}"></span>
-			</div>
-			<br/>
-			<h4>Class Details</h4>
-
-			<div class="details">
-				<label>Class ID:</label> <span th:text="${courseClass.classId}"></span>
-			</div>
-			<div class="details">
-				<label>Class Room Number:</label> <span
-					th:text="${courseClass.roomNum}"></span>
-			</div>
-			<div class="details">
-				<label>Class Start Date:</label> <span
-					th:text="${courseClass.startDate}"></span>
-			</div>
-			<br/>
-			
+		<div class="row">
+			<h3> Course Details</h3>
 		</div>
-		
-		<h4>Student Details</h4>
-		<form
-			th:action="@{/lecturer/gradeStudent/{enrollmentId}(enrollmentId=${enrollment.enrollmentId})}"
-			th:object="${enrollment}" method="post">
-			<input type="hidden" th:field="*{enrollmentId}" />
-
-			<div class="details">
-				<label>First Name:</label> <span th:text="${student.firstName}"></span>
-			</div>
-
-			<div class="details">
-				<label>Last Name:</label> <span th:text="${student.lastName}"></span>
-			</div>
-			<br />
-
+		<table class="table table-striped table-bordered table-smaller">
+			<thead class="table-dark">
+				<tr>
+					<th>Course Name</th>
+					<th>Id</th>
+					<th>Number</th>
+					<th>Description</th>
+					<th>Duration</th>
+					<th>Credits</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td th:text="${course.name}"></td>
+					<td th:text="${course.courseId}"></td>
+					<td th:text="${course.courseNum}"></td>
+					<td th:text="${course.description}"></td>
+					<td th:text="${course.duration}"> hours</td>
+					<td th:text="${course.credits}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<form th:action="@{/lecturer/grade/{enrollmentId}(enrollmentId=${enrollment.enrollmentId})}" th:object="${enrollment}" method="post">
+			<input type="hidden" th:field="*{enrollmentId}"/>
+			<table class="table table-striped table-bordered table-smaller">
+				<thead class="table-dark">
+					<tr>
+						<th>Student First Name</th>
+						<th>Student Last Name</th>
+						<th>Id</th>
+						<th>Contact Number</th>
+						<th>Email</th>
+						<th>Address</th>
+						<th>Current Score</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td th:text="${student.firstName}"></td>
+						<td th:text="${student.LastName}"></td>
+						<td th:text="${student.studentId}"></td>
+						<td th:text="${student.contactNo}"></td>
+						<td th:text="${student.email}"></td>
+						<td th:text="${student.address}"></td>
+						<td th:text="${enrollment.score}"></td>
+					</tr>
+				</tbody>
+			</table>
+			
 			<label for="score">Score:</label>
-			<input type="text" id="score" th:field="*{score}" required /><br /> 
+			<input type="text" id="score" th:field="*{score}" required /><br />
+			
 			<input type="submit" value="Submit / Update" />
 		</form>
-		<br><br>
-		<button onclick="goBack()">Back</button>
 	</div>
-
-	<script>
-		function goBack() {
-			window.history.back();
-		}
-	</script>
 </body>
+
 </html>
