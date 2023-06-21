@@ -1,0 +1,32 @@
+body { 
+  padding-top: 70px;
+  padding-left: 200px;
+ }
+.sidebar {
+  height: 100%;
+  width: 200px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #eeebeb;
+  padding-top: 60px;
+}
+.content {
+  margin-left: 200px;
+  padding: 20px;
+}
+h1 {
+  text-align: center;
+  color: #033a6d;
+  font-size: 45px;
+  margin-top: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.img-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+

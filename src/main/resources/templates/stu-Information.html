@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SelfInformation</title>
+    <link rel="stylesheet" href="/css/detail.css">
+</head>
+
+<body>
+  <header>
+    <div th:include="studentPage.html"></div>
+  </header>
+   <div class="container">
+    <h3>Detail Information</h3>
+    <div class="details">
+      <label>StudentID:</label>
+      <span th:text="${curntStudent.studentId}"></span>
+    </div>
+    <div class="details">
+      <label>Username:</label>
+      <span th:text="${curntStudent.user.username}"></span>
+    </div>
+    <div class="details">
+      <label>First Name:</label>
+      <span th:text="${curntStudent.firstName}"></span>
+    </div>
+    <div class="details">
+      <label>Last Name:</label>
+      <span th:text="${curntStudent.lastName}"></span>
+    </div>
+    <div class="details">
+      <label>Email:</label>
+      <span th:text="${curntStudent.email}"></span>
+    </div>
+    <div class="details">
+      <label>Contact No:</label>
+      <span th:text="${curntStudent.contactNo}"></span>
+    </div>
+    <div class="details">
+      <label>Address:</label>
+      <span th:text="${curntStudent.address}"></span>
+    </div>
+  
+
+  </div>
+</body>
+</html>

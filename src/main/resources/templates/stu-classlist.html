@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<head>
+    <title>ClassList</title>
+    <link rel="stylesheet" href="/css/detail.css">
+</head>
+
+<body>
+  <header>
+    <div th:include="studentPage.html"></div>
+  </header>
+  <div class="container" >
+    <div class="details">
+      Avg_score: <span th:text="${avge}"></span>
+    </div>
+    <div class="details">
+      GPA: <span th:text="${gpa}"></span>
+    </div>
+    
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Courses</th>
+            <th>Score</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="courseAnds : ${courseAndscore}">
+            <td th:text="${courseAnds[0]}"></td>
+            <td th:text="${courseAnds[1]}"></td>
+        </tr>
+        </tbody>
+    </table>
+  </div>
+
+
+
+</body>
+</html>
