@@ -8,27 +8,22 @@
 <body>
   <header>
     <div th:include="studentPage.html"></div>
-  </header>
-  <div class="container" >
-    <div class="details">
-      Avg_score: <span th:text="${avge}"></span>
-    </div>
-    <div class="details">
-      GPA: <span th:text="${gpa}"></span>
-    </div>
-    
+  </header>    
     <table class="table table-striped">
         <thead>
         <tr>
             <th>Courses</th>
-            <th>Score</th>
-
+            <th>StartTime</th>            
+            <th>ClassRoom</th>
+            <th>EnrollmentStatus</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="courseAnds : ${courseAndscore}">
-            <td th:text="${courseAnds[0]}"></td>
-            <td th:text="${courseAnds[1]}"></td>
+        <tr th:each="enrol : ${enrollments}">
+            <td th:text="${enrol.CourseClass.Course.name}"></td>
+            <td th:text="${enrol.CourseClass.startDate}"></td>
+            <td th:text="${enrol.CourseClass.roomNum}"></td>
+            <td th:text="${enrol.enrollmentStatus}"></td>
         </tr>
         </tbody>
     </table>
