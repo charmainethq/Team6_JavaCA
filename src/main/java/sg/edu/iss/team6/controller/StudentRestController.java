@@ -7,17 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sg.edu.iss.team6.model.*;
 import sg.edu.iss.team6.repository.EnrollmentRepository;
 import sg.edu.iss.team6.service.*;
 import sg.edu.iss.team6.utility.EmailUtility;
 
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -43,90 +39,67 @@ public class StudentRestController {
     EmailUtility emailUtility;
 
     private static final Long testId = 3L;
-    String username = "stu_3_charlie";
-    @GetMapping
-    public String homePage(HttpSession session, Model model){
-
-        String username= (String)session.getAttribute("username");
-        Student student = studentService.findByUserUsername(username);
-
-        model.addAttribute("name",student.getFullName());
-        return "student";
-    }
 
     @GetMapping(value = "/registerCourses", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<Long, Boolean>> getEligibility(HttpSession session) {
+    public ResponseEntity<List<Course>> getUnenrolledAndFailedCourses() {
         try {
-            //String username= (String)session.getAttribute("username");
+            //TODO: remove and use session instead
+            Long studentId = testId;
 
-            Student student = studentService.findByUserUsername(username);
-            List<Enrollment> enrollments = enrollmentService.findByStudent(student);
+            Student student = studentService.findByStudentId(studentId);
             List<Course> allCourses = courseService.getAllCourses();
 
             if (allCourses == null)
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-            Map<Long, Boolean> canRegister = new HashMap<>();
+            List<Course> unenrolledAndFailedCourses = allCourses.stream()
+                    .filter(course -> {
+                        // filter for enrollment
+                        boolean hasEnrollment = student.getStudentEnrollments().stream()
+                                .anyMatch(enrollment ->
+                                        enrollment.getCourseClass().getCourse().getCourseId() == course.getCourseId());
 
-            //set default value to can register to avoid nulls
-            for (Course course : allCourses) {
-                canRegister.put(course.getCourseId(), true);
-            }
+                        // Check if the enrollment status is withdrawal or failure
+                        boolean isWithdrawnOrFailed = student.getStudentEnrollments().stream().anyMatch(enrollment ->
+                                enrollment.getCourseClass().getCourse().getCourseId() == course.getCourseId() &&
+                                        (enrollment.getEnrollmentStatus() == EnrollmentEnum.WITHDRAWN ||
+                                                enrollment.getEnrollmentStatus() == EnrollmentEnum.FAILED ||
+                                                enrollment.getEnrollmentStatus() == EnrollmentEnum.REMOVED));
 
-            //set to false if student has completed, attempted to register or been removed.
-            for (Enrollment enrollment : enrollments) {
-                Course course = enrollment.getCourseClass().getCourse();
-                if (enrollment.getEnrollmentStatus().equals(EnrollmentEnum.COMPLETED)
-                        || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.REMOVED)
-                        || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.SUBMITTED)) {
-                    canRegister.put(course.getCourseId(), false);
-                }
-            }
-            return new ResponseEntity<>(canRegister, HttpStatus.OK);
+                        // only include if hasEnrollment is false AND fail/withdraw is true.
+                        return !hasEnrollment || isWithdrawnOrFailed;
+                    })
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(unenrolledAndFailedCourses, HttpStatus.OK);
 
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping(value = "/fetchAllCourses", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Course>> getAllCourses(){
-        List<Course> courses = courseService.getAllCourses();
-        return ResponseEntity.ok(courses);
-    }
-
 
     @GetMapping(value = "/fetchClasses/{courseId}")
-    public ResponseEntity<List<CourseClass>> getClassesByCourseId(
-            @PathVariable("courseId") Long courseId) {
+    public ResponseEntity<Page<CourseClass>> getClassesByCourseId(
+            @PathVariable("courseId") Long courseId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
 
         try {
-            List<CourseClass> classes = classService.findByCourseId(courseId);
+            Pageable pageable = PageRequest.of(page, size);
+            Page<CourseClass> classes = classService.findByCourseId(courseId, pageable);
+            //List<CourseClass> classes = classService.findByCourseId(courseId);
+
+            if (classes.getContent().size() == 0)
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
             return ResponseEntity.ok(classes);
 
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+
     }
-
-    @GetMapping(value = "/fetchLecturerNames/{courseId}")
-    public ResponseEntity<List<String>> getLecturerNamesByCourseId(
-            @PathVariable("courseId") Long courseId) {
-
-        try {
-            List<CourseClass> classes = classService.findByCourseId(courseId);
-            List<String> lecturerNames = classes.stream()
-                    .map(courseClass -> courseClass.getLecturer().getFullName())
-                    .collect(Collectors.toList());
-
-            return ResponseEntity.ok(lecturerNames);
-
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 
     @GetMapping(value = "/fetchCourse/{courseId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Course> getClassByCourseId(@PathVariable("courseId") Long courseId) {
@@ -148,7 +121,7 @@ public class StudentRestController {
     }
 
 
-    @PostMapping(value = "/register/{classId}/{courseId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/register/{classId}/{courseId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> registerClass(@PathVariable("classId") Long classId, @PathVariable("courseId") Long courseId) {
 
         boolean success = true;
