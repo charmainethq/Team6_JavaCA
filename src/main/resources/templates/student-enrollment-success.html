@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Enrollment Success</title>
+  <link rel="stylesheet" href="/css/student-messages.css">
+</head>
+<body>
+<header>
+  <div th:include="studentPage.html"></div>
+</header>
+<h2>Enrollment Success</h2>
+<br>
+<p>You have successfully enrolled for <span th:text="${courseName}">!</span></p>
+
+</body>
+</html>

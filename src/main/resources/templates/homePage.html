@@ -11,14 +11,17 @@
             background-color: #ffffff;
             font-family: Arial, Helvetica, sans-serif
         }
-
+        .navbar {
+            background-color: #fffff;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Shadow effect */
+        }
         .navbar-brand,
         .navbar-nav .nav-link {
-            color: #fff;
+            color: #023E7C;
         }
 
         .navbar-nav .nav-link:hover {
-            color: #f8f9fa;
+            color: #023E7C;
         }
 
         html, body {
@@ -27,22 +30,43 @@
 
         .content {
             min-height: 100%;
-            padding-bottom: 50px;
+            padding-top: 35px;
+            padding-bottom: 60px;
+            text-align: center;
         }
 
         .footer {
-            background-color: #98efef;
+            background-color: #b8e5e6;
             color: #615e5e;
             padding: 20px;
             bottom: 0;
             text-align: center;
+            }
+
+        .whiteboard-nav {
+            background-color: #f9f9f9; /* Whiteboard background color */
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Shadow effect */
         }
+
+        .logo-img {
+            height: auto;
+            width: 200px;
+            margin-right: 5px;
+            margin-left: 15px;
+        }
+        .shadowed-image {
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+
 
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffffff;">
-        <a class="navbar-brand" href="/home">Team 6 Java CA</a>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fff;">
+        <a class="navbar-brand" href="/home">
+            <img src="image/logo_caps.png" alt="Logo" class="logo-img">
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -66,8 +90,8 @@
         <h1>Welcome to our School</h1>
         <p>Explore our programs and courses to enhance your knowledge and skills.</p><br>
         <div class="row justify-content-center"> <!-- Added justify-content-center class -->
-            <div class="col-md-8 text-center"> <!-- Increased the column size to col-md-8 and added text-center class -->
-                <img src="image/image1.jpg" alt="Image" class="img-fluid" style="max-width: 100%;"> <!-- Added max-width style -->
+            <div class="col-md-8 text-center">
+                <img src="image/image1.jpg" alt="Image" class="img-fluid shadowed-image">
             </div>
         </div>
     </div>

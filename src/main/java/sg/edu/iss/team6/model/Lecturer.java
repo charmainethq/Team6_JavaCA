@@ -44,4 +44,7 @@ public class Lecturer implements Serializable {
     @OneToMany(mappedBy="lecturer")
     private List<CourseClass> CourseClasses;
 
+    public String getFullName(){
+        return firstName + " " + lastName;
+    }
 }
