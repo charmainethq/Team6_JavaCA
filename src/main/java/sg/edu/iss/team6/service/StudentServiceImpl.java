@@ -16,9 +16,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-import java.util.ArrayList;
-
-
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -72,6 +69,16 @@ public class StudentServiceImpl implements StudentService {
 
         return crol;
 
+    }
+
+    @Override
+    @Transactional
+    public List<Enrollment> getStudentEnroll(long studentId){
+        Student student = srepo.findByStudentId(studentId);
+
+        List<Enrollment> enrols = student.getStudentEnrollments();
+
+        return enrols;
     }
 
     @Override
