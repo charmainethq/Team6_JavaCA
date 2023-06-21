@@ -15,6 +15,7 @@ import sg.edu.iss.team6.repository.EnrollmentRepository;
 import sg.edu.iss.team6.service.*;
 import sg.edu.iss.team6.utility.EmailUtility;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,6 +53,7 @@ public class StudentController {
     }**/
 
 
+
     @GetMapping
     public String homePage(HttpSession session, Model model){
 
@@ -68,6 +70,9 @@ public class StudentController {
         Student student = studentService.findByUserUsername(username);
         List<Enrollment> enrollments = enrollmentService.findByStudent(student);
         List<Course> allCourses = courseService.getAllCourses();
+
+        if (student == null || enrollments == null || allCourses == null)
+            throw new ResourceNotFoundException();
 
         Map<Long, Boolean> canRegister = new HashMap<>();
 
@@ -151,6 +156,7 @@ public class StudentController {
         Enrollment enrollment = new Enrollment();
         enrollment.setStudent(student);
         enrollment.setCourseClass(courseClass);
+        enrollment.setSubmittedDate(LocalDateTime.now());
         enrollment.setEnrollmentStatus(EnrollmentEnum.SUBMITTED);
         System.out.print(enrollment.getEnrollmentId());
 

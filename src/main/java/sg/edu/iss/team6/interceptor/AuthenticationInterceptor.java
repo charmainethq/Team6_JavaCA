@@ -14,6 +14,7 @@ import sg.edu.iss.team6.exception.UnauthorizedException;
 
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor{
+    /**
     @Override
     public boolean preHandle(HttpServletRequest request, 
     HttpServletResponse response, Object handler) throws IOException, UnauthorizedException {
@@ -54,4 +55,5 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
         return true;
 
     }
+    **/
 }
