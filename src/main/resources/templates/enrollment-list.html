@@ -6,7 +6,7 @@
     <title>Enrollment List</title>
     <link rel="stylesheet" href="/css/list.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap.min.css">
 </head>
 <body>
     <header>
@@ -18,31 +18,31 @@
         <div th:if="${param.message}" class="alert alert-success" role="alert">
             <p th:text="${param.message}"></p>
         </div>
-        <div class="mb-3">
-            <label for="searchInput">Search:</label>
-            <input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
-        </div>
 
         <table id="enrollmentTable" class="table table-striped">      
             <thead>
                 <tr>
-                    <th onclick="sortTable('enrollmentTable', 0)"><button class="transparent-btn"><span class="sort-text">Enrollment ID</span> <i class="fas fa-sort"></i></button></th>
-                    <th onclick="sortTable('enrollmentTable', 1)"><button class="transparent-btn"><span class="sort-text">Student ID</span> <i class="fas fa-sort"></i></button></th>
-                    <th onclick="sortTable('enrollmentTable', 2)"><button class="transparent-btn"><span class="sort-text">Student Username</span> <i class="fas fa-sort"></i></button></th>
-                    <th onclick="sortTable('enrollmentTable', 3)"><button class="transparent-btn"><span class="sort-text">Class ID</span> <i class="fas fa-sort"></i></button></th>
-                    <th onclick="sortTable('enrollmentTable', 4)"><button class="transparent-btn"><span class="sort-text">Status</span> <i class="fas fa-sort"></i></button></th>
+                    <th>Enrollment ID</th>
+                    <th>Student ID</th>
+                    <th>Student Username</th>
+                    <th>Class ID</th>
+                    <th>Status</th>
+                    <th>Submitted Date</th>
                     <th>Actions</th>
                 </tr>
             </thead>            
             
             <tbody>
                 <!-- Iterate over the enrollments and display their information -->
-                <tr th:each="enrollment : ${enrollments}" id="enrollmentRow">
+                <tr th:each="enrollment : ${enrollments}">
                     <td th:text="${enrollment.enrollmentId}"></td>
                     <td th:text="${enrollment.student.studentId}"></td>
                     <td th:text="${enrollment.student.user.username}"></td>
                     <td th:text="${enrollment.courseClass.classId}"></td>
                     <td th:text="${enrollment.enrollmentStatus}"></td>
+                    <td>
+                        <span th:text="${#temporals.format(enrollment.submittedDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                    </td>
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
@@ -64,47 +64,29 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
         <script>
-            function filterTable() {
-                // Retrieve the search input value
-                const searchInput = document.querySelector('#searchInput').value.toLowerCase();
-                
-                // Retrieve all enrollment rows
-                const enrollmentRows = document.querySelectorAll('#enrollmentRow');
-                
-                // Loop through enrollment rows and check if they match the search input
-                enrollmentRows.forEach(function(row) {
-                    // Retrieve the enrollment information from the row
-                    const enrollmentId = row.cells[0].textContent.toLowerCase();
-                    const studentId = row.cells[1].textContent.toLowerCase();
-                    const courseId = row.cells[2].textContent.toLowerCase();
-                    const classId = row.cells[3].textContent.toLowerCase();
-                    const status = row.cells[4].textContent.toLowerCase();
-                    
-                    // Check if any of the enrollment information matches the search input
-                    if (
-                        enrollmentId.includes(searchInput) ||
-                        studentId.includes(searchInput) ||
-                        courseId.includes(searchInput) ||
-                        classId.includes(searchInput) ||
-                        status.includes(searchInput)
-                    ) {
-                        // Show the row if it matches the search input
-                        row.style.display = '';
-                    } else {
-                        // Hide the row if it doesn't match the search input
-                        row.style.display = 'none';
-                    }
-                });
-            }
-
-            function confirmDelete() {
-                return confirm('Are you sure you want to delete this enrollment?');
-            }
-
+            '<"top"i>rt<"bottom"flp><"clear">'
             $(document).ready(function() {
                 $('#enrollmentTable').DataTable({
-                    searching: false
+                    dom: '<"top"B>fltr<"bottom"ip><"clear">',
+                    buttons: [
+                        'copy',
+                        'excel',
+                        'csv',
+                        'pdf'
+                    ],
+                    columnDefs: [
+                        { targets: [0, 1, 2, 3, 4, 5], orderable: true },
+                        { targets: '_all', orderable: false }
+                    ]
                 });
             });
         </script>

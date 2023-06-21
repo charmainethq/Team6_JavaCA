@@ -15,6 +15,7 @@ import sg.edu.iss.team6.repository.EnrollmentRepository;
 import sg.edu.iss.team6.service.*;
 import sg.edu.iss.team6.utility.EmailUtility;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -151,6 +152,7 @@ public class StudentController {
         Enrollment enrollment = new Enrollment();
         enrollment.setStudent(student);
         enrollment.setCourseClass(courseClass);
+        enrollment.setSubmittedDate(LocalDateTime.now());
         enrollment.setEnrollmentStatus(EnrollmentEnum.SUBMITTED);
         System.out.print(enrollment.getEnrollmentId());
 
@@ -170,7 +172,6 @@ public class StudentController {
     public String registerSuccess(){
         return "student-register-success";
     }
-
 
     @GetMapping("/confirmEnrollment")
     public String createEnrollmentFromUrl(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, Model model) {
@@ -212,16 +213,6 @@ public class StudentController {
         model.addAttribute("gpa",studentService.computeStudentgpa(curntStudent.getStudentId()));
         model.addAttribute("avge",studentService.computeStudentavgScore(curntStudent.getStudentId()));
         return "stu-classlist";
-    }
-
-    @GetMapping("/EnrollmentStatus")
-    public String enrollmentStatus(HttpSession session,Model model){
-
-        String username= (String)session.getAttribute("username");
-        Student curntStudent= studentService.findByUserUsername(username);
-        
-        model.addAttribute("enrollments", studentService.getStudentEnroll(curntStudent.getStudentId()));
-        return "stu-enrollist";
     }
 
 }

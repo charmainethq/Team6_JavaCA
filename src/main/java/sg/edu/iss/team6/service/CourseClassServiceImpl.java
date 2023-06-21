@@ -25,6 +25,16 @@ public class CourseClassServiceImpl implements CourseClassService{
     private CourseClassRepository ccRepo;
 
     @Override
+    public ArrayList<CourseClass> findByCourseId(long courseId) {
+    	return ccRepo.findByCourseId(courseId);
+    }
+    
+    @Override
+    public CourseClass findById(long id) {
+    	return ccRepo.findById(id).orElse(null);
+    }
+    
+    @Override
     public List<CourseClass> findByCourse(Course course) {
         return ccRepo.findByCourse(course);
     }
@@ -33,8 +43,6 @@ public class CourseClassServiceImpl implements CourseClassService{
     public CourseClass findByClassId(long id) {
         return ccRepo.findByClassId(id);
     }
-
-
 
     @Override
     public Page<CourseClass> findByCourseId(Long courseId,Pageable pageable) {
