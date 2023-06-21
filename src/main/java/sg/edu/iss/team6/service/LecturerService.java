@@ -17,8 +17,6 @@ public interface LecturerService {
     Lecturer findById(Long id);
 
 
-	// Lecturer findById(long id);
-
 
     Lecturer create(Lecturer l);
 
