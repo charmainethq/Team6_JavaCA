@@ -17,9 +17,7 @@ public interface CourseClassService {
     CourseClass findByClassId(Long classId);
 
     
-    ArrayList<CourseClass> findByCourseId(long courseId);
-    
-    CourseClass findById(long id);
+	//CourseClass findById(long Id);
 	
 	List<Long> findDistinctCourseId(long lecturerId);
 	

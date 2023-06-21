@@ -96,47 +96,60 @@ public class LecturerController {
         model.addAttribute(enrollmentList);
         return "lecturer-course-enrollment";
     }
-// Lecturer Grade A Course
-    @RequestMapping(value = "/lecturer/courseList/{lecturerId}", method = RequestMethod.GET)
-    public String viewCourseList(@PathVariable long lecturerId, Model model) {
-        ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
-        ArrayList<Course> courseList = new ArrayList<>();
-        for (CourseClass current : courseClassList) {
-        	long courseId = current.getCourse().getCourseId();
-        	Course course = cseSvc.findById(courseId);
-        	if(!courseList.contains(course)) {
-        		courseList.add(course);
-        	}
-        }
-        model.addAttribute("courseList", courseList);
-        return "lecturer-course-list";
-    }
 
-    @RequestMapping(value = "/lecturer/classList/{courseId}", method = RequestMethod.GET)
-    public String viewClassList(@PathVariable long courseId, Model model) {
-    	Course course = cseSvc.findById(courseId);
-    	ArrayList<CourseClass> classList = cseClsSvc.findByCourseId(courseId);
-    	model.addAttribute("course", course);
-        model.addAttribute("classList", classList);
+    @RequestMapping(value = "/lecturer/classList/{lecturerId}", method = RequestMethod.GET)
+    public String viewClassList(@PathVariable long lecturerId, Model model) {
+        ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
+        ArrayList<Long> courseIdList = new ArrayList<>();
+        ArrayList<Integer> courseNumList = new ArrayList<>();
+        ArrayList<String> courseNameList = new ArrayList<>();
+        ArrayList<String> courseDescriptionList = new ArrayList<>();
+
+        for (CourseClass current : courseClassList) {
+            Course course = cseSvc.findById(current.getCourse().getCourseId());
+            courseIdList.add(course.getCourseId());
+            courseNumList.add(course.getCourseNum());
+            courseNameList.add(course.getName());
+            courseDescriptionList.add(course.getDescription());
+        }
+
+        model.addAttribute("courseClassList", courseClassList);
+        model.addAttribute("courseIdList", courseIdList);
+        model.addAttribute("courseNumList", courseNumList);
+        model.addAttribute("courseNameList", courseNameList);
+        model.addAttribute("courseDescriptionList", courseDescriptionList);
         return "lecturer-class-list";
     }
 
-    @RequestMapping(value = "/lecturer/studentList/{classId}", method = RequestMethod.GET)
-    public String viewStudentList(@PathVariable long classId, Model model) {
-    	CourseClass courseClass = cseClsSvc.findById(classId);
-    	Course course = cseSvc.findById(courseClass.getCourse().getCourseId());
-    	ArrayList<Enrollment> enrollmentList = enrlSvc.findByClassId(classId);
-    	model.addAttribute("courseClass", courseClass);
-    	model.addAttribute("course", course);
+    @RequestMapping(value = "/lecturer/class/{classId}", method = RequestMethod.GET)
+    public String enrollmentList(@PathVariable long classId, Model model) {
+        ArrayList<Enrollment> enrollmentList = enrlSvc.findByClassId(classId);
+        ArrayList<String> studentFirstName = new ArrayList<>();
+        ArrayList<String> studentLastName = new ArrayList<>();
+        Course courseGet = null;
+
+        for (Enrollment current : enrollmentList) {
+            Student student = stuSvc.findByStudentId(current.getStudent().getStudentId());
+            if (courseGet == null) {
+                Course course = cseSvc.findById(current.getCourseClass().getCourse().getCourseId());
+                courseGet = course;
+            }
+            studentFirstName.add(student.getFirstName());
+            studentLastName.add(student.getLastName());
+        }
+
         model.addAttribute("enrollmentList", enrollmentList);
-    	return "lecturer-student-list";
+        model.addAttribute("course", courseGet);
+        model.addAttribute("firstName", studentFirstName);
+        model.addAttribute("lastName", studentLastName);
+        return "lecturer-class-view";
     }
-    
-    @RequestMapping(value = "/lecturer/gradeStudent/{enrollmentId}", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/lecturer/grade/{enrollmentId}", method = RequestMethod.GET)
     public String showGradeCourse(@PathVariable long enrollmentId, Model model) {
         Enrollment enrollment = enrlSvc.findById(enrollmentId);
-        CourseClass courseClass = cseClsSvc.findById(enrollment.getCourseClass().getClassId());
         Course course = cseSvc.findById(enrollment.getCourseClass().getCourse().getCourseId());
+        CourseClass courseClass = cseClsSvc.findByClassId(enrollment.getCourseClass().getClassId());
         Student student = stuSvc.findByStudentId(enrollment.getStudent().getStudentId());
 
         model.addAttribute("enrollment", enrollment);
@@ -147,7 +160,7 @@ public class LecturerController {
         return "lecturer-grade-student";
     }
 
-    @RequestMapping(value = "/lecturer/gradeStudent/{enrollmentId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/lecturer/grade/{enrollmentId}", method = RequestMethod.POST)
     public String gradeCourse(@PathVariable long enrollmentId, @ModelAttribute("enrollment") Enrollment enrollment) {
         if (enrollment.getScore() == null) {
             System.out.println("Score cannot by empty");
@@ -160,6 +173,6 @@ public class LecturerController {
         currentEnrollment.setScore(enrollment.getScore());
         enrlSvc.update(currentEnrollment);
         long classId = currentEnrollment.getCourseClass().getClassId();
-        return "redirect:/lecturer/studentList/" + classId;
+        return "redirect:/lecturer/class/" + classId;
     }
 }
