@@ -11,8 +11,12 @@
   </header>
   <div class="container" >
     <div class="details">
+      Avg_score: <span th:text="${avge}"></span>
+    </div>
+    <div class="details">
       GPA: <span th:text="${gpa}"></span>
     </div>
+    
     <table class="table table-striped">
         <thead>
         <tr>
@@ -22,9 +26,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="courseAndscore : ${courseAndscore}">
-            <td th:text="*{courseAndscore.key}"></td>
-            <td th:text="*{courseAndscore.value}"></td>
+        <tr th:each="courseAnds : ${courseAndscore}">
+            <td th:text="${courseAnds[0]}"></td>
+            <td th:text="${courseAnds[1]}"></td>
         </tr>
         </tbody>
     </table>

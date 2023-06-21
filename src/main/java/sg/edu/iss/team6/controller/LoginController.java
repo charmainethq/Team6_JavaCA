@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import sg.edu.iss.team6.model.User;
 import sg.edu.iss.team6.service.UserService;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 @Controller
 public class LoginController {
      
@@ -60,12 +62,15 @@ public class LoginController {
 		String enteredPassword = user.getPassword();
 
 		User actualUser = userService.findByUsername(enteredUsername);
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		//String encodedPassword = encoder.encode(enteredPassword);
 
 		if (actualUser != null) {
 			String actualPassword = actualUser.getPassword();
 
 			// Compare the entered password with the actual password
-			return enteredPassword.equals(actualPassword);
+			//return enteredPassword.equals(actualPassword);
+			return encoder.matches(enteredPassword, actualPassword);
 		}
 
 		return false; // User not found
