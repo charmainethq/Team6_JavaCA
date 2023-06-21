@@ -5,8 +5,13 @@
     <title>lecturers</title>
     <link rel="stylesheet" href="/css/list.css">
 </head>
+<body>
+    <header>
+        <div th:include="lecturer-home-page.html"></div>
+    </header>
 
 <body>
+
     <header>
         <div th:include="lecturer-home-page.html"></div>
     </header>
@@ -64,7 +69,6 @@
         function filterTable() {
             var input = document.getElementById("searchInput");
             var filter = input.value.toUpperCase();
-
             for (var i = 1; i < rows.length; i++) {
                 var rowData = rows[i].getElementsByTagName("td");
                 var found = false;

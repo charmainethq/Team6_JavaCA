@@ -39,7 +39,6 @@ public class CourseClass implements Serializable {
     private Lecturer lecturer;
 
     @OneToMany(mappedBy="courseClass")
-    @JsonIgnore
     private List<Enrollment> classEnrollment;
 
     public String getFormatStartDate(){
@@ -57,13 +56,6 @@ public class CourseClass implements Serializable {
         return sdf.format(calendar.getTime());
     }
 
-    //for REST
-    @Override
-    public String toString() {
-        return "CourseClass [classId=" + classId + ", course=" + course.getName()
-                + ", startDate=" + startDate + ", size=" + size + ", confirmed="
-                + confirmed + ", roomNum=" + roomNum + "]";
-    }
 
 
 
