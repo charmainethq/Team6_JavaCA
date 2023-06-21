@@ -11,7 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
-/**
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 	throws IOException{
@@ -26,5 +26,5 @@ public class LoginInterceptor implements HandlerInterceptor {
 		response.sendRedirect("/login");
 		return false;
 	}
-	**/
+
 }
