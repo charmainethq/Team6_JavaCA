@@ -4,6 +4,7 @@ import javax.naming.Binding;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -23,6 +24,8 @@ public class UserController{
 
     @Autowired
     private UserService userSvc;
+
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
     private UserValidator userValidator;
@@ -63,6 +66,7 @@ public class UserController{
             bindingResult.rejectValue("username", "error.username.exists", "Username already exists");
             return "user-create";
         }
+        user.setPassword(encoder.encode(user.getPassword()));
         userSvc.create(user);
         return "redirect:/admin/user/list";
     }
@@ -86,7 +90,7 @@ public class UserController{
         User existingUser = userSvc.findByUsername(username);
 
         existingUser.setUsername(user.getUsername());
-        existingUser.setPassword(user.getPassword());
+        existingUser.setPassword(encoder.encode(user.getPassword()));
 
         userSvc.update(existingUser);
         return "redirect:/admin/user/list";

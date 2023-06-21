@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import sg.edu.iss.team6.controller.exception.ResourceNotFoundException;
 import sg.edu.iss.team6.model.*;
 import sg.edu.iss.team6.repository.EnrollmentRepository;
 import sg.edu.iss.team6.service.*;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -42,103 +44,108 @@ public class StudentController {
     @Autowired
     EmailUtility emailUtility;
 
-    private static final Long testId = 3L;
-    @RequestMapping(value = "/all")
-    public @ResponseBody List<String> findAllStudents(){
+    /**
+    //for testing only
+    private Student student;
+    @PostConstruct
+    public void init() {
+        student = studentService.findByUserUsername("stu_3_charlie");
+    }**/
 
-        List<Student> students = studentService.findAllStudents();
-        List<String> studentNames = new ArrayList<>();
-        for (Student s: students
-             ) {studentNames.add(s.getFirstName());
-        }
 
-        return studentNames;
+    @GetMapping
+    public String homePage(HttpSession session, Model model){
+
+        String username= (String)session.getAttribute("username");
+        Student student = studentService.findByUserUsername(username);
+
+        model.addAttribute("name",student.getFullName());
+        return "student";
     }
 
     @GetMapping(value = "/registerCourses")
-    public String getUnenrolledAndFailedCourses(Model model) {
-        //TODO: remove and use session instead
-        Long studentId = testId;
-
-        Student student = studentService.findByStudentId(studentId);
+    public String listCoursesForRegistration(HttpSession session, Model model) {
+        String username= (String)session.getAttribute("username");
+        Student student = studentService.findByUserUsername(username);
+        List<Enrollment> enrollments = enrollmentService.findByStudent(student);
         List<Course> allCourses = courseService.getAllCourses();
 
-        List<Course> unenrolledAndFailedCourses = allCourses.stream()
-                .filter(course -> {
-                    // filter for enrollment
-                    boolean hasEnrollment = student.getStudentEnrollments().stream()
-                            .anyMatch(enrollment ->
-                                    enrollment.getCourseClass().getCourse().getCourseId() == course.getCourseId());
+        Map<Long, Boolean> canRegister = new HashMap<>();
 
-                    // Check if the enrollment status is withdrawal or failure
-                    boolean isWithdrawnOrFailed = student.getStudentEnrollments().stream()
-                            .anyMatch(enrollment ->
-                                    enrollment.getCourseClass().getCourse().getCourseId() == course.getCourseId() &&
-                                            (enrollment.getEnrollmentStatus() == EnrollmentEnum.WITHDRAWN ||
-                                                    enrollment.getEnrollmentStatus() == EnrollmentEnum.FAILED));
+        //set default value to can register to avoid nulls
+        for (Course course : allCourses) {
+            canRegister.put(course.getCourseId(), true);
+        }
 
-                    // only include if hasEnrollment is false AND fail/withdraw is true.
-                    return !hasEnrollment || isWithdrawnOrFailed;
-                })
-                .collect(Collectors.toList());
-        model.addAttribute("coursesToRegister", unenrolledAndFailedCourses);
+        //set to false if student has completed, attempted to register or been removed.
+        for (Enrollment enrollment : enrollments) {
+            Course course = enrollment.getCourseClass().getCourse();
+            if (enrollment.getEnrollmentStatus().equals(EnrollmentEnum.COMPLETED)
+                    || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.REMOVED)
+                    || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.SUBMITTED)) {
+                canRegister.put(course.getCourseId(), false);
+            }
+        }
+
+        model.addAttribute("courses", allCourses);
+        model.addAttribute("canRegister", canRegister);
+
         return "student-view-course-registration";
     }
 
 
 
-
-
     @GetMapping(value = "viewClasses/{courseId}")
     public String getClassesByCourseId(@PathVariable("courseId") Long courseId,
-                                       @RequestParam(value = "page", defaultValue = "0") int page,
-                                       @RequestParam(value = "size", defaultValue = "10") int size,
+                                       HttpSession session,
                                        Model model) {
 
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<CourseClass> allClasses = classService.findByCourseId(courseId, pageable);
-        //List<CourseClass> allClasses = classService.findByCourseId(courseId);
-
-        //TODO: remove and use session instead
-        Student student =  studentService.findByStudentId(testId);
-        model.addAttribute("student",student);
-
+        String username= (String)session.getAttribute("username");
+        Student student= studentService.findByUserUsername(username);
         Course course = courseService.findCourseByCourseId(courseId);
-        model.addAttribute("course",course);
+        List<CourseClass> allClasses = classService.findByCourseId(courseId);
 
+        List<String> lecturerNames = allClasses.stream()
+                .map(courseClass -> courseClass.getLecturer().getFullName())
+                .collect(Collectors.toList());
+
+        if (student == null || allClasses == null || course == null || lecturerNames == null) {
+            throw new ResourceNotFoundException("Resource not found");
+        }
+
+        model.addAttribute("student",student);
+        model.addAttribute("course",course);
         model.addAttribute("classes", allClasses);
+        model.addAttribute("lecturerNames", lecturerNames);
 
         return "student-view-classes";
     }
 
     @PostMapping("/register")
-    public String registerClass(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, @RequestParam("courseId") Long courseId, Model model) {
+    public String registerClass(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, HttpSession session, Model model) {
+
 
         // Retrieve the student and class based on the provided IDs
-        Student student = studentService.findByStudentId(studentId);
+        String username= (String)session.getAttribute("username");
+        Student student= studentService.findByUserUsername(username);
         CourseClass courseClass = classService.findByClassId(classId);
-        Course course = courseService.findCourseByCourseId(courseId);
 
-        //TODO: exceptions
-        /**    if (student == null || courseClass == null) {
-         // Handle invalid student or class ID
-         return "redirect:/student/registerFailure";
-         }**/
+        if (student == null || courseClass == null) {
+            throw new ResourceNotFoundException("Resource not found");
+        }
 
         // Find the current enrollment status if any
         Enrollment existingEnrollment = enrollmentService.findByStudentAndClass(classId,studentId).orElse(null);
-        if (existingEnrollment != null)
-        System.out.println(existingEnrollment.getEnrollmentStatus());
 
         // Reject if completed or attempted to register before
         if (existingEnrollment != null &&
                 (existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.SUBMITTED
                         || existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.CONFIRMED
                         || existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.COMPLETED
+                        || existingEnrollment.getEnrollmentStatus() ==EnrollmentEnum.REMOVED
                 )) {
-            model.addAttribute("eStatus", existingEnrollment.getEnrollmentStatus());
-            return "student-error-duplicate-registration";
+            model.addAttribute("eStatus", existingEnrollment.getEnrollmentStatus().toString());
+            return "student-register-fail";
         }
 
         // Else create a new enrollment object
@@ -156,40 +163,30 @@ public class StudentController {
         String testRecepientEmail= "sa56team6@outlook.com";
 
         String confirmationLink = emailUtility.generateConfirmationLink(studentId, classId);
-        emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink, student.getFullName(), course);
+        emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink, student.getFullName(), courseClass);
 
         return "redirect:/student/registerSuccess";
     }
-
-
-    @GetMapping("/confirmEnrollment")
-    public String createEnrollmentFromUrl(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId) {
-        Enrollment enrollment = enrollmentService.findByStudentAndClass(classId,studentId).orElse(null);
-
-        enrollmentService.updateEnrollmentStatus(enrollment.getEnrollmentId(), EnrollmentEnum.CONFIRMED);
-
-        //TODO: if (enrollment == null) some error
-        try {
-        } catch (NumberFormatException e) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invalid URL parameters");
-        }
-
-
-        return "student-register-success";
-    }
-
-    /**private String getUrlParamValue(String url, String paramName) {
-        MultiValueMap<String, String> params = UriComponentsBuilder.fromUriString(url).build().getQueryParams();
-        return params.getFirst(paramName);
-    }**/
-
-
-
 
     @GetMapping("/registerSuccess")
     public String registerSuccess(){
         return "student-register-success";
     }
+
+    @GetMapping("/confirmEnrollment")
+    public String createEnrollmentFromUrl(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, Model model) {
+        Enrollment enrollment = enrollmentService.findByStudentAndClass(classId,studentId).orElse(null);
+
+        if (enrollment== null) {
+            throw new ResourceNotFoundException("Resource not found");
+        }
+        enrollmentService.updateEnrollmentStatus(enrollment.getEnrollmentId(), EnrollmentEnum.CONFIRMED);
+        String courseName = enrollment.getCourseClass().getCourse().getCourseNum() + " " + enrollment.getCourseClass().getCourse().getName();
+        model.addAttribute("courseName", courseName);
+        return "student-enrollment-success";
+    }
+
+
 
     @GetMapping("/selfInformation")
     public String selfInformation(HttpSession session,Model model){
@@ -209,11 +206,12 @@ public class StudentController {
         String username= (String)session.getAttribute("username");
         Student curntStudent= studentService.findByUserUsername(username);
 
-        Map<String, Long> courseAndscore = studentService.getCourseandScore(curntStudent.getStudentId());
 
-        model.addAttribute("courseAndscore", courseAndscore);
+        //model.addAttribute("len", courseAndscore.size());
+        model.addAttribute("courseAndscore", studentService.getCourseandScore(curntStudent.getStudentId()));
         model.addAttribute("curntStudent", curntStudent);
         model.addAttribute("gpa",studentService.computeStudentgpa(curntStudent.getStudentId()));
+        model.addAttribute("avge",studentService.computeStudentavgScore(curntStudent.getStudentId()));
         return "stu-classlist";
     }
 

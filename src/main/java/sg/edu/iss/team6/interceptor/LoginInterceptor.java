@@ -31,5 +31,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         response.sendRedirect("/login"); // Redirect unauthorized users to the login page
         return false;
     }
+
 }
 
