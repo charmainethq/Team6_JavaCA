@@ -1,5 +1,4 @@
-package sg.edu.iss.team6.configuration;
-
+/*package sg.edu.iss.team6.configuration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,4 +14,4 @@ public class SecurityConfig extends
     {
         security.httpBasic().disable();
     }
-}
+}*/

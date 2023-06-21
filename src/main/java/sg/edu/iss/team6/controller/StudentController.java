@@ -204,11 +204,12 @@ public class StudentController {
         String username= (String)session.getAttribute("username");
         Student curntStudent= studentService.findByUserUsername(username);
 
-        Map<String, Long> courseAndscore = studentService.getCourseandScore(curntStudent.getStudentId());
 
-        model.addAttribute("courseAndscore", courseAndscore);
+        //model.addAttribute("len", courseAndscore.size());
+        model.addAttribute("courseAndscore", studentService.getCourseandScore(curntStudent.getStudentId()));
         model.addAttribute("curntStudent", curntStudent);
         model.addAttribute("gpa",studentService.computeStudentgpa(curntStudent.getStudentId()));
+        model.addAttribute("avge",studentService.computeStudentavgScore(curntStudent.getStudentId()));
         return "stu-classlist";
     }
 
