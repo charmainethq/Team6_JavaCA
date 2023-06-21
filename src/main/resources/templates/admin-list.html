@@ -10,11 +10,11 @@
     </header>
     <div class="container" >
         <h1> Admin List </h1>
-
+<!-- 
         <div class="mb-3">
             <label for="searchInput">Search:</label>
             <input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
-        </div>
+        </div> -->
 
         <table class="table table-striped" id="adminTable">
             <thead>
@@ -104,7 +104,7 @@
 
             $(document).ready(function() {
             $('#adminTable').DataTable({
-                searching: false
+                //searching: true
             });
         });
         </script>
