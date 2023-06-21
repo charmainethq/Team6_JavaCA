@@ -77,6 +77,7 @@ public class LoginController {
 		return false; // User not found
 	}
 
+
 	@GetMapping("/logout")
     public String logout(HttpSession session, HttpServletRequest request) {
         String referer = request.getHeader("Referer"); // Get the URL of the previous page
