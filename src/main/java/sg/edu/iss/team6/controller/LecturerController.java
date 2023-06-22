@@ -48,7 +48,7 @@ public class LecturerController {
     private Long retrieveLecturerId(HttpSession sessionObj) {
         String lectuerUsername = (String) sessionObj.getAttribute("username");
         List<Lecturer> lecturerList = lectSvc.findByUser_Username(lectuerUsername);
-        long lecturerId = 3; // mock up a lecturer ID
+        long lecturerId = 2; // mock up a lecturer ID
         for(Lecturer lecturer : lecturerList) {
             if(lecturer != null) {
                 lecturerId = lecturer.getLecturerId();
