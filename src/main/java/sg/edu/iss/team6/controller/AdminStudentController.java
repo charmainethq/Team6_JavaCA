@@ -62,7 +62,6 @@ public class AdminStudentController {
             return "student-create";
         }
         student.setUser(existingUser);
-        uService.create(user);
         // Save the student object to the database
         sService.create(student);
         return "redirect:/admin/student/list";
