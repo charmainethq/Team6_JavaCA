@@ -53,7 +53,6 @@
 				</tr>
 			</thead>
 			<tbody>
-				<!-- Iterate over the admins and display their information -->
 				<tr th:each="enroll : ${enrollList}" id="enrollRow">
 					<td th:text="${enroll.courseClass.classId}"></td>
 					<td th:text="${enroll.enrollmentId}"></td>

@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import sg.edu.iss.team6.interceptor.AuthenticationInterceptor;
-import sg.edu.iss.team6.interceptor.LoginInterceptor;
+//import sg.edu.iss.team6.interceptor.LoginInterceptor;
 
 @Component
 public class WebAppConfig implements WebMvcConfigurer {
