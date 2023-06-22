@@ -23,7 +23,11 @@ public class WebAppConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(authenticationInterceptor);
+		registry.addInterceptor(authenticationInterceptor)
+		                .addPathPatterns("/admin/**")
+				.addPathPatterns("/student/**")
+				.addPathPatterns("/lecturer/**")
+				.excludePathPatterns("/home");
 	/**
 	@Autowired
 	LoginInterceptor loginInterceptor;

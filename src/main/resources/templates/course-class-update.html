@@ -1,45 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
     <title>Update Class</title>
     <link rel="stylesheet" href="/css/create.css">
 </head>
 <body>
-<h1>Create Course</h1>
+<header>
+    <div th:include="adminPage.html"></div>
+</header>
 <form th:action="@{/admin/course/class/update/{id}(id=${courseClass.classId})}" th:object="${courseClass}" method="post">
+
+    <button class="icon-button" onclick="goBack()">
+        <i style="font-size:30px" class="fa">&#xf137;</i>
+    </button>
+    <h1>Update Class</h1>
     <input type="hidden" th:field="*{classId}" required/>
     <input type="hidden" th:field="*{course.courseId}" required />
 
     <label for="roomNum">Room Number:</label>
     <input type="text" id="roomNum" th:field="*{roomNum}" required/><br/>
 
-    <label for="size">Size:</label>
+    <label for="size">Size:</label> <span th:if="${#fields.hasErrors('size')}" th:errors="*{size}"
+                                          style="color: #bf1111; font-size: 12px;"></span>
     <input type="text" id="size" th:field="*{size}" required/><br/>
 
     <label for="lecturer">Lecturer:</label>
     <select id="lecturer" name="lecturer" required>
         <option th:each="l : ${lecturers}" th:value="${l.lecturerId}" th:text="${l.firstName + ' ' + l.lastName}"></option>
-    </select><br/>
+    </select><br/><br/>
 
     <label for="startDate">Start Date:</label>
-    <input type="text" id="startDate" th:field="*{startDate}" required
-           th:attr="value=${#dates.format(startDate, 'yyyy-MM-dd')}"/><br/>
+    <input type="date" id="startDate" th:field="*{startDate}" required
+           th:attr="value=${#dates.format(startDate, 'yyyy-MM-dd')}"/><br/><br/>
 
     <script>
-      $(function() {
-        $("#startDate").datepicker();
-      });
+      function goBack() {
+      window.history.back();
+      }
     </script>
-
-<!--    <label for="lecturer">Lecturer:</label>-->
-<!--    <input type="text" id="lecturer" th:field="*{lecturer}" required/><br/>-->
-<!--    <div id="lecturerOptions" class="dropdown-content">-->
-<!--        <div class="option" th:each="l : ${lecturer}" th:text="${l.firstName + ' ' + l.lastName}">Lecturer 1</div>-->
-<!--    </div>-->
 
     <input type="submit" value="Update"/>
 </form>
