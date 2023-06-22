@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
     <title>Update User</title>
     <link rel="stylesheet" href="/css/update.css">
@@ -9,9 +10,11 @@
         <div th:include="adminPage.html"></div>
     </header>
     <div class="container">
-        <h1>Update User</h1>
         <form th:action="@{{username}(username=${user.username})}" th:object="${user}" method="post">
-
+            <button class="icon-button" onclick="goBack()">
+                <i style="font-size:30px" class="fa">&#xf137;</i>
+            </button>
+            <h1>Update User</h1>
             <label for="username">Username:</label>
             <input type="text" name="username" th:value="${user.username}" required><br>
             <label for="password">Password:</label><br>
@@ -20,7 +23,6 @@
             <input type="submit" value="Update User">
         </form>
         <br>
-        <button onclick="goBack()">Back</button>
     </div>
     
     <script>

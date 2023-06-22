@@ -11,12 +11,10 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Entity
 public class User implements Serializable {
 
     @Id
-    
     private String username;
     private String password;
 
