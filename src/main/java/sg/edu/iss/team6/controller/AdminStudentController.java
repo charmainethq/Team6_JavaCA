@@ -6,21 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import sg.edu.iss.team6.model.Admin;
 import sg.edu.iss.team6.model.Enrollment;
 import sg.edu.iss.team6.model.Student;
 import sg.edu.iss.team6.model.User;
-import sg.edu.iss.team6.repository.StudentRepository;
-import sg.edu.iss.team6.repository.UserRepository;
 import sg.edu.iss.team6.service.EnrollmentService;
 import sg.edu.iss.team6.service.StudentService;
 import sg.edu.iss.team6.service.UserService;
-import sg.edu.iss.team6.service.UserServiceImpl;
-import sg.edu.iss.team6.validator.StudentValidator;
 import sg.edu.iss.team6.validator.UserValidator;
 
-import javax.annotation.Resource;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -33,13 +26,6 @@ public class AdminStudentController {
     UserService uService;
     @Autowired
     EnrollmentService eService;
-    @Autowired
-    StudentValidator sValidator;
-
-    @InitBinder
-    private void initCustomerBinder(WebDataBinder binder) {
-        binder.addValidators(sValidator);
-    }
 
     @GetMapping(value = "/list")
     public String getAllStudents(Model model){
@@ -62,22 +48,26 @@ public class AdminStudentController {
     @PostMapping(value = "/create")
     public String createStudent(@Valid @ModelAttribute("student") Student student,
                                 BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            // Return the same view if there are validation errors
+        User user = student.getUser();
+        User existingUser = uService.findByUsername(user.getUsername());
+        if (existingUser == null) {
+            bindingResult.rejectValue("user.username", "error.user.username.notFound",
+                    "User not found. Please create the user first.");
             return "student-create";
         }
-        // Remember to save user object
-        User user = student.getUser();
-        if (uService.findByUsername(student.getUser().getUsername()) != null) {
-            bindingResult.rejectValue("username", "error.username.exists",
-                    "Username already exists");
-            return "user-create";
+        Student existingStudent = sService.findByUser(existingUser);
+        if (existingStudent != null) {
+            bindingResult.rejectValue("user.username", "error.user.username.alreadyExists",
+                    "A student has been created under this username.");
+            return "student-create";
         }
+        student.setUser(existingUser);
         uService.create(user);
         // Save the student object to the database
         sService.create(student);
         return "redirect:/admin/student/list";
     }
+
     @GetMapping("/update/{id}")
     public String updateStudentPage(@PathVariable("id") long id, Model model){
         Student student = sService.findByStudentId(id);

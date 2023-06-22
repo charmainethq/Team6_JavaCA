@@ -55,7 +55,7 @@ public class AdminCourseController {
         cService.create(course);
         return "redirect:/admin/course/list";
     }
-    @GetMapping("/update/{id}")
+    @GetMapping(value = "/update/{id}")
     public String updateCoursePage(@PathVariable("id") long id, Model model){
         Course course = cService.findByCourseId(id);
         model.addAttribute("course", course);
@@ -88,7 +88,7 @@ public class AdminCourseController {
         return "course-class";
     }
     @GetMapping(value = "/class/create/{id}")
-    public String createClassPage(@PathVariable long id, Model model){
+    public String createClassPage(@PathVariable("id") long id, Model model){
         Course course = cService.findByCourseId(id);
         List<Lecturer> lecturers = lService.findAll();
         model.addAttribute("course", course);
@@ -96,12 +96,17 @@ public class AdminCourseController {
         model.addAttribute("lecturers", lecturers);
         return "course-class-create";
     }
-    @PostMapping(value = "/class/create")
+    @PostMapping(value = "/class/create/{id}")
     public String createClass(@ModelAttribute("courseClass") @Valid CourseClass cc,
-                              @RequestParam("course.courseId") long courseId,
+                              BindingResult bindingResult,
+                              @PathVariable("id") @RequestParam("course.courseId") long courseId,
                               @RequestParam("lecturer") Lecturer lecturer,
-                              BindingResult bindingResult){
+                              Model model){
         if (bindingResult.hasErrors()) {
+            Course course = cService.findByCourseId(courseId);
+            List<Lecturer> lecturers = lService.findAll();
+            model.addAttribute("course", course);
+            model.addAttribute("lecturers", lecturers);
             return "course-class-create";
         }
         Course course = cService.findByCourseId(courseId);
@@ -119,12 +124,15 @@ public class AdminCourseController {
         return "course-class-update";
     }
     @PostMapping(value = "/class/update/{id}")
-    public String updateClass(@PathVariable("id") long id,
-                              @ModelAttribute("courseClass") @Valid CourseClass cc,
+    public String updateClass(@ModelAttribute("courseClass") @Valid CourseClass cc,
+                              BindingResult bindingResult,
+                              @PathVariable("id") long id,
                               @RequestParam("lecturer") Lecturer lecturer,
-                              BindingResult bindingResult){
+                              Model model){
         if (bindingResult.hasErrors()) {
-            return "/admin/course/class/update" + cc.getCourse().getCourseId();
+            List<Lecturer> lecturers = lService.findAll();
+            model.addAttribute("lecturers", lecturers);
+            return "course-class-update";
         }
         ccService.update(cc);
         return "redirect:/admin/course/class/" + cc.getCourse().getCourseId();
@@ -136,7 +144,7 @@ public class AdminCourseController {
         List<Enrollment> enrollments = eService.findByCourseClass(cc);
         eService.deleteList(enrollments);
         ccService.delete(id);
-        return "redirect:/admin/course/list";
+        return "redirect:/admin/course/class/" + cc.getCourse().getCourseId();
     }
 
     @GetMapping("/class/enrollments/{id}")

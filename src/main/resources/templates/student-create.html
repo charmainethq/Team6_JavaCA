@@ -15,7 +15,7 @@
         <i style="font-size:30px" class="fa">&#xf137;</i>
     </button>
     <h1>Create Student</h1>
-    <label for="username">Username:</label> <span th:if="${#fields.hasErrors('user.getUsername()')}" th:errors="*{error.username}"
+    <label for="username">Username:</label> <span th:if="${#fields.hasErrors('user.username')}" th:errors="*{user.username}"
                                                   style="color: #bf1111; font-size: 12px;"></span>
     <input type="text" id="username" th:field="*{user.username}" required/><br/>
 

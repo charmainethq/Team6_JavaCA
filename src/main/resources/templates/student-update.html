@@ -17,8 +17,7 @@
   <form th:action="@{/admin/student/update/{id}(id=${student.studentId})}" th:object="${student}" method="post">
     <input type="hidden" th:field="*{studentId}"/>
 
-    <label for="username">Username:</label>
-    <input type="text" id="username" th:field="*{user.username}" required/><br/>
+    <input type="hidden" th:field="*{user.username}"/><br/>
 
     <label for="firstName">First Name:</label> <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
                                                     style="color: #bf1111; font-size: 12px;"></span>

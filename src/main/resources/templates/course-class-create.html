@@ -10,7 +10,7 @@
 <header>
     <div th:include="adminPage.html"></div>
 </header>
-<form th:action="@{/admin/course/class/create}" th:object="${courseClass}" method="post">
+<form th:action="@{/admin/course/class/create/{id}(id=${course.courseId})}" th:object="${courseClass}" method="post">
     <button class="icon-button" onclick="goBack()">
         <i style="font-size:30px" class="fa">&#xf137;</i>
     </button>
