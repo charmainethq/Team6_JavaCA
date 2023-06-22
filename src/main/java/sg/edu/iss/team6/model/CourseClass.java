@@ -2,6 +2,8 @@ package sg.edu.iss.team6.model;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -28,9 +30,10 @@ public class CourseClass implements Serializable {
     @JoinColumn(name = "course_id")
     private Course course;
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
+    @Max(value=1000, message="Class size cannot exceed 1000")
     private int size;
-    private int confirmed;
     private String roomNum;
 
     @ManyToOne
@@ -44,7 +47,7 @@ public class CourseClass implements Serializable {
     public String getFormatStartDate(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(calendar.getTime());
     }
 
@@ -52,11 +55,19 @@ public class CourseClass implements Serializable {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
         calendar.add(Calendar.DAY_OF_YEAR, course.getDuration());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         return sdf.format(calendar.getTime());
     }
 
-
+    public int getConfirmedNumber() {
+        int confirmedCount = 0;
+        for (Enrollment e : classEnrollment) {
+            if (e.getEnrollmentStatus() == EnrollmentEnum.CONFIRMED) {
+                confirmedCount++;
+            }
+        }
+        return confirmedCount;
+    }
 
 
 }

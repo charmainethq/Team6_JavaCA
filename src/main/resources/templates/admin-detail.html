@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
     <title>Admin Details</title>
     <link rel="stylesheet" href="/css/detail.css">
@@ -9,6 +10,9 @@
         <div th:include="adminPage.html"></div>
     </header>
     <div class="container">
+        <button class="icon-button" onclick="goBack()">
+            <i style="font-size:30px" class="fa">&#xf137;</i>
+        </button>
         <h1>Admin Details</h1>
         <div class="details">
             <label>Admin ID:</label>
@@ -43,8 +47,7 @@
             <a class="btn" th:href="@{/admin/update/{id}(id=${admin.adminId})}">Edit</a>
             <a class="btn" th:href="@{/admin/delete/{id}(id=${admin.adminId})}" onclick="return confirmDelete()">Delete</a>
         </div>
-        <br><br>
-        <button onclick="goBack()">Back</button>
+        <br>
         
         <script>
             function confirmDelete() {
