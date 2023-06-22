@@ -12,9 +12,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-import java.util.ArrayList;
-
-
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -77,9 +74,19 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public long computeStudentgpa(long studentId){
+    public List<Enrollment> getStudentEnroll(long studentId){
+        Student student = srepo.findByStudentId(studentId);
 
-        long gpa = 0;
+        List<Enrollment> enrols = student.getStudentEnrollments();
+
+        return enrols;
+    }
+
+    @Override
+    @Transactional
+    public double computeStudentavgScore(long studentId){
+
+        double avge = 0;
 
         Student student = srepo.findByStudentId(studentId);
         List<Enrollment> enrol = new ArrayList<>();
@@ -103,10 +110,39 @@ public class StudentServiceImpl implements StudentService {
         }
 
         if(credit != 0){
-            gpa = score/credit;
+            avge = score/credit;
         }
 
-        return gpa;
+        return avge;
+    }
+
+    @Override
+    @Transactional
+    public double computeStudentgpa(long studentId){
+        double avge = computeStudentavgScore(studentId);
+        int ten = 0;
+        double tmp = avge/10;
+        switch((int)tmp){
+            case 10:
+                ten = 5;
+                break;
+            case 9:
+                ten = 4;
+                break;
+            case 8:
+                ten = 3;
+                break;
+            case 7:
+                ten = 2;
+                break;
+            case 6:
+                ten = 1;
+                break;
+            default:
+                ten = 0;
+        }
+
+        return (ten + (avge%10)/10.0);
     }
 
     @Override
@@ -134,13 +170,19 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public Map<String, Long> getCourseandScore(long studentId){
-        Map<String, Long> CourseandScore = new HashMap<>();
+    public String[][] getCourseandScore(long studentId){
 
         List<Enrollment> enrol= getCompletedEnrollmentsForStudent(studentId);
 
-        for(Enrollment enrollment : enrol){
-            CourseandScore.put(enrollment.getCourseClass().getCourse().getName(),enrollment.getScore());
+        String[][] CourseandScore = new String[enrol.size()][enrol.size()];
+
+
+
+        for (int i=0;i<enrol.size();i++){
+            String[] temp = new String[2];
+            temp[0] = enrol.get(i).getCourseClass().getCourse().getName();
+            temp[1] = enrol.get(i).getScore().toString();
+            CourseandScore[i] = temp;
         }
 
         return CourseandScore;

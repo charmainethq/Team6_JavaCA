@@ -20,7 +20,7 @@
         </div>
         <div class="details">
             <label>Password:</label>
-            <span th:text="${user.password}"></span>
+            <span th:field="${user.password}" th:attr="placeholder=#{placeholder.password}" th:utext="${'********'}"></span>
         </div>
         
         <div class="actions">

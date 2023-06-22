@@ -131,7 +131,7 @@ public class StudentRestController {
         Student student = studentService.findByStudentId(studentId);
 
         CourseClass courseClass = classService.findByClassId(classId);
-        Course course = courseService.findCourseByCourseId(courseId);
+       //Course course = courseService.findCourseByCourseId(courseId);
 
         if (student == null || courseClass == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -167,7 +167,7 @@ public class StudentRestController {
             String testRecepientEmail = "sa56team6@outlook.com";
 
             String confirmationLink = emailUtility.generateConfirmationLink(studentId, classId);
-            emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink, student.getFullName(), course);
+            emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink, student.getFullName(), courseClass);
         }
         return ResponseEntity.ok(success);
 
