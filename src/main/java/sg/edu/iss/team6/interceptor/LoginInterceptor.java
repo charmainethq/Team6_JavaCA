@@ -1,4 +1,4 @@
-package sg.edu.iss.team6.interceptor;
+/*package sg.edu.iss.team6.interceptor;
 
 import java.io.IOException;
 
@@ -34,4 +34,4 @@ public class LoginInterceptor implements HandlerInterceptor {
     }
 }
 
-
+}*/
