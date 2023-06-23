@@ -9,13 +9,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import sg.edu.iss.team6.model.Lecturer;
-import sg.edu.iss.team6.service.LecturerService;
+import sg.edu.iss.team6.service.*;
 
 @Controller
 public class AdminLecturerController {
 
 	@Autowired
 	private LecturerService lectSvc;
+
+	@Autowired
+	private UserService userSvc;
 
 	@GetMapping("/admin/lecturer")
 	public String getLecturerPage(){
@@ -36,6 +39,7 @@ public class AdminLecturerController {
 
 	@GetMapping("/admin/lecturer/create")
 	public String createLecturer(Model model, Lecturer lecturer){
+		model.addAttribute("userList", userSvc.findAll());
 		model.addAttribute("lecturer", lecturer);
 		return "lect-create";
 	}

@@ -1,5 +1,7 @@
 package sg.edu.iss.team6.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,8 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import sg.edu.iss.team6.model.Admin;
+import sg.edu.iss.team6.model.*;
 import sg.edu.iss.team6.service.AdminService;
+import sg.edu.iss.team6.service.UserService;
 
 @Controller
 public class AdminController{
@@ -18,12 +21,16 @@ public class AdminController{
     @Autowired
     private AdminService adminSvc;
 
+    @Autowired
+    private UserService userSvc;
+
     @GetMapping("/admin")
     public String getAdminPage(){
         return "admin";
     }
     @GetMapping("/admin/list")
     public String getAllAdmin(Model model) {
+
         model.addAttribute("admin", adminSvc.findAll());
         return "admin-list";
     }
@@ -37,6 +44,7 @@ public class AdminController{
 
     @GetMapping("/admin/create")
     public String createAdmin(Model model, Admin admin){
+        model.addAttribute("userList", userSvc.findAll());
         model.addAttribute("admin", admin);
         return "admin-create";
     }

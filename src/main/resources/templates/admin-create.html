@@ -11,8 +11,12 @@
     <h1>Create Admin</h1>
     <form th:action="@{/admin/create}" th:object="${admin}" method="post">
         <label for="username">Username:</label>
-        <input type="text" id="username" th:field="*{user.username}" required/><br/>
-
+        <select id="username" th:field="*{user.username}" required>
+            <option value="">Select a username</option>
+            <option th:each="u : ${userList}" th:value="${u.username}" th:text="${u.username}" th:if="${u.username.startsWith('adm')}"></option>
+        </select><br/>
+        
+        
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" th:field="*{firstName}" required/><br/>
         

@@ -1,0 +1,72 @@
+<!-- lecturer-dashboard.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lecturer Dashboard</title>
+    <style>
+        .section {
+            display: none;
+        }
+    </style>
+    <script>
+        function showSection(sectionId) {
+            var sections = document.getElementsByClassName('section');
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].style.display = 'none';
+            }
+            document.getElementById(sectionId).style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+    <h1>Lecturer Dashboard</h1>
+    <label for="courseId">Select a course:</label>
+    <select name="courseId" id="courseId" onchange="showSection('classSection')">
+        <option value="">Select Course</option>
+        <!-- Populate the options dynamically from the server-side -->
+        <option value="1">Course 1</option>
+        <option value="2">Course 2</option>
+    </select>
+    <br>
+
+    <div id="classSection" class="section">
+        <label for="classId">Select a class:</label>
+        <select name="classId" id="classId" onchange="showSection('studentSection')">
+            <option value="">Select Class</option>
+            <!-- Populate the options dynamically from the server-side -->
+            <option value="1">Class 1</option>
+            <option value="2">Class 2</option>
+        </select>
+        <br>
+    </div>
+
+    <div id="studentSection" class="section">
+        <h2>Student List</h2>
+        <table>
+            <tr>
+                <th>Student Name</th>
+                <th>Actions</th>
+            </tr>
+            <!-- Populate the table rows dynamically from the server-side -->
+            <tr>
+                <td>Student 1</td>
+                <td><a href="#" onclick="showSection('gradeSection')">Grade</a></td>
+            </tr>
+            <tr>
+                <td>Student 2</td>
+                <td><a href="#" onclick="showSection('gradeSection')">Grade</a></td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="gradeSection" class="section">
+        <h2>Grade Student</h2>
+        <form action="/lecturer/gradeStudent/{enrollmentId}" method="POST">
+            <label for="score">Enter score:</label>
+            <input type="number" name="score" id="score" required>
+            <br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
