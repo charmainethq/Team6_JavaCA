@@ -26,6 +26,7 @@ public class AdminLecturerController {
 	}
 	@GetMapping("/admin/lecturer/list")
 	public String getAllLecturer(Model model) {
+		model.addAttribute("userList", userSvc.findAll());
 		model.addAttribute("lecturer", lectSvc.findAll());
 		return "lect-list";
 	}

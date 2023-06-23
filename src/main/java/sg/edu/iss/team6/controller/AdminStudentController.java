@@ -29,6 +29,7 @@ public class AdminStudentController {
     @Autowired
     EnrollmentService eService;
 
+
     @GetMapping(value = "/list")
     public String getAllStudents(Model model){
         model.addAttribute("allStudents", sService.findAllStudents());
@@ -42,6 +43,7 @@ public class AdminStudentController {
 
     @GetMapping(value = "/create")
     public String createStudentPage(Model model){
+        model.addAttribute("userList", uService.findAll());
         model.addAttribute("student", new Student());
         return "student-create";
     }
