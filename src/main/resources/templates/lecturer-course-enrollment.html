@@ -2,12 +2,19 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
+
     <title>View Courses Enrollment</title>
     <link rel="stylesheet" href="/css/list.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 </head>
+<body>
+    <header>
+        <div th:include="lecturer-home-page.html"></div>
+    </header>
 
 <body>
+
     <header>
         <div th:include="lecturer-home-page.html"></div>
     </header>
@@ -85,6 +92,7 @@
                 searching: false
             });
         });
+
     </script>
 </body>
 

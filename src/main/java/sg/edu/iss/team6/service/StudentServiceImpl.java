@@ -5,15 +5,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
-import sg.edu.iss.team6.model.Course;
-import sg.edu.iss.team6.model.Enrollment;
-import sg.edu.iss.team6.model.EnrollmentEnum;
-import sg.edu.iss.team6.model.Student;
+import sg.edu.iss.team6.model.*;
 import sg.edu.iss.team6.repository.StudentRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+
+import java.util.ArrayList;
 
 
 
@@ -36,6 +35,11 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     public Student findByStudentId(Long studentId) {
         return srepo.findByStudentId(studentId);
+    }
+
+    @Override
+    public Student findByUser(User user) {
+        return srepo.findByUser(user);
     }
 
     @Override
@@ -155,6 +159,7 @@ public class StudentServiceImpl implements StudentService {
         }
         return Collections.emptyList();
     }
+
 
     @Override
     @Transactional

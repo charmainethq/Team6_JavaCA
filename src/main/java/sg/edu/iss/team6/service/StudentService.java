@@ -4,6 +4,7 @@ package sg.edu.iss.team6.service;
 import sg.edu.iss.team6.model.Course;
 import sg.edu.iss.team6.model.Enrollment;
 import sg.edu.iss.team6.model.Student;
+import sg.edu.iss.team6.model.User;
 
 import java.util.*;
 
@@ -14,6 +15,8 @@ public interface StudentService {
     ArrayList<Student> findAllStudents();
 
     Student findByStudentId(Long studentId);
+
+    Student findByUser(User user);
 
     Student findByUserUsername(String username);
 
@@ -29,7 +32,7 @@ public interface StudentService {
     double computeStudentavgScore(long studentId);
     String[][] getCourseandScore(long studentId);
     double computeStudentgpa(long studentId);
-
     List<Enrollment> getStudentEnroll(long studentId);
+
 
 }

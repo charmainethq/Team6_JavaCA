@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/api/student")
 public class StudentRestController {
     @Autowired
@@ -158,7 +159,7 @@ public class StudentRestController {
         Student student = studentService.findByStudentId(studentId);
 
         CourseClass courseClass = classService.findByClassId(classId);
-       //Course course = courseService.findCourseByCourseId(courseId);
+        //Course course = courseService.findCourseByCourseId(courseId);
 
         if (student == null || courseClass == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
