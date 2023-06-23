@@ -76,14 +76,13 @@ public class AdminStudentController {
         return "student-update";
     }
     @PostMapping(value = "/update/{id}")
-    public String updateStudent(@PathVariable("id") long id, @Valid @ModelAttribute("student") Student student,
+    public String updateStudent(@PathVariable("id") long id,
+                                @Valid @ModelAttribute("student") Student student,
                                 BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             // Return the same view if there are validation errors
             return "student-update";
         }
-        User user = student.getUser();
-        uService.update(user);
         sService.update(student);
         return "redirect:/admin/student/list";
     }

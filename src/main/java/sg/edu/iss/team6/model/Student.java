@@ -34,7 +34,7 @@ public class Student {
     @Email(message = "Invalid email format")
     private String email;
 
-    @Size(min=8, max=15, message="Contact Number must be 8-15 characters long")
+    @Size(min=8, max=15, message="Contact number should contain 8-15 numbers")
     private String contactNo;
 
     @Size(min=2, max=90, message="Address must be 2-90 characters long")

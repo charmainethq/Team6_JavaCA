@@ -1,16 +1,18 @@
 package sg.edu.iss.team6.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
-import sg.edu.iss.team6.model.Admin;
+import sg.edu.iss.team6.model.*;
 import sg.edu.iss.team6.service.AdminService;
+import sg.edu.iss.team6.service.UserService;
+
+import javax.validation.Valid;
 
 @Controller
 public class AdminController{
@@ -18,12 +20,16 @@ public class AdminController{
     @Autowired
     private AdminService adminSvc;
 
+    @Autowired
+    private UserService userSvc;
+
     @GetMapping("/admin")
     public String getAdminPage(){
         return "admin";
     }
     @GetMapping("/admin/list")
     public String getAllAdmin(Model model) {
+
         model.addAttribute("admin", adminSvc.findAll());
         return "admin-list";
     }
@@ -37,23 +43,29 @@ public class AdminController{
 
     @GetMapping("/admin/create")
     public String createAdmin(Model model, Admin admin){
+        model.addAttribute("adminUsers", userSvc.findAll());
         model.addAttribute("admin", admin);
         return "admin-create";
     }
 
     @PostMapping("admin/create")
-    public String saveAdmin(@ModelAttribute("admin") Admin admin, Model model){
-        Admin newAdmin = new Admin();
-
-        newAdmin.setFirstName(admin.getFirstName());
-        newAdmin.setLastName(admin.getLastName());
-        newAdmin.setEmail(admin.getEmail());
-        newAdmin.setAddress(admin.getAddress());
-        newAdmin.setContactNo(admin.getContactNo());
-        newAdmin.setUser(admin.getUser());
-
-        adminSvc.create(newAdmin);
-        return "redirect:/admin/list";
+    public String saveAdmin(@Valid @ModelAttribute("admin") Admin admin,
+                            BindingResult bindingResult,
+                            @RequestParam("username") String username,
+                            Model model){
+        User user = userSvc.findByUsername(username);
+        Admin existingAdmin = adminSvc.findByUser(user);
+        if (existingAdmin != null) {
+            model.addAttribute("adminUsers", userSvc.findAll());
+            bindingResult.rejectValue("user.username", "error.user.username.alreadyExists",
+                    "An admin has been created under this username.");
+            return "admin-create";
+        }
+        else {
+            admin.setUser(user);
+            adminSvc.create(admin);
+            return "redirect:/admin/list";
+        }
     }
 
     @GetMapping("/admin/delete/{id}")
@@ -70,17 +82,14 @@ public class AdminController{
     }
 
     @PostMapping("/admin/update/{id}")
-    public String updateAdmin(@PathVariable("id") Long id, @ModelAttribute("admin") Admin admin) {
-        Admin existingAdmin = adminSvc.findById(id);
-
-        existingAdmin.setFirstName(admin.getFirstName());
-        existingAdmin.setLastName(admin.getLastName());
-        existingAdmin.setEmail(admin.getEmail());
-        existingAdmin.setAddress(admin.getAddress());
-        existingAdmin.setContactNo(admin.getContactNo());
-        existingAdmin.setUser(admin.getUser());
-
-        adminSvc.update(existingAdmin);
+    public String updateAdmin(@PathVariable("id") Long id,
+                              @Valid @ModelAttribute("admin") Admin admin,
+                              BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            // Return the same view if there are validation errors
+            return "admin-update";
+        }
+        adminSvc.update(admin);
         return "redirect:/admin/list";
     }
 
