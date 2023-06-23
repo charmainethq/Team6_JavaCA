@@ -10,33 +10,37 @@
         <div th:include="lecturer-home-page.html"></div>
     </header>
 	<div class="container">
-		<div class="row">
+		<div>
 			<h1>Select The Student To Be Graded</h1>
 		</div>
 		<br/>
 		<div>
-			<h4>Course Details</h4>
-
-			<div class="details">
-				<label>Course Name:</label> <span th:text="${course.name}"></span>
-			</div>
-			<div class="details">
-				<label>Course Description:</label> <span
-					th:text="${course.description}"></span>
+			<div>
+				<h4>Course Details</h4>
+	
+				<div class="details">
+					<label>Course Name:</label> <span th:text="${course.name}"></span>
+				</div>
+				<div class="details">
+					<label>Course Description:</label> <span
+						th:text="${course.description}"></span>
+				</div>
 			</div>
 			<br/>
-			<h4>Class Details</h4>
-
-			<div class="details">
-				<label>Class ID:</label> <span th:text="${courseClass.classId}"></span>
-			</div>
-			<div class="details">
-				<label>Class Room Number:</label> <span
-					th:text="${courseClass.roomNum}"></span>
-			</div>
-			<div class="details">
-				<label>Class Start Date:</label> <span
-					th:text="${courseClass.startDate}"></span>
+			<div>
+				<h4>Class Details</h4>
+	
+				<div class="details">
+					<label>Class ID:</label> <span th:text="${courseClass.classId}"></span>
+				</div>
+				<div class="details">
+					<label>Class Room Number:</label> <span
+						th:text="${courseClass.roomNum}"></span>
+				</div>
+				<div class="details">
+					<label>Class Start Date:</label> <span
+						th:text="${courseClass.startDate}"></span>
+				</div>			
 			</div>
 			<br/>
 		</div>
@@ -44,43 +48,32 @@
 			<label for="searchInput">Search:</label>
 			<input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
 		</div>
-		
-		<table id="studentTable" class="table table-striped">
-			<thead>
-				<tr>
-					<th onclick="sortTable('studentTable', 0)"><button class="transparent-btn"><span class="sort-text">Enrollment Id</span><i class="fas fa-sort"></i></button></th>
-					<th onclick="sortTable('studentTable', 1)"><button class="transparent-btn"><span class="sort-text">Student Id</span><i class="fas fa-sort"></i></button></th>
-					<th onclick="sortTable('studentTable', 2)"><button class="transparent-btn"><span class="sort-text">Student First Name</span><i class="fas fa-sort"></i></button></th>
-					<th onclick="sortTable('studentTable', 3)"><button class="transparent-btn"><span class="sort-text">Student Last Name</span><i class="fas fa-sort"></i></button></th>
-					<th onclick="sortTable('studentTable', 4)"><button class="transparent-btn"><span class="sort-text">Score</span><i class="fas fa-sort"></i></button></th>
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="enrollment: ${enrollmentList}" id="studentRow">
-					<td th:text="${enrollment.enrollmentId}"></td>
-					<td th:text="${enrollment.student.studentId}"></td>
-					<td th:text="${enrollment.student.firstName}"></td>
-					<td th:text="${enrollment.student.lastName}"></td>
-					<td th:text="${enrollment.score}"></td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" 
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                            </svg>
-                            </button>
-                            <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" th:href="@{/lecturer/gradeStudent/} + ${enrollment.enrollmentId}">Select Student</a>
-                            </div>
-                        </div>
-                    </td>
-				</tr>
-			</tbody>
-		</table>
+		<form>
+			<table id="studentTable" class="table table-striped">
+				<thead>
+					<tr>
+						<th onclick="sortTable('studentTable', 0)"><button class="transparent-btn"><span class="sort-text">Student First Name</span><i class="fas fa-sort"></i></button></th>
+						<th onclick="sortTable('studentTable', 1)"><button class="transparent-btn"><span class="sort-text">Student Last Name</span><i class="fas fa-sort"></i></button></th>
+						<th>Score</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="enrollment: ${enrollmentList}" id="studentRow">
+						<td th:text="${enrollment.student.firstName}"></td>
+						<td th:text="${enrollment.student.lastName}"></td>
+						<td>
+							<input type="text" th:value="${enrollment.score}" required />
+						</td>
+	                    <td>
+							<a class="btn btn-primary" th:href="@{/lecturer/gradeStudent/{enrollmentId}(enrollmentId=${enrollment.enrollmentId})}">Submit</a>
+	                    </td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
 		<br><br>
-		<a th:href="@{/lecturer/classList/} + ${courseClass.classId}"><button>Back to Class List</button></a>
+		<a th:href="@{/lecturer}"><button>Back to Home Page</button></a>
 	    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 	    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
@@ -92,19 +85,15 @@
 	
 				const studentRows = document.querySelectorAll('#studentRow');
 	
-				// Loop through admin rows and check if they match the search input
+				// Loop through student rows and check if they match the search input
 				studentRows.forEach(function(row) {
 					// Retrieve the admin information from the row
-					const enrollmentId = row.cells[0].textContent.toLowerCase();
-					const studentId = row.cells[1].textContent.toLowerCase();
-					const firstName = row.cells[2].textContent.toLowerCase();
-					const lastName = row.cells[3].textContent.toLowerCase();
-					const score = row.cells[4].textContent.toLowerCase();
+					const firstName = row.cells[1].textContent.toLowerCase();
+					const lastName = row.cells[2].textContent.toLowerCase();
+					const score = row.cells[3].textContent.toLowerCase();
 	
-					// Check if any of the admin information matches the search input
-					if (enrollmentId.includes(searchInput)
-							|| studentId.includes(searchInput)
-							|| firstName.includes(searchInput)
+					// Check if any of the student information matches the search input
+					if (firstName.includes(searchInput)
 							|| lastName.includes(searchInput)
 							|| score.includes(searchInput)) {
 						// Show the row if it matches the search input
