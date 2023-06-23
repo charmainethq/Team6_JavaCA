@@ -45,17 +45,10 @@ public class LecturerController {
     @Autowired
     private StudentService stuSvc;
 
-    private Long retrieveLecturerId(HttpSession sessionObj) {
-//        String lectuerUsername = (String) sessionObj.getAttribute("username");
-//        List<Lecturer> lecturerList = lectSvc.findByUser_Username(lectuerUsername);
-//        long lecturerId = 1; // mock up a lecturer ID
-//        for(Lecturer lecturer : lecturerList) {
-//            if(lecturer != null) {
-//                lecturerId = lecturer.getLecturerId();
-//            }
-//        }
-    	long lecturerId = 2;
-        return lecturerId;
+    private long retrieveLecturerId(HttpSession sessionObj) {
+        String lecturerUsername = (String) sessionObj.getAttribute("username");
+        Lecturer lecturer = lectSvc.findByUsername(lecturerUsername);
+        return lecturer.getLecturerId();
     }
 
     @GetMapping("/lecturer")
@@ -100,14 +93,17 @@ public class LecturerController {
         for (CourseClass courseClass : courseClassList) {
             Course course = cseSvc.findById(courseClass.getCourse().getCourseId());
             courseList.add(course);
-            Enrollment enrollment = enrlSvc.findById(courseClass.getClassId());
-            enrollmentList.add(enrollment);
-        }
+            List<Enrollment> enrollments = enrlSvc.findByClassId(courseClass.getClassId());
+            for (Enrollment e: enrollments)
+                enrollmentList.add(e);
 
+        }
+        model.addAttribute(enrollmentList);
         model.addAttribute(lecturer);
         model.addAttribute(courseClassList);
         model.addAttribute(courseList);
-        model.addAttribute(enrollmentList);
+
+
         return "lecturer-course-enrollment";
     }
 // Lecturer Grade A Course

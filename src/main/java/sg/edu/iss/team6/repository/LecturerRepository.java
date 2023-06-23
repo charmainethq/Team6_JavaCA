@@ -13,7 +13,9 @@ public interface LecturerRepository extends JpaRepository<Lecturer, Long>{
     
     Lecturer findByUser(User u);
 
-    @Query("SELECT l from Lecturer l where l.user.username = :username")
-    public List<Lecturer>findByUser_Username(@Param("username")String username);
+    @Query("SELECT lecturer.lecturerId FROM Lecturer lecturer WHERE lecturer.user.username = :username")
+    Long findLecturerIdByUserUsername(@Param("username") String username);
+
+    Lecturer findByUserUsername(String username);
 
 }
