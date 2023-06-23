@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import sg.edu.iss.team6.model.Course;
 import sg.edu.iss.team6.model.CourseClass;
@@ -146,17 +147,17 @@ public class LecturerController {
     	return "lecturer-student-list";
     }
 
-    @RequestMapping(value = "/lecturer/gradeStudentList/{enrollmentId}", method = RequestMethod.POST)
-    public String gradeStudent(@PathVariable long enrollmentId, @ModelAttribute("enrollment") Enrollment enrollment) {
-        if (enrollment.getScore() == null) {
-            System.out.println("Score cannot by empty");
-        } else if (enrollment.getScore() > 100 || enrollment.getScore() < 0) {
+	@RequestMapping(value = "/lecturer/gradeStudentList/{enrollmentId}", method = RequestMethod.POST)
+    public String gradeStudent(@PathVariable long enrollmentId, @RequestParam("score") long score) {
+        if (score < 0 || score > 100) {
             System.out.println("Score out of range !");
+        } else if (score < 40) {
+            System.out.println("Failed !");
         } else {
-            System.out.println("Score updated successfully !");
+            System.out.println("Passed !");
         }
         Enrollment currentEnrollment = enrlSvc.findById(enrollmentId);
-        currentEnrollment.setScore(enrollment.getScore());
+        currentEnrollment.setScore(score);
         enrlSvc.update(currentEnrollment);
         long classId = currentEnrollment.getCourseClass().getClassId();
         return "redirect:/lecturer/gradeStudentList/" + classId;

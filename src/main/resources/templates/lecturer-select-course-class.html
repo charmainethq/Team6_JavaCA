@@ -17,14 +17,14 @@
         <div th:include="lecturer-home-page.html"></div>
     </header>
     <div class="container" >
-        <h1> Select A Course and Class</h1>
+        <h2> Select A Course and Class</h2>
 
 		<table class="table table-striped">
 			<tr>
-				<td>Course Name: </td>
+				<td style="font-size: 18px;">Course Name: </td>
 				<td>
 					<label for="searchClass"></label>
-					<select id="searchClass" oninput="filterTable1()">
+					<select id="searchClass" oninput="filterTable1()" style="font-size: 18px;">
 							<option value="0"></option>
 							<option th:each="course : ${courseList}" th:value="${course.name}" th:text="${course.name}"></option>
 					</select>
@@ -36,8 +36,8 @@
 			
 			<thead>
 				<tr>
+					<th>Class ID</th>
 					<th>Course Name</th>
-					<th>Class Id</th>
 					<th>Class Room Number</th>
 					<th>Class Start Date</th>
 					<th>Select Class</th>
@@ -45,8 +45,8 @@
 			</thead>
 			<tbody>
 				<tr th:each="class: ${courseClassList}" id="classRow">
-					<td th:text="${class.course.name}"></td>
 					<td th:text="${class.classId}"></td>
+					<td th:text="${class.course.name}"></td>
 					<td th:text="${class.roomNum}"></td>
 					<td th:text="${class.startDate}"></td>
                     <td>
@@ -76,8 +76,8 @@
 				// Loop through class rows and check if they match the search input
 				classRows.forEach(function(row) {
 					// Retrieve the admin information from the row
-					const name = row.cells[0].textContent.toLowerCase();
-					const classId = row.cells[1].textContent.toLowerCase();
+					const classId = row.cells[0].textContent.toLowerCase();
+					const name = row.cells[1].textContent.toLowerCase();
 					const roomNum = row.cells[2].textContent.toLowerCase();
 					const startDate = row.cells[3].textContent.toLowerCase();
 					

@@ -48,30 +48,29 @@
 			<label for="searchInput">Search:</label>
 			<input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
 		</div>
-		<form>
-			<table id="studentTable" class="table table-striped">
-				<thead>
-					<tr>
-						<th onclick="sortTable('studentTable', 0)"><button class="transparent-btn"><span class="sort-text">Student First Name</span><i class="fas fa-sort"></i></button></th>
-						<th onclick="sortTable('studentTable', 1)"><button class="transparent-btn"><span class="sort-text">Student Last Name</span><i class="fas fa-sort"></i></button></th>
-						<th>Score</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="enrollment: ${enrollmentList}" id="studentRow">
-						<td th:text="${enrollment.student.firstName}"></td>
-						<td th:text="${enrollment.student.lastName}"></td>
-						<td>
-							<input type="text" th:value="${enrollment.score}" required />
-						</td>
-	                    <td>
-							<a class="btn btn-primary" th:href="@{/lecturer/gradeStudent/{enrollmentId}(enrollmentId=${enrollment.enrollmentId})}">Submit</a>
-	                    </td>
-					</tr>
-				</tbody>
-			</table>
-		</form>
+		
+				<table id="studentTable" class="table table-striped">
+					<thead>
+						<tr>
+							<th onclick="sortTable('studentTable', 0)"><button class="transparent-btn"><span class="sort-text">Student First Name</span><i class="fas fa-sort"></i></button></th>
+							<th onclick="sortTable('studentTable', 1)"><button class="transparent-btn"><span class="sort-text">Student Last Name</span><i class="fas fa-sort"></i></button></th>
+							<th>Score</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="enrollment: ${enrollmentList}" id="studentRow">
+							<td th:text="${enrollment.student.firstName}"></td>
+							<td th:text="${enrollment.student.lastName}"></td>
+							<td>
+								<form th:action="@{/lecturer/gradeStudentList/} + ${enrollment.enrollmentId}" method="post">
+								<input type="text" name="score" required />
+								<button type="submit">Submit</button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+	
 		<br><br>
 		<a th:href="@{/lecturer}"><button>Back to Home Page</button></a>
 	    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
