@@ -46,14 +46,15 @@ public class LecturerController {
     private StudentService stuSvc;
 
     private Long retrieveLecturerId(HttpSession sessionObj) {
-        String lectuerUsername = (String) sessionObj.getAttribute("username");
-        List<Lecturer> lecturerList = lectSvc.findByUser_Username(lectuerUsername);
-        long lecturerId = 2; // mock up a lecturer ID
-        for(Lecturer lecturer : lecturerList) {
-            if(lecturer != null) {
-                lecturerId = lecturer.getLecturerId();
-            }
-        }
+//        String lectuerUsername = (String) sessionObj.getAttribute("username");
+//        List<Lecturer> lecturerList = lectSvc.findByUser_Username(lectuerUsername);
+//        long lecturerId = 1; // mock up a lecturer ID
+//        for(Lecturer lecturer : lecturerList) {
+//            if(lecturer != null) {
+//                lecturerId = lecturer.getLecturerId();
+//            }
+//        }
+    	long lecturerId = 2;
         return lecturerId;
     }
 
@@ -177,7 +178,7 @@ public class LecturerController {
         return "redirect:/lecturer/studentList/" + classId;
     }
 
-	@GetMapping(value = "/lecturer/performanceList/")
+	@GetMapping(value = "/lecturer/performanceList")
 	public String studentperformancePage(HttpSession session, Model model) {
 		long lecturerId = retrieveLecturerId(session);
 		ArrayList<CourseClass> classIdList = cseClsSvc.findByLecturerId(lecturerId);
