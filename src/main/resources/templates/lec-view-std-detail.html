@@ -4,15 +4,21 @@
 <br>
 
 <head>
-	<title>Student details</title>
+	<title>Each Student details</title>
 	<link rel="stylesheet" href="/css/list.css">
-	 
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">	 
 </head>
-
 <body>
+		    <header>
+        <div th:include="lecturer-home-page.html"></div>
+    </header>
 
-	<div class="container"  style="padding-left: 20px;">
+	<div class="container">
+		<div class="row">
 		<h1>Student Details</h1>
+		</div>
+		<br/>
+		<div>
 		<div class="details">
 			<label>StudentID:</label>
 			<span th:text="${student.studentId}"></span>
@@ -53,7 +59,6 @@
 				</tr>
 			</thead>
 			<tbody>
-				<!-- Iterate over the admins and display their information -->
 				<tr th:each="enroll : ${enrollList}" id="enrollRow">
 					<td th:text="${enroll.courseClass.classId}"></td>
 					<td th:text="${enroll.enrollmentId}"></td>
