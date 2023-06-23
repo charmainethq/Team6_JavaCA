@@ -215,4 +215,14 @@ public class StudentController {
         return "stu-classlist";
     }
 
+    @GetMapping("/EnrollmentStatus")
+    public String enrollmentStatus(HttpSession session,Model model){
+
+        String username= (String)session.getAttribute("username");
+        Student curntStudent= studentService.findByUserUsername(username);
+
+        model.addAttribute("enrollments", studentService.getStudentEnroll(curntStudent.getStudentId()));
+        return "stu-enrollist";
+    }
+
 }

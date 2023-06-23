@@ -32,6 +32,7 @@ public interface StudentService {
     double computeStudentavgScore(long studentId);
     String[][] getCourseandScore(long studentId);
     double computeStudentgpa(long studentId);
+    List<Enrollment> getStudentEnroll(long studentId);
 
 
 }

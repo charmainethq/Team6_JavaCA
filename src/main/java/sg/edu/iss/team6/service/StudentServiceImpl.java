@@ -77,6 +77,16 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
+    public List<Enrollment> getStudentEnroll(long studentId){
+        Student student = srepo.findByStudentId(studentId);
+
+        List<Enrollment> enrols = student.getStudentEnrollments();
+
+        return enrols;
+    }
+
+    @Override
+    @Transactional
     public double computeStudentavgScore(long studentId){
 
         double avge = 0;
