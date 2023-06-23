@@ -44,6 +44,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
+
 		<script>
 			function filterTable() {
 				// Retrieve the search input value
@@ -73,58 +74,12 @@
 		            }
 				});
 			}
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#courseTable').DataTable({
                     searching: false
                 });
-            });
-		</script>
-
-	</div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#courseTable').DataTable({
-                "lengthMenu": [10, 25, 50, 100],
-                "pageLength": 10,
-                "searching": false 
-            });
         });
-
-        function filterTable() {
-           
-            const searchInput = document.querySelector('#searchInput').value.toLowerCase();
-            
-            
-            const courseRows = document.querySelectorAll('#courseTable tbody tr');
-            
-           
-            courseRows.forEach(function(row) {
-               
-                const courseId = row.cells[0].textContent.toLowerCase();
-                const courseName = row.cells[1].textContent.toLowerCase();
-                const courseNumber = row.cells[2].textContent.toLowerCase();
-                const description = row.cells[3].textContent.toLowerCase();
-                const duration = row.cells[4].textContent.toLowerCase();
-                const credits = row.cells[5].textContent.toLowerCase();
-                
-                
-                if (
-                    courseId.includes(searchInput) ||
-                    courseName.includes(searchInput) ||
-                    courseNumber.includes(searchInput) ||
-                    description.includes(searchInput) ||
-                    duration.includes(searchInput) ||
-                    credits.includes(searchInput)
-                ) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
-    </script>
+		</script>
+	</div>
 </body>
 </html>
