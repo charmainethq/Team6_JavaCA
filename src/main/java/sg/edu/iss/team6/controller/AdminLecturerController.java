@@ -62,6 +62,10 @@ public class AdminLecturerController {
 			return "lect-create";
 		}
 		else {
+			if (bindingResult.hasErrors()){
+				model.addAttribute("lecUsers", userSvc.findAll());
+				return "lect-create";
+			}
 			lecturer.setUser(user);
 			lectSvc.create(lecturer);
 			return "redirect:/admin/lecturer/list";

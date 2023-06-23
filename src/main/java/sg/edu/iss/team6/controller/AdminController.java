@@ -62,6 +62,10 @@ public class AdminController{
             return "admin-create";
         }
         else {
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("adminUsers", userSvc.findAll());
+                return "admin-create";
+            }
             admin.setUser(user);
             adminSvc.create(admin);
             return "redirect:/admin/list";

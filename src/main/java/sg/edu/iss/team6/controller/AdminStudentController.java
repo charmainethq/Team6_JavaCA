@@ -55,13 +55,16 @@ public class AdminStudentController {
         User user = uService.findByUsername(username);
         Student existingStudent = sService.findByUser(user);
         if (existingStudent != null) {
-            List<User> stuUsers = uService.findAll();
-            model.addAttribute("stuUsers", stuUsers);
+            model.addAttribute("stuUsers", uService.findAll());
             bindingResult.rejectValue("user.username", "error.user.username.alreadyExists",
                     "A student has been created under this username.");
             return "student-create";
         }
         else {
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("stuUsers", uService.findAll());
+                return "student-create";
+            }
             student.setUser(user);
             // Save the student object to the database
             sService.create(student);
