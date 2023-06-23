@@ -32,26 +32,34 @@
                         <th onclick="sortTable('enrollTable', 0)"><button class="transparent-btn"><span
                                     class="sort-text">Class Id</span><i class="fas fa-sort"></i></button></th>
                         <th onclick="sortTable('enrollTable', 1)"><button class="transparent-btn"><span
+                                class="sort-text">Course Number</span><i class="fas fa-sort"></i></button></th>
+                        <th onclick="sortTable('enrollTable', 2)"><button class="transparent-btn"><span
+                                class="sort-text">Course Name</span><i class="fas fa-sort"></i></button></th>
+                        <th onclick="sortTable('enrollTable', 3)"><button class="transparent-btn"><span
                                     class="sort-text">Confirmed Class Size</span><i class="fas fa-sort"></i></button>
                         </th>
-                        <th onclick="sortTable('enrollTable', 2)"><button class="transparent-btn"><span
-                                    class="sort-text">Room No.</span><i class="fas fa-sort"></i></button></th>
-                        <th onclick="sortTable('enrollTable', 3)"><button class="transparent-btn"><span
-                                    class="sort-text">Class Size</span><i class="fas fa-sort"></i></button></th>
                         <th onclick="sortTable('enrollTable', 4)"><button class="transparent-btn"><span
-                                    class="sort-text">Start Date</span><i class="fas fa-sort"></i></button></th>
+                                    class="sort-text">Room No.</span><i class="fas fa-sort"></i></button></th>
                         <th onclick="sortTable('enrollTable', 5)"><button class="transparent-btn"><span
-                                    class="sort-text">Course Name</span><i class="fas fa-sort"></i></button></th>
+                                    class="sort-text">Class Size</span><i class="fas fa-sort"></i></button></th>
+                        <th onclick="sortTable('enrollTable', 6)"><button class="transparent-btn"><span
+                                    class="sort-text">Start Date</span><i class="fas fa-sort"></i></button></th>
+                        <th onclick="sortTable('enrollTable', 7)"><button class="transparent-btn"><span
+                                class="sort-text">End Date</span><i class="fas fa-sort"></i></button></th>
+
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="class : ${courseClassList}" id="classRow">
                         <td th:text="${class.classId}"></td>
-                        <td th:text="${class.confirmed}"></td>
+                        <td th:text="${class.course.courseNum}"></td>
+                        <td th:text="${class.course.name}"></td>
+                        <td th:text="${class.getConfirmedNumber()}"></td>
                         <td th:text="${class.roomNum}"></td>
                         <td th:text="${class.size}"></td>
                         <td th:text="${class.startDate}"></td>
-                        <td th:text="${class.course.name}"></td>
+                        <td th:text="${class.getFormatEndDate()}"></td>
+
                     </tr>
                 </tbody>
             </table>

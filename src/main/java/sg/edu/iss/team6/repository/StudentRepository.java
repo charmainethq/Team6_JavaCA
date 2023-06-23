@@ -32,9 +32,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     void deleteByStudentId(long id);
 
 
-    @Query("SELECT s from Student s")
-    ArrayList<Student> findAllStudents();
-
     Student findByUser(User u);
 
 
