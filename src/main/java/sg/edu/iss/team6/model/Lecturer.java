@@ -41,7 +41,7 @@ public class Lecturer implements Serializable {
     @Size(min=2, max=50, message="Address must be 2-30 characters long")
     private String address;
 
-    @OneToMany(mappedBy="lecturer")
+    @OneToMany(mappedBy = "lecturer", cascade = CascadeType.REMOVE)
     private List<CourseClass> CourseClasses;
 
     public String getFullName(){

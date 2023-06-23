@@ -9,8 +9,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import sg.edu.iss.team6.model.CourseClass;
+import sg.edu.iss.team6.model.Enrollment;
 import sg.edu.iss.team6.model.Lecturer;
+import sg.edu.iss.team6.service.CourseClassService;
+import sg.edu.iss.team6.service.CourseService;
+import sg.edu.iss.team6.service.EnrollmentService;
 import sg.edu.iss.team6.service.LecturerService;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class AdminLecturerController {
@@ -60,7 +69,7 @@ public class AdminLecturerController {
 	}
 
 	@GetMapping("/admin/lecturer/delete/{id}")
-	public String deleteAdminById(@PathVariable(value = "id") Long id) {
+	public String deleteLecturerById(@PathVariable(value = "id") Long id) {
 		lectSvc.delete(id);
 		return "redirect:/admin/lecturer/list";
 	}
