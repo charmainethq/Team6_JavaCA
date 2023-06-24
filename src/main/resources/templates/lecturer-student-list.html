@@ -75,7 +75,7 @@
 						<td th:text="${enrollment.student.lastName}"></td>
 						<td>
 							<form th:action="@{/lecturer/gradeStudentList/} + ${enrollment.enrollmentId}" th:object="${enrollment}" method="post">
-							<input type="text" id="score" name="score" required />
+							<input type="text" id="score" name="score" />
 							<button type="submit">Submit</button>
 							</form>
 						</td>
