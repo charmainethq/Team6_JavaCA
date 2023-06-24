@@ -66,6 +66,7 @@
 					<tr>
 						<th onclick="sortTable('studentTable', 0)"><button class="transparent-btn"><span class="sort-text">Student First Name</span><i class="fas fa-sort"></i></button></th>
 						<th onclick="sortTable('studentTable', 1)"><button class="transparent-btn"><span class="sort-text">Student Last Name</span><i class="fas fa-sort"></i></button></th>
+						<th onclick="sortTable('studentTable', 1)"><button class="transparent-btn"><span class="sort-text">Current Score</span><i class="fas fa-sort"></i></button></th>
 						<th>Score</th>
 					</tr>
 				</thead>
@@ -73,6 +74,7 @@
 					<tr th:each="enrollment: ${enrollmentList}" id="studentRow">
 						<td th:text="${enrollment.student.firstName}"></td>
 						<td th:text="${enrollment.student.lastName}"></td>
+						<td th:text="${enrollment.score}"></td>
 						<td>
 							<form th:action="@{/lecturer/gradeStudentList/} + ${enrollment.enrollmentId}" th:object="${enrollment}" method="post">
 							<input type="text" id="score" name="score" />
