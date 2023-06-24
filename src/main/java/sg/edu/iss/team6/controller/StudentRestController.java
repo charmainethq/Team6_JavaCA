@@ -46,9 +46,8 @@ public class StudentRestController {
     private static final Long testId = 3L;
     String username = "stu_3_charlie";
     @GetMapping
-    public String homePage(HttpSession session, Model model){
+    public String homePage(@RequestHeader("X-Username") String username, Model model){
 
-        String username= (String)session.getAttribute("username");
         Student student = studentService.findByUserUsername(username);
 
         model.addAttribute("name",student.getFullName());
@@ -56,10 +55,8 @@ public class StudentRestController {
     }
 
     @GetMapping(value = "/registerCourses", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<Long, Boolean>> getEligibility(HttpSession session) {
+    public ResponseEntity<Map<Long, Boolean>> getEligibility(@RequestHeader("X-Username") String username) {
         try {
-            //String username= (String)session.getAttribute("username");
-
             Student student = studentService.findByUserUsername(username);
             List<Enrollment> enrollments = enrollmentService.findByStudent(student);
             List<Course> allCourses = courseService.getAllCourses();
@@ -91,7 +88,7 @@ public class StudentRestController {
     }
 
     @GetMapping(value = "/fetchAllCourses", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Course>> getAllCourses(){
+    public ResponseEntity<List<Course>> getAllCourses(@RequestHeader("X-Username") String username){
         List<Course> courses = courseService.getAllCourses();
         return ResponseEntity.ok(courses);
     }
@@ -140,13 +137,15 @@ public class StudentRestController {
 
 
     @GetMapping(value = "/fetchStudent")
-    public ResponseEntity<Student> getStudentFromSession() {
-        Student student = studentService.findByStudentId(testId);
+    public ResponseEntity<Student> getStudent(HttpSession session,@RequestHeader("X-Username") String username) {
+        Student student = studentService.findByUserUsername(username);
         if (student == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return ResponseEntity.ok(student);
     }
+
+
 
 
     @PostMapping(value = "/register/{classId}/{courseId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -175,13 +174,13 @@ public class StudentRestController {
                 (existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.SUBMITTED
                         || existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.CONFIRMED
                         || existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.COMPLETED
+                        || existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.REMOVED
                 )) {
             success = false;
         }
 
-        // If no current enrollment
+
         else if (success = true) {
-            // Create a new enrollment object
             Enrollment enrollment = new Enrollment();
             enrollment.setStudent(student);
             enrollment.setCourseClass(courseClass);
