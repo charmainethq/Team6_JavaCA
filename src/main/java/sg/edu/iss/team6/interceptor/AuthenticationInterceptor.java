@@ -27,27 +27,32 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
         if (uri.startsWith("/login")) {
             return true;
         }
-        // check if the user already has set attribute userLogin
-        if (session.getAttribute("username") == null){
 
+        String username = null;
+        // check if the user already has set attribute userLogin
+        if (session.getAttribute("username") != null){
+            username = (String) session.getAttribute("username");
+        }
+        else if (request.getHeader("X-Username") != null) {
+            username = request.getHeader("X-Username");
+        }
+
+        if (username == null){
             response.sendRedirect("/login");
             return false;
         }
 
 
-
-        String username = (String) session.getAttribute("username");
-
         if (uri.startsWith("/admin") && username.charAt(0)!='a') {
-            throw new UnauthorizedException();
+            response.sendRedirect("/login");
         }
 
         if (uri.startsWith("/student") && username.charAt(0)!='s') {
-            throw new UnauthorizedException();
+            response.sendRedirect("/login");
         }
 
         if (uri.startsWith("/lecturer") && username.charAt(0)!='l') {
-            throw new UnauthorizedException();
+            response.sendRedirect("/login");
         }
 
 
