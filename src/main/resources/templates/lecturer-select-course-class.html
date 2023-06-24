@@ -24,10 +24,11 @@
 				<td style="font-size: 18px;">Course Name: </td>
 				<td>
 					<label for="searchClass"></label>
-					<select id="searchClass" oninput="filterTable1()" style="font-size: 18px;">
-							<option value="0"></option>
-							<option th:each="course : ${courseList}" th:value="${course.name}" th:text="${course.name}"></option>
+					<select id="searchClass" onchange="filterTable1()" style="font-size: 18px;">
+						<option value="0"></option>
+						<option th:each="course : ${courseList}" th:value="${course.name}" th:text="${course.name}"></option>
 					</select>
+
 				</td>
 			</tr>
 		</table>
@@ -62,47 +63,29 @@
 	    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
 		<script>
 			function filterTable1() {
-				const id = searchClass.value;
-				if(id!=0){
-				var x = document.getElementById('classTable');
-				x.style.display="";
-				// Retrieve the search input value
-				const searchClass = document.querySelector('#searchClass').value
-						.toLowerCase();
-	
+
+				const searchClass = document.querySelector('#searchClass').value.toLowerCase();
 				const classRows = document.querySelectorAll('#classRow');
-				
-				// Loop through class rows and check if they match the search input
-				classRows.forEach(function(row) {
-					// Retrieve the admin information from the row
-					const classId = row.cells[0].textContent.toLowerCase();
-					const name = row.cells[1].textContent.toLowerCase();
-					const roomNum = row.cells[2].textContent.toLowerCase();
-					const startDate = row.cells[3].textContent.toLowerCase();
-					
-					// Check if any of the class information matches the search input
-					if (name.includes(searchClass)
-							|| classId.includes(searchClass)
-							|| roomNum.includes(searchClass)
-							|| startDate.includes(searchClass)) {
-						// Show the row if it matches the search input
-						row.style.display = '';
-					} else {
-						// Hide the row if it doesn't match the search input
-						row.style.display = 'none';
-					}
-				});					
-				}
-				else{
-					var x = document.getElementById('classTable');
-					x.style.display="none";
+
+				if(searchClass != '0') {
+					document.getElementById('classTable').style.display = "";
+					// Loop through class rows and check if they match the search input
+					classRows.forEach(function(row) {
+						const name = row.cells[1].textContent.toLowerCase();
+						// Check if course name matches the search input
+						if (name.includes(searchClass)) {
+							// Show the row if it matches the search input
+							row.style.display = '';
+						} else {
+							// Hide the row if it doesn't match the search input
+							row.style.display = 'none';
+						}
+					});
+				} else {
+					document.getElementById('classTable').style.display = "none";
 				}
 			}
-            $(document).ready(function() {
-                $('#classTable').DataTable({
-                    searching: false
-                });
-            });
+
 		</script>
 	</div>
 </body>

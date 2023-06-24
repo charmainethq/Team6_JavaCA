@@ -8,79 +8,41 @@
 
 </head>
 <body>
-    <header>
-        <div th:include="lecturer-home-page.html"></div>
-    </header>
 
-    <div class="container" >
-        <h1>View Courses Taught</h1>
+<header>
+    <div th:include="lecturer-home-page.html"></div>
+</header>
 
-        <div class="mb-3">
-            <label for="searchInput">Search:</label>
-            <input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
-        </div>
+<div class="container" >
+    <h1>View Courses Taught</h1>
 
-        <table id="courseTable" class="table table-striped">
-            <thead>
-                <tr>
-                    <th onclick="sortTable('courseTable', 0)"><button class="transparent-btn"><span class="sort-text">Course ID</span><i class="fas fa-sort"></i></button></th>
-                    <th onclick="sortTable('courseTable', 1)"><button class="transparent-btn"><span class="sort-text">Course Number</span><i class="fas fa-sort"></i></button></th>
-                    <th onclick="sortTable('courseTable', 2)"><button class="transparent-btn"><span class="sort-text">Course Name</span><i class="fas fa-sort"></i></button></th>
-                    <th onclick="sortTable('courseTable', 3)"><button class="transparent-btn"><span class="sort-text">Course Description</span><i class="fas fa-sort"></i></button></th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Iterate over the course list and display their information -->
-                <tr th:each="course : ${courseList}" id="courseRow">
-                    <td th:text="${course.courseId}"></td>
-                    <td th:text="${course.courseNum}"></td>
-                    <td th:text="${course.name}"></td>
-                    <td th:text="${course.description}"></td>
-                </tr>
-            </tbody>
-        </table>
-		<br><br>
-		<a th:href="@{/lecturer}"><button>Back</button></a>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
-		<script>
-			function filterTable() {
-				// Retrieve the search input value
-				const searchInput = document.querySelector('#searchInput').value.toLowerCase();
-	
-				const courseRows = document.querySelectorAll('#courseRow');
-	
-				// Loop through admin rows and check if they match the search input
-				courseRows.forEach(function(row) {
-					// Retrieve the admin information from the row
-		            const courseId = row.cells[0].textContent.toLowerCase();
-		            const courseNum = row.cells[1].textContent.toLowerCase();
-		            const name = row.cells[2].textContent.toLowerCase();
-		            const description = row.cells[3].textContent.toLowerCase();
-	
-					// Check if any of the admin information matches the search input
-		            if (courseId.includes(searchInput) ||
-		                courseNum.includes(searchInput) ||
-		                name.includes(searchInput) ||
-		                description.includes(searchInput)
-		            ) {
-		                // Show the row if it matches the search input
-		                row.style.display = '';
-		            } else {
-		                // Hide the row if it doesn't match the search input
-		                row.style.display = 'none';
-		            }
-				});
-			}
-            $(document).ready(function() {
-                $('#courseTable').DataTable({
-                    searching: false
-                });
-            });
-		</script>
+    <div class="mb-3">
+        <label for="searchInput">Search:</label>
+        <input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
+    </div>
 
-	</div>
+    <table id="courseTable" class="table table-striped">
+        <thead>
+        <tr>
+            <th onclick="sortTable('courseTable', 0)"><button class="transparent-btn"><span class="sort-text">Course ID</span><i class="fas fa-sort"></i></button></th>
+            <th onclick="sortTable('courseTable', 1)"><button class="transparent-btn"><span class="sort-text">Course Number</span><i class="fas fa-sort"></i></button></th>
+            <th onclick="sortTable('courseTable', 2)"><button class="transparent-btn"><span class="sort-text">Course Name</span><i class="fas fa-sort"></i></button></th>
+            <th onclick="sortTable('courseTable', 3)"><button class="transparent-btn"><span class="sort-text">Course Description</span><i class="fas fa-sort"></i></button></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Iterate over the course list and display their information -->
+        <tr th:each="course : ${courseList}" id="courseRow">
+            <td th:text="${course.courseId}"></td>
+            <td th:text="${course.courseNum}"></td>
+            <td th:text="${course.name}"></td>
+            <td th:text="${course.description}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <br><br>
+    <a th:href="@{/lecturer}"><button>Back</button></a>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
@@ -89,35 +51,31 @@
             $('#courseTable').DataTable({
                 "lengthMenu": [10, 25, 50, 100],
                 "pageLength": 10,
-                "searching": false 
+                "searching": false
             });
         });
 
         function filterTable() {
-           
+
             const searchInput = document.querySelector('#searchInput').value.toLowerCase();
-            
-            
+
+
             const courseRows = document.querySelectorAll('#courseTable tbody tr');
-            
-           
+
+
             courseRows.forEach(function(row) {
-               
+
                 const courseId = row.cells[0].textContent.toLowerCase();
-                const courseName = row.cells[1].textContent.toLowerCase();
-                const courseNumber = row.cells[2].textContent.toLowerCase();
+                const courseNum = row.cells[1].textContent.toLowerCase();
+                const name = row.cells[2].textContent.toLowerCase();
                 const description = row.cells[3].textContent.toLowerCase();
-                const duration = row.cells[4].textContent.toLowerCase();
-                const credits = row.cells[5].textContent.toLowerCase();
-                
-                
+
+
                 if (
                     courseId.includes(searchInput) ||
-                    courseName.includes(searchInput) ||
-                    courseNumber.includes(searchInput) ||
-                    description.includes(searchInput) ||
-                    duration.includes(searchInput) ||
-                    credits.includes(searchInput)
+                    courseNum.includes(searchInput) ||
+                    name.includes(searchInput) ||
+                    description.includes(searchInput)
                 ) {
                     row.style.display = '';
                 } else {
@@ -126,5 +84,7 @@
             });
         }
     </script>
+</div>
+
 </body>
 </html>

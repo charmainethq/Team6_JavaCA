@@ -67,6 +67,7 @@
         </tbody>
     </table>
   </div>
+  <div id="calendar"></div>
 </body>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -91,5 +92,54 @@
         $('#pageInfo').text('Page ' + (info.page + 1) + ' of ' + info.pages);
     });
 });
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+      // Retrieve the enrollment data from the table
+      const enrollmentData = [];
+      const enrollmentRows = document.querySelectorAll("tbody tr");
+      enrollmentRows.forEach(function(row) {
+          const courseName = row.cells[0].textContent.trim();
+          const dateRange = row.cells[1].textContent.trim();
+          const roomNum = row.cells[2].textContent.trim();
+          const enrollmentStatus = row.cells[3].textContent.trim();
+
+          // Filter events based on enrollment status
+          if (enrollmentStatus === "CONFIRMED") {
+              // Parse the start and end dates from the date range
+              const [startDate, endDate] = dateRange.split(" - ");
+
+              const event = {
+                  title: courseName,
+                  start: startDate,
+                  end: endDate,
+                  description: `Room: ${roomNum}\nEnrollment Status: ${enrollmentStatus}`,
+              };
+
+              // Add the event to the enrollment data array
+              enrollmentData.push(event);
+          }
+      });
+
+      // initialize fullcalendar
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          headerToolbar: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek'
+          },
+          events: enrollmentData,
+          eventDidMount: function(info) {
+              // Display the event description directly on the calendar
+              const descriptionElement = document.createElement('div');
+              descriptionElement.classList.add('event-description');
+              descriptionElement.innerHTML = info.event.extendedProps.description;
+              info.el.appendChild(descriptionElement);
+          }
+      });
+      calendar.render();
+  });
 </script>
 </html>

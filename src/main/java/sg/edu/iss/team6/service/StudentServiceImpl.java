@@ -120,34 +120,7 @@ public class StudentServiceImpl implements StudentService {
         return avge;
     }
 
-    @Override
-    @Transactional
-    public double computeStudentgpa(long studentId){
-        double avge = computeStudentavgScore(studentId);
-        int ten = 0;
-        double tmp = avge/10;
-        switch((int)tmp){
-            case 10:
-                ten = 5;
-                break;
-            case 9:
-                ten = 4;
-                break;
-            case 8:
-                ten = 3;
-                break;
-            case 7:
-                ten = 2;
-                break;
-            case 6:
-                ten = 1;
-                break;
-            default:
-                ten = 0;
-        }
 
-        return (ten + (avge%10)/10.0);
-    }
 
     @Override
     @Transactional
