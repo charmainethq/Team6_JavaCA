@@ -53,15 +53,15 @@ h2,h3 {
     background-color: #77aae8;
     color: #ffffff;
     text-align: center;
-    border-bottom: 1px solid #ffffff;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-bottom: 1px solid #ffffff; /* Add a white border at the bottom */
+    border-top-left-radius: 8px; /* Add border radius to the top-left corner */
+    border-top-right-radius: 8px; /* Add border radius to the top-right corner */
 }
 
 .table td {
-    background-color: #ffffff;
+    background-color: #ffffff; /* Set white background color */
     text-align: center;
-    border-bottom: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff; /* Add a white border at the bottom */
 }
 
 /* Search Input Styles */
@@ -77,22 +77,6 @@ h2,h3 {
     border-radius: 4px;
     background-color: #f2f8ff;
 }
-.view-select {
-    width: 140px;
-    height: 30px;
-    float: right;
-    border: 1px solid #ccc;
-    padding: 5px 3px;
-    font-size: 14px;
-    border-radius: 6px;
-    background-color: #fff;
-    color: #333;
-    cursor: pointer;
-}
-  .view-select:focus {
-    outline: none;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-  }
 /* Action Button Styles */
 .btn {
   height: 40px;
@@ -100,6 +84,58 @@ h2,h3 {
   border-radius: 20px;
   background-color: transparent;
   border: none;
+}
+.button-65 {
+  text-align: center;
+  appearance: none;
+  backface-visibility: hidden;
+  background-color: #2f80ed;
+  border-radius: 10px;
+  border-style: none;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 500;
+  height: 50px;
+  letter-spacing: normal;
+  line-height: 1.5;
+  outline: none;
+  overflow: hidden;
+  padding: 14px 30px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transform: translate3d(0, 0, 0);
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.button-65:hover {
+  background-color: #1366d6;
+  box-shadow: rgba(0, 0, 0, .05) 0 5px 30px, rgba(0, 0, 0, .05) 0 1px 4px;
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: .35s;
+}
+
+.button-65:hover:after {
+  opacity: .5;
+}
+
+.button-65:active {
+  box-shadow: rgba(0, 0, 0, .1) 0 3px 6px 0, rgba(0, 0, 0, .1) 0 0 10px 0, rgba(0, 0, 0, .1) 0 1px 4px -1px;
+  transform: translateY(2px);
+  transition-duration: .35s;
+}
+
+.button-65:active:after {
+  opacity: 1;
 }
 
 .dataTables_length .custom-select {

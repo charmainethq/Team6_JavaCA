@@ -33,10 +33,10 @@ public class Admin implements Serializable {
     @Email(message = "Invalid email format")
     private String email;
 
-    @Size(min=8, max=10, message="Contact number should contain 8-10 numbers")
+    @Size(min=2, max=10, message="Contact Number must be 2-10 characters long")
     private String contactNo;
     
-    @Size(min=2, max=50, message="Address must be 2-50 characters long")
+    @Size(min=2, max=50, message="Address must be 2-30 characters long")
     private String address;
 
     public String getFullName(){

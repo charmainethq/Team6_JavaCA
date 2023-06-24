@@ -41,7 +41,7 @@ public class CourseClass implements Serializable {
     @JsonIgnore
     private Lecturer lecturer;
 
-    @OneToMany(mappedBy = "courseClass", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy="courseClass")
     private List<Enrollment> classEnrollment;
 
     public String getFormatStartDate(){
@@ -68,5 +68,6 @@ public class CourseClass implements Serializable {
         }
         return confirmedCount;
     }
+
 
 }

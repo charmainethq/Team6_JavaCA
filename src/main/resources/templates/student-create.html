@@ -17,11 +17,7 @@
     <h1>Create Student</h1>
     <label for="username">Username:</label> <span th:if="${#fields.hasErrors('user.username')}" th:errors="*{user.username}"
                                                   style="color: #bf1111; font-size: 12px;"></span>
-    <select id="username" name="username" required>
-        <option value="">- Select a username -</option>
-        <option th:each="u : ${stuUsers}" th:value="${u.username}" th:text="${u.username}"
-                th:if="${u.username.startsWith('stu')}"></option>
-    </select><br/><br/>
+    <input type="text" id="username" th:field="*{user.username}" required/><br/>
 
     <label for="firstName">First Name:</label> <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
                                                      style="color: #bf1111; font-size: 12px;"></span>

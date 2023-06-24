@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <head>
@@ -16,33 +16,22 @@
             <i style="font-size:30px" class="fa">&#xf137;</i>
         </button>
         <h1>Create Lecturer</h1>
+        <label for="username">Username:</label>
+        <input type="text" id="username" th:field="*{user.username}" required/><br/>
 
-        <label for="username">Username:</label> <span th:if="${#fields.hasErrors('user.username')}" th:errors="*{user.username}"
-                                                      style="color: #bf1111; font-size: 12px;"></span>
-        <select id="username" name="username" required>
-            <option value="">- Select a username -</option>
-            <option th:each="u : ${lecUsers}" th:value="${u.username}" th:text="${u.username}" th:if="${u.username.startsWith('lec')}"></option>
-        </select><br/>
-
-
-        <label for="firstName">First Name:</label> <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
-                                                         style="color: #bf1111; font-size: 12px;"></span>
+        <label for="firstName">First Name:</label>
         <input type="text" id="firstName" th:field="*{firstName}" required/><br/>
         
-        <label for="lastName">Last Name:</label> <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
-                                                       style="color: #bf1111; font-size: 12px;"></span>
+        <label for="lastName">Last Name:</label>
         <input type="text" id="lastName" th:field="*{lastName}" required/><br/>
         
-        <label for="email">Email:</label> <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-                                                style="color: #bf1111; font-size: 12px;"></span>
+        <label for="email">Email:</label>
         <input type="email" id="email" th:field="*{email}" required/><br/>
         
-        <label for="contactNo">Contact No:</label> <span th:if="${#fields.hasErrors('contactNo')}" th:errors="*{contactNo}"
-                                                         style="color: #bf1111; font-size: 12px;"></span>
+        <label for="contactNo">Contact No:</label>
         <input type="text" id="contactNo" th:field="*{contactNo}" required/><br/>
         
-        <label for="address">Address:</label> <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"
-                                                    style="color: #bf1111; font-size: 12px;"></span>
+        <label for="address">Address:</label>
         <input type="text" id="address" th:field="*{address}" required/><br/>
         
         <input type="submit" value="Create"/>
