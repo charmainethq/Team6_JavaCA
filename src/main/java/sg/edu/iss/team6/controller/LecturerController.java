@@ -224,7 +224,7 @@ public class LecturerController {
         	modelAndView.addObject("message2", message2);
         }
 		else {
-			long score = enrollment.getScore();
+			Long score = enrollment.getScore();
 			double gpa = calculateGpa(score);
 			int credits = retrieveCourseCredits(enrollmentId);
 			double cumulativeGpa = calculateCumulativeGpa(enrollmentId, gpa, credits);
