@@ -67,6 +67,7 @@ public class LecturerController {
 
     @RequestMapping(value = "/lecturer/coursesTaught/{lecturerId}", method = RequestMethod.GET)
     public String coursesTaught(@PathVariable long lecturerId, Model model) {
+
         Lecturer lecturer = lectSvc.findById(lecturerId);
 
         List<Long> courseIdList = cseClsSvc.findDistinctCourseId(lecturerId);
@@ -81,10 +82,12 @@ public class LecturerController {
         model.addAttribute("courseList", courseList);
         return "lecturer-courses-taught";
     }
+
 // Lecturer view courses enrolled
     
     @RequestMapping(value = "/lecturer/courseEnrollment/{lecturerId}", method = RequestMethod.GET)
     public String courseEnrollmentList(@PathVariable long lecturerId, Model model) {
+
         Lecturer lecturer = lectSvc.findById(lecturerId);
         ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
         ArrayList<Course> courseList = new ArrayList<>();
@@ -93,21 +96,24 @@ public class LecturerController {
         for (CourseClass courseClass : courseClassList) {
             Course course = cseSvc.findById(courseClass.getCourse().getCourseId());
             courseList.add(course);
-            Enrollment enrollment = enrlSvc.findById(courseClass.getClassId());
-            enrollmentList.add(enrollment);
-        }
+            List<Enrollment> enrollments = enrlSvc.findByClassId(courseClass.getClassId());
+            for (Enrollment e: enrollments)
+                enrollmentList.add(e);
 
+        }
+        model.addAttribute(enrollmentList);
         model.addAttribute(lecturer);
         model.addAttribute(courseClassList);
         model.addAttribute(courseList);
-        model.addAttribute(enrollmentList);
+
+
         return "lecturer-course-enrollment";
     }
-// Lecturer Grade A Course
 
     @RequestMapping(value = "/lecturer/selectCourseAndClass/", method = RequestMethod.GET)
     public String selectCourseAndClass(HttpSession sessionObj, Model model) {
     	long lecturerId = retrieveLecturerId(sessionObj);
+
         ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
         ArrayList<Course> distinctCourseList = new ArrayList<>();
         for (CourseClass current : courseClassList) {
@@ -223,6 +229,7 @@ public class LecturerController {
         	String message2 = "Score out of range! Please enter a range between 0 to 100.";
         	modelAndView.addObject("message2", message2);
         }
+
 		else {
 			Long score = enrollment.getScore();
 			double gpa = calculateGpa(score);
@@ -247,6 +254,7 @@ public class LecturerController {
 	
 // Lecturer view student performance list
 	
+
 	@GetMapping(value = "/lecturer/performanceList")
 	public String studentperformancePage(HttpSession session, Model model) {
 		long lecturerId = retrieveLecturerId(session);

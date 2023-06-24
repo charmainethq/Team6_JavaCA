@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
     <title>Update Lecturer</title>
     <link rel="stylesheet" href="/css/update.css">
@@ -9,12 +10,13 @@
         <div th:include="adminPage.html"></div>
     </header>
     <div class="container">
-        <h1>Update Admin</h1>
         <form th:action="@{/admin/lecturer/update/{id}(id=${lecturer.lecturerId})}" th:object="${lecturer}" method="post">
+            <button class="icon-button" onclick="goBack()">
+                <i style="font-size:30px" class="fa">&#xf137;</i>
+            </button>
+            <h1>Update Lecturer</h1>
             <input type="hidden" th:field="*{lecturerId}"/>
-            
-            <label for="username">Username:</label>
-            <input type="text" id="username" th:field="*{user.username}" required/><br/>
+            <input type="hidden" th:field="*{user.username}"/><br/>
 
             <label for="firstName">First Name:</label>
             <input type="text" id="firstName" th:field="*{firstName}" required/><br/>
@@ -34,8 +36,7 @@
             <input type="submit" value="Update"/>
             
         </form>
-        <br><br>
-            <button onclick="goBack()">Back</button>
+        <br>
     </div>
     <script>
         function goBack() {

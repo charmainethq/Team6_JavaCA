@@ -26,7 +26,8 @@ public interface CourseClassService {
 	ArrayList<CourseClass> findByLecturerId(long lecturerId);
 
     CourseClass findByClassId(long id);
-    CourseClass create(CourseClass c);
-    CourseClass update(CourseClass c);
+    CourseClass create(CourseClass cc);
+    CourseClass update(CourseClass cc);
     void delete(long id);
+    void deleteList(List<CourseClass> cc);
 }

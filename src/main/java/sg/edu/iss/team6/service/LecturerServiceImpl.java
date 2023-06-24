@@ -32,6 +32,7 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
 
+
     @Override
 
     public Lecturer create(Lecturer lect) {
@@ -63,8 +64,12 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
     @Override
-    public List<Lecturer> findByUser_Username(String username){
-    	return lrepo.findByUser_Username(username);
+    public Long findLecturerIdByUserUsername(String username) {
+        return lrepo.findLecturerIdByUserUsername(username);
     }
 
+    @Override
+    public Lecturer findByUsername(String username){
+        return lrepo.findByUserUsername(username);
+    }
 }

@@ -28,6 +28,8 @@ public interface LecturerService {
 
     long delete(long id);
 
-    List<Lecturer>findByUser_Username(String username);
+    Long findLecturerIdByUserUsername(String username);
+
+    Lecturer findByUsername(String username);
 
 }

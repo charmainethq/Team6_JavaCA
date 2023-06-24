@@ -7,17 +7,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sg.edu.iss.team6.model.*;
 import sg.edu.iss.team6.repository.EnrollmentRepository;
 import sg.edu.iss.team6.service.*;
 import sg.edu.iss.team6.utility.EmailUtility;
 
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/api/student")
 public class StudentRestController {
     @Autowired
@@ -39,70 +44,89 @@ public class StudentRestController {
     EmailUtility emailUtility;
 
     private static final Long testId = 3L;
+    String username = "stu_3_charlie";
+    @GetMapping
+    public String homePage(@RequestHeader("X-Username") String username, Model model){
+
+        Student student = studentService.findByUserUsername(username);
+
+        model.addAttribute("name",student.getFullName());
+        return "student";
+    }
 
     @GetMapping(value = "/registerCourses", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Course>> getUnenrolledAndFailedCourses() {
+    public ResponseEntity<Map<Long, Boolean>> getEligibility(@RequestHeader("X-Username") String username) {
         try {
-            //TODO: remove and use session instead
-            Long studentId = testId;
-
-            Student student = studentService.findByStudentId(studentId);
+            Student student = studentService.findByUserUsername(username);
+            List<Enrollment> enrollments = enrollmentService.findByStudent(student);
             List<Course> allCourses = courseService.getAllCourses();
 
             if (allCourses == null)
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-            List<Course> unenrolledAndFailedCourses = allCourses.stream()
-                    .filter(course -> {
-                        // filter for enrollment
-                        boolean hasEnrollment = student.getStudentEnrollments().stream()
-                                .anyMatch(enrollment ->
-                                        enrollment.getCourseClass().getCourse().getCourseId() == course.getCourseId());
+            Map<Long, Boolean> canRegister = new HashMap<>();
 
-                        // Check if the enrollment status is withdrawal or failure
-                        boolean isWithdrawnOrFailed = student.getStudentEnrollments().stream().anyMatch(enrollment ->
-                                enrollment.getCourseClass().getCourse().getCourseId() == course.getCourseId() &&
-                                        (enrollment.getEnrollmentStatus() == EnrollmentEnum.WITHDRAWN ||
-                                                enrollment.getEnrollmentStatus() == EnrollmentEnum.FAILED ||
-                                                enrollment.getEnrollmentStatus() == EnrollmentEnum.REMOVED));
+            //set default value to can register to avoid nulls
+            for (Course course : allCourses) {
+                canRegister.put(course.getCourseId(), true);
+            }
 
-                        // only include if hasEnrollment is false AND fail/withdraw is true.
-                        return !hasEnrollment || isWithdrawnOrFailed;
-                    })
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(unenrolledAndFailedCourses, HttpStatus.OK);
+            //set to false if student has completed, attempted to register or been removed.
+            for (Enrollment enrollment : enrollments) {
+                Course course = enrollment.getCourseClass().getCourse();
+                if (enrollment.getEnrollmentStatus().equals(EnrollmentEnum.COMPLETED)
+                        || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.REMOVED)
+                        || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.SUBMITTED)) {
+                    canRegister.put(course.getCourseId(), false);
+                }
+            }
+            return new ResponseEntity<>(canRegister, HttpStatus.OK);
 
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    @GetMapping(value = "/fetchAllCourses", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Course>> getAllCourses(@RequestHeader("X-Username") String username){
+        List<Course> courses = courseService.getAllCourses();
+        return ResponseEntity.ok(courses);
+    }
+
 
     @GetMapping(value = "/fetchClasses/{courseId}")
-    public ResponseEntity<Page<CourseClass>> getClassesByCourseId(
-            @PathVariable("courseId") Long courseId,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size) {
+    public ResponseEntity<List<CourseClass>> getClassesByCourseId(@RequestHeader("X-Username") String username, @PathVariable("courseId") Long courseId) {
 
         try {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<CourseClass> classes = classService.findByCourseId(courseId, pageable);
-            //List<CourseClass> classes = classService.findByCourseId(courseId);
-
-            if (classes.getContent().size() == 0)
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
+            List<CourseClass> classes = classService.findByCourseId(courseId);
             return ResponseEntity.ok(classes);
 
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-
     }
 
+    @GetMapping(value = "/fetchLecturerNames/{courseId}")
+    public ResponseEntity<List<String>> getLecturerNamesByCourseId(@RequestHeader("X-Username") String username,
+                                                                   @PathVariable("courseId") Long courseId) {
+
+        try {
+            List<CourseClass> classes = classService.findByCourseId(courseId);
+            List<String> lecturerNames = classes.stream()
+                    .map(courseClass -> courseClass.getLecturer().getFullName())
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(lecturerNames);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     @GetMapping(value = "/fetchCourse/{courseId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Course> getClassByCourseId(@PathVariable("courseId") Long courseId) {
+    public ResponseEntity<Course> getClassByCourseId(@RequestHeader("X-Username") String username, @PathVariable("courseId") Long courseId) {
         Course course = courseService.findCourseByCourseId(courseId);
         if (course == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -112,8 +136,8 @@ public class StudentRestController {
 
 
     @GetMapping(value = "/fetchStudent")
-    public ResponseEntity<Student> getStudentFromSession() {
-        Student student = studentService.findByStudentId(testId);
+    public ResponseEntity<Student> getStudent(@RequestHeader("X-Username") String username) {
+        Student student = studentService.findByUserUsername(username);
         if (student == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
@@ -121,24 +145,24 @@ public class StudentRestController {
     }
 
 
-    @GetMapping(value = "/register/{classId}/{courseId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> registerClass(@PathVariable("classId") Long classId, @PathVariable("courseId") Long courseId) {
+
+
+    @PostMapping(value = "/register/{classId}/{courseId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> registerClass(@RequestHeader("X-Username") String username, @PathVariable("classId") Long classId, @PathVariable("courseId") Long courseId) {
 
         boolean success = true;
 
-        // TODO: Replace with session
-        Long studentId = testId;
-        Student student = studentService.findByStudentId(studentId);
+        Student student = studentService.findByUserUsername(username);
 
         CourseClass courseClass = classService.findByClassId(classId);
-       //Course course = courseService.findCourseByCourseId(courseId);
+        //Course course = courseService.findCourseByCourseId(courseId);
 
         if (student == null || courseClass == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 
         // Find the current enrollment status if any
-        Enrollment existingEnrollment = enrollmentService.findByStudentAndClass(classId, studentId).orElse(null);
+        Enrollment existingEnrollment = enrollmentService.findByStudentAndClass(classId, student.getStudentId()).orElse(null);
         if (existingEnrollment != null)
             System.out.println(existingEnrollment.getEnrollmentStatus());
 
@@ -147,13 +171,13 @@ public class StudentRestController {
                 (existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.SUBMITTED
                         || existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.CONFIRMED
                         || existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.COMPLETED
+                        || existingEnrollment.getEnrollmentStatus() == EnrollmentEnum.REMOVED
                 )) {
             success = false;
         }
 
-        // If no current enrollment
+
         else if (success = true) {
-            // Create a new enrollment object
             Enrollment enrollment = new Enrollment();
             enrollment.setStudent(student);
             enrollment.setCourseClass(courseClass);
@@ -166,7 +190,7 @@ public class StudentRestController {
             // Send confirmation email with link
             String testRecepientEmail = "sa56team6@outlook.com";
 
-            String confirmationLink = emailUtility.generateConfirmationLink(studentId, classId);
+            String confirmationLink = emailUtility.generateConfirmationLink(student.getStudentId(), classId);
             emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink, student.getFullName(), courseClass);
         }
         return ResponseEntity.ok(success);
