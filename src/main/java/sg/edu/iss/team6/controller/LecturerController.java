@@ -51,6 +51,7 @@ public class LecturerController {
 		String lecturerUsername = (String) sessionObj.getAttribute("username");
 		Lecturer lecturer = lectSvc.findByUsername(lecturerUsername);
 		return lecturer.getLecturerId();
+
     }
     
     @GetMapping("/lecturer")
@@ -224,7 +225,7 @@ public class LecturerController {
         }
 
 		else {
-			long score = enrollment.getScore();
+			Long score = enrollment.getScore();
 			double gpa = calculateGpa(score);
 			int credits = retrieveCourseCredits(enrollmentId);
 			double cumulativeGpa = calculateCumulativeGpa(enrollmentId, gpa, credits);
