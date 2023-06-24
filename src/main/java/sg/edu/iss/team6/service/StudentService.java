@@ -8,8 +8,6 @@ import sg.edu.iss.team6.model.User;
 
 import java.util.*;
 
-import java.util.ArrayList;
-
 
 public interface StudentService {
     ArrayList<Student> findAllStudents();
@@ -30,8 +28,7 @@ public interface StudentService {
 
 
     double computeStudentavgScore(long studentId);
-    String[][] getCourseandScore(long studentId);
-    double computeStudentgpa(long studentId);
+    Map<Course, String> getCourseandScore(long studentId);
     List<Enrollment> getStudentEnroll(long studentId);
 
 

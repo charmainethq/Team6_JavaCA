@@ -47,6 +47,11 @@ public class AdminServiceImpl implements AdminService {
         return adminRepo.findByUser(u);
     }
 
-    
+    @Override
+    @Transactional
+    public Admin findByUserUsername(String username){
+        Admin admin = adminRepo.findByUserUsername(username);
+        return admin;
+    }
 
 }

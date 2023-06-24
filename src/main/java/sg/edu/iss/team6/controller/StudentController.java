@@ -37,14 +37,6 @@ public class StudentController {
     @Autowired
     EmailUtility emailUtility;
 
-    /**
-    //for testing only
-    private Student student;
-    @PostConstruct
-    public void init() {
-        student = studentService.findByUserUsername("stu_3_charlie");
-    }**/
-
 
     @GetMapping
     public String homePage(HttpSession session, Model model){
@@ -75,6 +67,7 @@ public class StudentController {
             Course course = enrollment.getCourseClass().getCourse();
             if (enrollment.getEnrollmentStatus().equals(EnrollmentEnum.COMPLETED)
                     || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.REMOVED)
+                    || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.CONFIRMED)
                     || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.SUBMITTED)) {
                 canRegister.put(course.getCourseId(), false);
             }
@@ -203,7 +196,7 @@ public class StudentController {
         //model.addAttribute("len", courseAndscore.size());
         model.addAttribute("courseAndscore", studentService.getCourseandScore(curntStudent.getStudentId()));
         model.addAttribute("curntStudent", curntStudent);
-        model.addAttribute("gpa",studentService.computeStudentgpa(curntStudent.getStudentId()));
+        model.addAttribute("gpa",curntStudent.getGpa());
         model.addAttribute("avge",studentService.computeStudentavgScore(curntStudent.getStudentId()));
         return "stu-classlist";
     }

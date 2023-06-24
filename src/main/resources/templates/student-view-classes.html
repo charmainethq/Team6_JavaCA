@@ -60,8 +60,7 @@
             <input type="text"
                    class="form-control datepicker-input"
                    name="datepicker"
-                   id="datepicker"
-                   onchange="filterCoursesByMonth(this.value)"/>
+                   id="datepicker"/>
         </div>
         <button type="button"
                 class="clear-filter-button"
@@ -136,15 +135,18 @@
         return true;
     }
 
-    //Datepicker
+    // Datepicker
     $(document).ready(function () {
         $('#datepicker').datepicker({
             format: 'mm/yyyy',
             startView: 'months',
             minViewMode: 'months',
             autoclose: true
+        }).on('changeDate', function (e) {
+            filterCoursesByMonth(e.date);
         });
     });
+
 
     //Filter function to display rows based on whether they match the datepicker
     function filterCoursesByMonth(date) {

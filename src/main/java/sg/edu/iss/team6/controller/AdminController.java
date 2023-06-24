@@ -1,7 +1,5 @@
 package sg.edu.iss.team6.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +10,7 @@ import sg.edu.iss.team6.model.*;
 import sg.edu.iss.team6.service.AdminService;
 import sg.edu.iss.team6.service.UserService;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -24,7 +23,12 @@ public class AdminController{
     private UserService userSvc;
 
     @GetMapping("/admin")
-    public String getAdminPage(){
+    public String getAdminPage(HttpSession session, Model model){
+
+        String username= (String)session.getAttribute("username");
+        Admin admin = adminSvc.findByUserUsername(username);
+
+        model.addAttribute("name",admin.getFullName());
         return "admin";
     }
     @GetMapping("/admin/list")

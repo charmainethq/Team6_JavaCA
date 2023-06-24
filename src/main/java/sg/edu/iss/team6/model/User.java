@@ -18,5 +18,4 @@ public class User implements Serializable {
     private String username;
     private String password;
 
-    // role (lecturer, admin, student)?
 }

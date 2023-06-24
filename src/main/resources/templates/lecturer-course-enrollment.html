@@ -19,8 +19,15 @@
         <div th:include="lecturer-home-page.html"></div>
     </header>
     <div class="container">
-        <h1>Course Enrollment List</h1>
+        <h1>My Classes</h1>
         <div>
+            <div class = "mb-3">
+                <label for="courseSelect">Filter by Course:</label>
+                <select id="courseSelect" onchange="filterTable()">
+                    <option value="">My Courses</option>
+                </select>
+
+            </div>
             <div class="mb-3">
                 <label for="searchInput">Search:</label>
                 <input type="text" class="form-control" id="searchInput" placeholder="Enter keywords"
@@ -72,36 +79,43 @@
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
     <script>
-        function filterTable() {
-            // Retrieve the search input value
-            const searchInput = document.querySelector('#searchInput').value.toLowerCase();
-            const classRows = document.querySelectorAll('#classRow');
 
-            // Loop through class rows and check if they match the search input
-            classRows.forEach(function (row) {
-                // Retrieve the class information from the row
-                const classId = row.cells[0].textContent.toLowerCase();
-                const roomNum = row.cells[1].textContent.toLowerCase();
-                const startDate = row.cells[4].textContent.toLowerCase();
-
-                // Check if any of the class information matches the search input
-                if (classId.includes(searchInput) || roomNum.includes(searchInput) || startDate.includes(searchInput)) {
-                    // Show the row if it matches the search input
-                    row.style.display = '';
-                } else {
-                    // Hide the row if it doesn't match the search input
-                    row.style.display = 'none';
-                }
+        function populateCourseDropdown() {
+            const courseSelect = document.querySelector('#courseSelect');
+            const courseNames = [...new Set(Array.from(document.querySelectorAll('#classRow')).map(row => row.cells[2].textContent))];
+            courseNames.forEach(course => {
+                const option = document.createElement('option');
+                option.value = option.textContent = course;
+                courseSelect.appendChild(option);
             });
         }
-        
+
+        function filterTable() {
+            const searchInput = document.querySelector('#searchInput').value.toLowerCase();
+            const courseFilter = document.querySelector('#courseSelect').value.toLowerCase();
+            const classRows = document.querySelectorAll('#classRow');
+
+            classRows.forEach(row => {
+                const classId = row.cells[0].textContent.toLowerCase();
+                const courseNum = row.cells[1].textContent.toLowerCase();
+                const courseName = row.cells[2].textContent.toLowerCase();
+                const roomNum = row.cells[4].textContent.toLowerCase();
+
+                const matchSearchInput = classId.includes(searchInput) || courseNum.includes(searchInput) || courseName.includes(searchInput) || roomNum.includes(searchInput);
+                const matchCourseFilter = courseFilter === '' || courseName === courseFilter;
+
+                row.style.display = (matchSearchInput && matchCourseFilter) ? '' : 'none';
+            });
+        }
+
         $(document).ready(function () {
+            populateCourseDropdown();
             $('#enrollTable').DataTable({
                 searching: false
             });
         });
 
+
     </script>
 </body>
-
 </html>

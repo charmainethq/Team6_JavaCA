@@ -22,4 +22,8 @@ public interface AdminService {
     Long delete(Long id);
 
     Admin findByUser(User u);
+
+    Admin findByUserUsername(String username);
+
+
 }

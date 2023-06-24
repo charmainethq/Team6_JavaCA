@@ -12,10 +12,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-import java.util.ArrayList;
-
-
-
 @Service
 public class StudentServiceImpl implements StudentService {
     @Resource
@@ -48,6 +44,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public Student update(Student student) {
         return srepo.save(student);
     }
@@ -119,34 +116,7 @@ public class StudentServiceImpl implements StudentService {
         return avge;
     }
 
-    @Override
-    @Transactional
-    public double computeStudentgpa(long studentId){
-        double avge = computeStudentavgScore(studentId);
-        int ten = 0;
-        double tmp = avge/10;
-        switch((int)tmp){
-            case 10:
-                ten = 5;
-                break;
-            case 9:
-                ten = 4;
-                break;
-            case 8:
-                ten = 3;
-                break;
-            case 7:
-                ten = 2;
-                break;
-            case 6:
-                ten = 1;
-                break;
-            default:
-                ten = 0;
-        }
 
-        return (ten + (avge%10)/10.0);
-    }
 
     @Override
     @Transactional
@@ -173,115 +143,21 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public String[][] getCourseandScore(long studentId){
+    public Map<Course, String> getCourseandScore(long studentId){
 
-        List<Enrollment> enrol= getCompletedEnrollmentsForStudent(studentId);
+        List<Enrollment> enrollments = getCompletedEnrollmentsForStudent(studentId);
+        Map<Course, String> courseAndScoreMap = new HashMap<>();
 
-        String[][] CourseandScore = new String[enrol.size()][enrol.size()];
-
-
-
-        for (int i=0;i<enrol.size();i++){
-            String[] temp = new String[2];
-            temp[0] = enrol.get(i).getCourseClass().getCourse().getName();
-            temp[1] = enrol.get(i).getScore().toString();
-            CourseandScore[i] = temp;
+        for (Enrollment enrollment : enrollments) {
+            Course course = enrollment.getCourseClass().getCourse();
+            String score = enrollment.getScore().toString();
+            courseAndScoreMap.put(course, score);
         }
 
-        return CourseandScore;
-
-
-
-    /**@Override
-    @Transactional
-    public Student findByUser(User u) {
-        return srepo.findByUserUsername(u);
-<<<<<<< HEAD
-=======
->>>>>>> 6c61760a29bcd135c8b04597cfdb6261c03542be
->>>>>>> 3fdb0fcbf0715fe98cdfc78b6bb44fb1936fcebb
+        return courseAndScoreMap;
     }
 
-    @Override
-    @Transactional
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-    public List<Course> getStudentcourse(long studentId){
-
-        Student student = srepo.findByStudentId(studentId);
-        List<Course> crol = new ArrayList<>();
-        if (student != null) {
-            crol =  student.getStudentEnrollments().stream()
-                    .filter(e -> e.getEnrollmentStatus() == EnrollmentEnum.COMPLETED)
-                    .map(e -> e.getCourseClass().getCourse())
-                    .collect(Collectors.toList());
-        }
-
-        return crol;
-
-    }
-
-    @Override
-    @Transactional
-    public long computeStudentgpa(long studentId){
-
-        long gpa = 0;
-        
-        Student student = srepo.findByStudentId(studentId);
-        List<Enrollment> enrol = new ArrayList<>();
-
-        if (student != null) {
-            enrol =  student.getStudentEnrollments().stream()
-                    .filter(e -> e.getEnrollmentStatus() == EnrollmentEnum.COMPLETED)
-                    .collect(Collectors.toList());
-        }
-
-        List<Course> courses = new ArrayList<>();
-
-        long score = 0;
-        int credit = 0;
-
-        for (Enrollment enrollment:enrol){
-            Course c = enrollment.getCourseClass().getCourse();
-            courses.add(c);
-            score = score + c.getCredits()*enrollment.getScore();
-            credit = credit + c.getCredits();
-        }
-
-        if(credit != 0){
-            gpa = score/credit;
-        }
-
-        return gpa;
-    }
-
-    @Override
-    @Transactional
-    public List<Enrollment> getCompletedEnrollmentsForStudent(long studentId){
-        Student student = srepo.findByStudentId(studentId);
-        if (student != null) {
-            return student.getStudentEnrollments().stream()
-                    .filter(e -> e.getEnrollmentStatus() == EnrollmentEnum.COMPLETED)
-                    .collect(Collectors.toList());
-        }
-        return Collections.emptyList();
-    }
-
-    @Override
-    @Transactional
-    public Student findByUserUsername(String username){
-        Student student = srepo.findByUserUsername(username);
-        return student;
-    }
-=======
->>>>>>> 3fdb0fcbf0715fe98cdfc78b6bb44fb1936fcebb
-    public Student findByUser(User u) {
-        return srepo.findByUser(u);
-    }
-    **/
 
 
-}
 }
 

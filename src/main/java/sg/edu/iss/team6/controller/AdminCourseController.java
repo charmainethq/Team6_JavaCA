@@ -12,8 +12,6 @@ import sg.edu.iss.team6.service.EnrollmentService;
 import sg.edu.iss.team6.service.LecturerService;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Controller

@@ -3,7 +3,6 @@ package sg.edu.iss.team6.service;
 import sg.edu.iss.team6.model.Course;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import sg.edu.iss.team6.model.CourseClass;
 import java.util.ArrayList;
 import java.util.List;

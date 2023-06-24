@@ -1,15 +1,12 @@
 package sg.edu.iss.team6.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import sg.edu.iss.team6.model.Course;
 import sg.edu.iss.team6.model.CourseClass;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 
@@ -30,7 +27,7 @@ public class EmailService {
 
             String htmlContent = "<p>Dear " + studentName + ",</p>" +
                     "<p>Please click the link below to confirm your enrollment for <b>" + courseClass.getCourse().getCourseNum() + " " + courseClass.getCourse().getName()
-                    + "</b>.<br> Duration: " + courseClass.getFormatStartDate() + " " + courseClass.getFormatEndDate()
+                    + "</b>.<br> Duration: " + courseClass.getFormatStartDate() + " to " + courseClass.getFormatEndDate()
                     +"<br><a href=\"" + confirmationLink + "\">Confirm enrollment</a></p>";
             helper.setText(htmlContent, true);
 
