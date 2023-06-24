@@ -5,6 +5,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ public class CourseClass implements Serializable {
     @Max(value=1000, message="Class size cannot exceed 1000")
     private int size;
     private String roomNum;
+    private int confirmedNumber;
 
     @ManyToOne
     @JoinColumn(name = "lecturer_id")
@@ -43,6 +45,11 @@ public class CourseClass implements Serializable {
     @OneToMany(mappedBy = "courseClass", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Enrollment> classEnrollment;
+
+    @JsonIgnore
+    public List<Enrollment> getClassEnrollment() {
+        return classEnrollment;
+    }
 
     public String getFormatStartDate(){
         Calendar calendar = Calendar.getInstance();
@@ -59,14 +66,6 @@ public class CourseClass implements Serializable {
         return sdf.format(calendar.getTime());
     }
 
-    public int getConfirmedNumber() {
-        int confirmedCount = 0;
-        for (Enrollment e : classEnrollment) {
-            if (e.getEnrollmentStatus() == EnrollmentEnum.CONFIRMED) {
-                confirmedCount++;
-            }
-        }
-        return confirmedCount;
-    }
+
 
 }

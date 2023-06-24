@@ -148,7 +148,7 @@ public class StudentController {
         // Send confirmation email with link
         String testRecepientEmail= "sa56team6@outlook.com";
 
-        String confirmationLink = emailUtility.generateConfirmationLink(studentId, classId);
+        String confirmationLink = emailUtility.generateConfirmationLink(enrollment.getEnrollmentId());
         emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink, student.getFullName(), courseClass);
 
         return "redirect:/student/registerSuccess";
@@ -160,13 +160,17 @@ public class StudentController {
     }
 
     @GetMapping("/confirmEnrollment")
-    public String createEnrollmentFromUrl(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, Model model) {
-        Enrollment enrollment = enrollmentService.findByStudentAndClass(classId,studentId).orElse(null);
+    public String createEnrollmentFromUrl(@RequestParam("enrollmentId") Long enrollmentId, Model model) {
+        Enrollment enrollment = enrollmentService.findByEnrollmentId(enrollmentId);
+        CourseClass courseClass = enrollment.getCourseClass();
+
 
         if (enrollment== null) {
             throw new ResourceNotFoundException("Resource not found");
         }
         enrollmentService.updateEnrollmentStatus(enrollment.getEnrollmentId(), EnrollmentEnum.CONFIRMED);
+        courseClass.setConfirmedNumber(courseClass.getConfirmedNumber()+1);
+        classService.update(courseClass);
         String courseName = enrollment.getCourseClass().getCourse().getCourseNum() + " " + enrollment.getCourseClass().getCourse().getName();
         model.addAttribute("courseName", courseName);
         return "student-enrollment-success";

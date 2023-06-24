@@ -39,16 +39,7 @@ public class StudentRestController {
     @Autowired
     EmailUtility emailUtility;
 
-    private static final Long testId = 3L;
-    String username = "stu_3_charlie";
-    @GetMapping
-    public String homePage(@RequestHeader("X-Username") String username, Model model){
 
-        Student student = studentService.findByUserUsername(username);
-
-        model.addAttribute("name",student.getFullName());
-        return "student";
-    }
 
     @GetMapping(value = "/registerCourses", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<Long, Boolean>> getEligibility(@RequestHeader("X-Username") String username) {
@@ -186,7 +177,7 @@ public class StudentRestController {
             // Send confirmation email with link
             String testRecepientEmail = "sa56team6@outlook.com";
 
-            String confirmationLink = emailUtility.generateConfirmationLink(student.getStudentId(), classId);
+            String confirmationLink = emailUtility.generateConfirmationLink(enrollment.getEnrollmentId());
             emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink, student.getFullName(), courseClass);
         }
         return ResponseEntity.ok(success);

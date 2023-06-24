@@ -6,12 +6,11 @@ import java.nio.charset.StandardCharsets;
 
 @Component
 public class EmailUtility {
-    public String generateConfirmationLink(long studentId, long classId) {
+    public String generateConfirmationLink(long enrollmentId) {
         // Construct the confirmation link URL
         String baseUrl = "http://localhost:2000/student/confirmEnrollment";
-        String encodedStudentId = URLEncoder.encode(String.valueOf(studentId), StandardCharsets.UTF_8);
-        String encodedClassId = URLEncoder.encode(String.valueOf(classId), StandardCharsets.UTF_8);
-        return baseUrl + "?studentId=" + encodedStudentId + "&classId=" + encodedClassId;
+        String encodedEnrollmentId = URLEncoder.encode(String.valueOf(enrollmentId), StandardCharsets.UTF_8);
+        return baseUrl + "?enrollmentId=" + encodedEnrollmentId;
     }
 
 }
