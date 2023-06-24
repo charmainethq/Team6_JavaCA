@@ -30,7 +30,7 @@ public interface StudentService {
 
 
     double computeStudentavgScore(long studentId);
-    String[][] getCourseandScore(long studentId);
+    Map<Course, String> getCourseandScore(long studentId);
     List<Enrollment> getStudentEnroll(long studentId);
 
 

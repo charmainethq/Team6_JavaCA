@@ -37,14 +37,6 @@ public class StudentController {
     @Autowired
     EmailUtility emailUtility;
 
-    /**
-    //for testing only
-    private Student student;
-    @PostConstruct
-    public void init() {
-        student = studentService.findByUserUsername("stu_3_charlie");
-    }**/
-
 
     @GetMapping
     public String homePage(HttpSession session, Model model){

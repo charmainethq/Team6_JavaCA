@@ -13,7 +13,7 @@
   <header>
     <div th:include="adminPage.html"></div>
   </header>
-  <h1>Welcome to Admin Page!</h1>
+  <h1>Welcome, <span th:text="${name}">!</span></h1>
   <div class="img-container">
     <img src="image/admin.jpg" alt="Admin" class="img-fluid" style="max-width: 45%;">
   </div>
