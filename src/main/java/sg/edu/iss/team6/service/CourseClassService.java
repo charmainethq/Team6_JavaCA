@@ -29,4 +29,5 @@ public interface CourseClassService {
     CourseClass update(CourseClass cc);
     void delete(long id);
     void deleteList(List<CourseClass> cc);
+
 }

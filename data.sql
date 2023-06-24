@@ -27,50 +27,54 @@ INSERT INTO team6.course (course_num,credits,description,duration,name) VALUES
                                                                             (801,3,'Fundamentals of computer networks, network protocols, and network security.',10,'Computer Networks'),
                                                                             (901,4,'Building mobile applications for iOS and Android platforms.',12,'Mobile App Development'),
                                                                             (1001,3,'Introduction to cloud computing and cloud-based application development.',10,'Cloud Computing');
-INSERT INTO team6.course_class (room_num,`size`,start_date,course_id,lecturer_id) VALUES
-                                                                                      ('Room 1',10,'2023-06-24',1,1),
-                                                                                      ('Room 2',20,'2023-06-24',1,2),
-                                                                                      ('Room 3',30,'2023-06-24',1,3),
-                                                                                      ('Room 4',40,'2023-06-24',1,1),
-                                                                                      ('Room 5',50,'2023-06-24',1,2),
-                                                                                      ('Room 6',50,'2023-06-24',1,3),
-                                                                                      ('Room 1',10,'2023-06-24',2,1),
-                                                                                      ('Room 2',20,'2023-06-24',2,2),
-                                                                                      ('Room 3',30,'2023-06-24',2,3),
-                                                                                      ('Room 4',40,'2023-06-24',2,1);
-INSERT INTO team6.course_class (room_num,`size`,start_date,course_id,lecturer_id) VALUES
-                                                                                      ('Room 5',50,'2023-06-24',2,2),
-                                                                                      ('Room 6',50,'2023-06-24',2,3),
-                                                                                      ('Room 1',10,'2023-06-24',3,1),
-                                                                                      ('Room 2',20,'2023-06-24',3,2),
-                                                                                      ('Room 3',30,'2023-06-24',3,3),
-                                                                                      ('Room 4',40,'2023-06-24',3,1),
-                                                                                      ('Room 5',50,'2023-06-24',3,2),
-                                                                                      ('Room 6',50,'2023-06-24',3,3),
-                                                                                      ('Room 1',10,'2023-06-24',4,1),
-                                                                                      ('Room 2',20,'2023-06-24',4,2);
-INSERT INTO team6.course_class (room_num,`size`,start_date,course_id,lecturer_id) VALUES
-                                                                                      ('Room 3',30,'2023-06-24',4,3),
-                                                                                      ('Room 4',40,'2023-06-24',4,1),
-                                                                                      ('Room 5',50,'2023-06-24',4,2),
-                                                                                      ('Room 6',50,'2023-06-24',4,3),
-                                                                                      ('Room 1',10,'2023-06-24',5,1),
-                                                                                      ('Room 2',20,'2023-06-24',5,2),
-                                                                                      ('Room 3',30,'2023-06-24',5,3),
-                                                                                      ('Room 4',40,'2023-06-24',5,1),
-                                                                                      ('Room 5',50,'2023-06-24',5,2),
-                                                                                      ('Room 6',50,'2023-06-24',5,3);
-INSERT INTO team6.course_class (room_num,`size`,start_date,course_id,lecturer_id) VALUES
-                                                                                      ('Room 1',10,'2023-06-24',6,1),
-                                                                                      ('Room 2',20,'2023-06-24',6,2),
-                                                                                      ('Room 1',10,'2023-06-24',7,1),
-                                                                                      ('Room 2',20,'2023-06-24',7,2),
-                                                                                      ('Room 1',10,'2023-06-24',8,1),
-                                                                                      ('Room 2',20,'2023-06-24',8,2),
-                                                                                      ('Room 1',10,'2023-06-24',9,1),
-                                                                                      ('Room 2',20,'2023-06-24',9,2),
-                                                                                      ('Room 1',10,'2023-06-24',10,1),
-                                                                                      ('Room 2',20,'2023-06-24',10,2);
+INSERT INTO team6.course_class (room_num, `size`, start_date, course_id, lecturer_id, confirmed_number) VALUES
+                                                                                                            ('Room 1', 10, '2023-06-24', 1, 1, 5),
+                                                                                                            ('Room 2', 20, '2023-06-24', 1, 2, 12),
+                                                                                                            ('Room 3', 30, '2023-06-24', 1, 3, 18),
+                                                                                                            ('Room 4', 40, '2023-06-24', 1, 1, 25),
+                                                                                                            ('Room 5', 50, '2023-06-24', 1, 2, 35),
+                                                                                                            ('Room 6', 50, '2023-06-24', 1, 3, 42),
+                                                                                                            ('Room 1', 10, '2023-06-24', 2, 1, 8),
+                                                                                                            ('Room 2', 20, '2023-06-24', 2, 2, 15),
+                                                                                                            ('Room 3', 30, '2023-06-24', 2, 3, 22),
+                                                                                                            ('Room 4', 40, '2023-06-24', 2, 1, 30);
+
+INSERT INTO team6.course_class (room_num, `size`, start_date, course_id, lecturer_id, confirmed_number) VALUES
+                                                                                                            ('Room 5', 50, '2023-06-24', 2, 2, 40),
+                                                                                                            ('Room 6', 50, '2023-06-24', 2, 3, 45),
+                                                                                                            ('Room 1', 10, '2023-06-24', 3, 1, 6),
+                                                                                                            ('Room 2', 20, '2023-06-24', 3, 2, 14),
+                                                                                                            ('Room 3', 30, '2023-06-24', 3, 3, 21),
+                                                                                                            ('Room 4', 40, '2023-06-24', 3, 1, 28),
+                                                                                                            ('Room 5', 50, '2023-06-24', 3, 2, 37),
+                                                                                                            ('Room 6', 50, '2023-06-24', 3, 3, 44),
+                                                                                                            ('Room 1', 10, '2023-06-24', 4, 1, 4),
+                                                                                                            ('Room 2', 20, '2023-06-24', 4, 2, 10);
+
+INSERT INTO team6.course_class (room_num, `size`, start_date, course_id, lecturer_id, confirmed_number) VALUES
+                                                                                                            ('Room 3', 30, '2023-06-24', 4, 3, 16),
+                                                                                                            ('Room 4', 40, '2023-06-24', 4, 1, 23),
+                                                                                                            ('Room 5', 50, '2023-06-24', 4, 2, 32),
+                                                                                                            ('Room 6', 50, '2023-06-24', 4, 3, 39),
+                                                                                                            ('Room 1', 10, '2023-06-24', 5, 1, 7),
+                                                                                                            ('Room 2', 20, '2023-06-24', 5, 2, 13),
+                                                                                                            ('Room 3', 30, '2023-06-24', 5, 3, 20),
+                                                                                                            ('Room 4', 40, '2023-06-24', 5, 1, 27),
+                                                                                                            ('Room 5', 50, '2023-06-24', 5, 2, 36),
+                                                                                                            ('Room 6', 50, '2023-06-24', 5, 3, 43);
+
+INSERT INTO team6.course_class (room_num, `size`, start_date, course_id, lecturer_id, confirmed_number) VALUES
+                                                                                                            ('Room 1', 10, '2023-06-24', 6, 1, 3),
+                                                                                                            ('Room 2', 20, '2023-06-24', 6, 2, 9),
+                                                                                                            ('Room 1', 10, '2023-06-24', 7, 1, 5),
+                                                                                                            ('Room 2', 20, '2023-06-24', 7, 2, 11),
+                                                                                                            ('Room 1', 10, '2023-06-24', 8, 1, 2),
+                                                                                                            ('Room 2', 20, '2023-06-24', 8, 2, 8),
+                                                                                                            ('Room 1', 10, '2023-06-24', 9, 1, 1),
+                                                                                                            ('Room 2', 20, '2023-06-24', 9, 2, 7),
+                                                                                                            ('Room 1', 10, '2023-06-24', 10, 1, 4),
+                                                                                                            ('Room 2', 20, '2023-06-24', 10, 2, 10);
+
 INSERT INTO team6.enrollment (enrollment_status,score,submitted_date,class_id,student_id) VALUES
                                                                                               ('CONFIRMED',79,'2023-06-02 10:45:00',1,3),
                                                                                               ('FAILED',45,'2023-06-02 11:45:00',1,2),
