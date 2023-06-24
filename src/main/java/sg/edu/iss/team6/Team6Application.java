@@ -38,23 +38,22 @@ public class Team6Application {
 		@Override
 		public void run(String... args) throws Exception {
 			User[] users = {
-					new User("adm_1_John", passwordEncoder.encode("adm1")),
-					new User("adm_2_Jane", passwordEncoder.encode("adm2")),
-					new User("lec_1_David", passwordEncoder.encode("lec1")),
-					new User("lec_2_Sarah", passwordEncoder.encode("lec2")),
-					new User("lec_3_Michael", passwordEncoder.encode("lec3")),
-					new User("stu_1_Jennifer", passwordEncoder.encode("stu1")),
-					new User("stu_10_Ryan", passwordEncoder.encode("stu10")),
-					new User("stu_2_Thomas", passwordEncoder.encode("stu2")),
-					new User("stu_3_Jessica", passwordEncoder.encode("stu3")),
-					new User("stu_4_William", passwordEncoder.encode("stu4")),
-					new User("stu_5_Melissa", passwordEncoder.encode("stu5")),
-					new User("stu_6_Benjamin", passwordEncoder.encode("stu6")),
-					new User("stu_7_Sophia", passwordEncoder.encode("stu7")),
-					new User("stu_8_Daniel", passwordEncoder.encode("stu8")),
-					new User("stu_9_Emily", passwordEncoder.encode("stu9"))
+					new User("adm_1_John", passwordEncoder.encode("adminpass1")),
+					new User("adm_2_Jane", passwordEncoder.encode("adminpass2")),
+					new User("lec_1_David", passwordEncoder.encode("lecturerpass1")),
+					new User("lec_2_Sarah", passwordEncoder.encode("lecturerpass2")),
+					new User("lec_3_Michael", passwordEncoder.encode("lecturerpass3")),
+					new User("stu_1_Jennifer", passwordEncoder.encode("studentpass1")),
+					new User("stu_10_Ryan", passwordEncoder.encode("studentpass10")),
+					new User("stu_2_Thomas", passwordEncoder.encode("studentpass2")),
+					new User("stu_3_Jessica", passwordEncoder.encode("studentpass3")),
+					new User("stu_4_William", passwordEncoder.encode("studentpass4")),
+					new User("stu_5_Melissa", passwordEncoder.encode("studentpass5")),
+					new User("stu_6_Benjamin", passwordEncoder.encode("studentpass6")),
+					new User("stu_7_Sophia", passwordEncoder.encode("studentpass7")),
+					new User("stu_8_Daniel", passwordEncoder.encode("studentpass8")),
+					new User("stu_9_Emily", passwordEncoder.encode("studentpass9"))
 			};
-
 			for (User user : users) {
 				userRepository.save(user);
 			}
