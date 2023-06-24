@@ -82,7 +82,7 @@
                 // Retrieve the class information from the row
                 const classId = row.cells[0].textContent.toLowerCase();
                 const roomNum = row.cells[1].textContent.toLowerCase();
-                const startDate = row.cells[4].textContent.toLowerCase();
+                const startDate = row.cells[2].textContent.toLowerCase();
 
                 // Check if any of the class information matches the search input
                 if (classId.includes(searchInput) || roomNum.includes(searchInput) || startDate.includes(searchInput)) {
