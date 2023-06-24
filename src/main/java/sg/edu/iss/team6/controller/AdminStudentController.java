@@ -4,16 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import sg.edu.iss.team6.model.Enrollment;
-import sg.edu.iss.team6.model.Lecturer;
 import sg.edu.iss.team6.model.Student;
 import sg.edu.iss.team6.model.User;
 import sg.edu.iss.team6.service.EnrollmentService;
 import sg.edu.iss.team6.service.StudentService;
 import sg.edu.iss.team6.service.UserService;
-import sg.edu.iss.team6.validator.UserValidator;
 
 import javax.validation.Valid;
 import java.util.*;

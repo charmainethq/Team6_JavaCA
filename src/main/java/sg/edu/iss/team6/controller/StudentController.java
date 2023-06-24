@@ -67,6 +67,7 @@ public class StudentController {
             Course course = enrollment.getCourseClass().getCourse();
             if (enrollment.getEnrollmentStatus().equals(EnrollmentEnum.COMPLETED)
                     || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.REMOVED)
+                    || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.CONFIRMED)
                     || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.SUBMITTED)) {
                 canRegister.put(course.getCourseId(), false);
             }

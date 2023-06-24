@@ -3,7 +3,6 @@ package sg.edu.iss.team6.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
-import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -42,6 +41,7 @@ public class CourseClass implements Serializable {
     private Lecturer lecturer;
 
     @OneToMany(mappedBy = "courseClass", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<Enrollment> classEnrollment;
 
     public String getFormatStartDate(){

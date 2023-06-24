@@ -1,7 +1,6 @@
 package sg.edu.iss.team6.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMax;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

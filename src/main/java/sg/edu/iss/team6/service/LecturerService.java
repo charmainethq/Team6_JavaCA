@@ -1,10 +1,8 @@
 package sg.edu.iss.team6.service;
-import java.util.List;
 
 import sg.edu.iss.team6.model.Lecturer;
 import sg.edu.iss.team6.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface LecturerService {

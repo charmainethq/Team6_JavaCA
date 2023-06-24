@@ -83,7 +83,7 @@ public class LecturerController {
 
 // Lecturer view courses enrolled
 
-	@RequestMapping(value = "/lecturer/courseEnrollment/", method = RequestMethod.GET)
+	@RequestMapping(value = "/lecturer/viewClasses/", method = RequestMethod.GET)
 	public String courseEnrollmentList(HttpSession session, Model model) {
 		long lecturerId = retrieveLecturerId(session);
 		Lecturer lecturer = lectSvc.findById(lecturerId);
