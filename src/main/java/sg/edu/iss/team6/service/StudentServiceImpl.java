@@ -48,6 +48,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public Student update(Student student) {
         return srepo.save(student);
     }

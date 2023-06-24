@@ -4,16 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import sg.edu.iss.team6.model.Course;
 import sg.edu.iss.team6.model.CourseClass;
@@ -45,28 +47,27 @@ public class LecturerController {
     @Autowired
     private StudentService stuSvc;
 
-    private long retrieveLecturerId(HttpSession sessionObj) {
-        String lecturerUsername = (String) sessionObj.getAttribute("username");
-        Lecturer lecturer = lectSvc.findByUsername(lecturerUsername);
-        return lecturer.getLecturerId();
+    private Long retrieveLecturerId(HttpSession sessionObj) {
+        String lectuerUsername = (String) sessionObj.getAttribute("username");
+        List<Lecturer> lecturerList = lectSvc.findByUser_Username(lectuerUsername);
+        long lecturerId = 1; // mock up a lecturer ID
+        for(Lecturer lecturer : lecturerList) {
+            if(lecturer != null) {
+                lecturerId = lecturer.getLecturerId();
+            }
+        }
+        return lecturerId;
     }
-
+    
     @GetMapping("/lecturer")
     public String lecturerHomePage(HttpSession sessionObj, Model model) {
-//        String lectuerUsername = (String) sessionObj.getAttribute("username");
-//        List<Lecturer> lecturerList = lectSvc.findByUser_Username(lectuerUsername);
-//        long lecturerId = 0;
-//        for(Lecturer lecturer : lecturerList) {
-//            if(lecturer != null) {
-//                lecturerId = lecturer.getLecturerId();
-//            }
-//        }
-//        model.addAttribute("lecturerId",lecturerId);
         return "lecturer";
     }
-    @RequestMapping(value = "/lecturer/coursesTaught/", method = RequestMethod.GET)
-    public String coursesTaught(HttpSession session, Model model) {
-    	long lecturerId = retrieveLecturerId(session);
+// Lecturer view courses taught
+
+    @RequestMapping(value = "/lecturer/coursesTaught/{lecturerId}", method = RequestMethod.GET)
+    public String coursesTaught(@PathVariable long lecturerId, Model model) {
+
         Lecturer lecturer = lectSvc.findById(lecturerId);
 
         List<Long> courseIdList = cseClsSvc.findDistinctCourseId(lecturerId);
@@ -82,9 +83,11 @@ public class LecturerController {
         return "lecturer-courses-taught";
     }
 
-    @RequestMapping(value = "/lecturer/courseEnrollment/", method = RequestMethod.GET)
-    public String courseEnrollmentList(HttpSession session, Model model) {
-    	long lecturerId = retrieveLecturerId(session);
+// Lecturer view courses enrolled
+    
+    @RequestMapping(value = "/lecturer/courseEnrollment/{lecturerId}", method = RequestMethod.GET)
+    public String courseEnrollmentList(@PathVariable long lecturerId, Model model) {
+
         Lecturer lecturer = lectSvc.findById(lecturerId);
         ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
         ArrayList<Course> courseList = new ArrayList<>();
@@ -106,73 +109,151 @@ public class LecturerController {
 
         return "lecturer-course-enrollment";
     }
-// Lecturer Grade A Course
-    @RequestMapping(value = "/lecturer/courseList/", method = RequestMethod.GET)
-    public String viewCourseList(HttpSession session, Model model) {
-    	long lecturerId = retrieveLecturerId(session);
+
+    @RequestMapping(value = "/lecturer/selectCourseAndClass/", method = RequestMethod.GET)
+    public String selectCourseAndClass(HttpSession sessionObj, Model model) {
+    	long lecturerId = retrieveLecturerId(sessionObj);
+
         ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
-        ArrayList<Course> courseList = new ArrayList<>();
+        ArrayList<Course> distinctCourseList = new ArrayList<>();
         for (CourseClass current : courseClassList) {
         	long courseId = current.getCourse().getCourseId();
         	Course course = cseSvc.findById(courseId);
-        	if(!courseList.contains(course)) {
-        		courseList.add(course);
+        	if(!distinctCourseList.contains(course)) {
+        		distinctCourseList.add(course);
         	}
         }
-        model.addAttribute("courseList", courseList);
-        return "lecturer-course-list";
+        model.addAttribute("courseClassList",courseClassList);
+        model.addAttribute("courseList", distinctCourseList);
+        return "lecturer-select-course-class";
     }
 
-    @RequestMapping(value = "/lecturer/classList/{courseId}", method = RequestMethod.GET)
-    public String viewClassList(@PathVariable long courseId, Model model) {
-    	Course course = cseSvc.findById(courseId);
-    	ArrayList<CourseClass> classList = cseClsSvc.findByCourseId(courseId);
-    	model.addAttribute("course", course);
-        model.addAttribute("classList", classList);
-        return "lecturer-class-list";
-    }
-
-    @RequestMapping(value = "/lecturer/studentList/{classId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/lecturer/gradeStudentList/{classId}", method = RequestMethod.GET)
     public String viewStudentList(@PathVariable long classId, Model model) {
     	CourseClass courseClass = cseClsSvc.findById(classId);
     	Course course = cseSvc.findById(courseClass.getCourse().getCourseId());
     	ArrayList<Enrollment> enrollmentList = enrlSvc.findByClassId(classId);
+    	ArrayList<Enrollment> confirmedEnrollmentList = new ArrayList<>();
+    	for(Enrollment enrollment : enrollmentList) {
+    		//check enrollment status is only confirmed
+    		if(enrollment.getEnrollmentStatus().equals(EnrollmentEnum.CONFIRMED)) {
+    			confirmedEnrollmentList.add(enrollment);
+    		}
+    	}
     	model.addAttribute("courseClass", courseClass);
     	model.addAttribute("course", course);
-        model.addAttribute("enrollmentList", enrollmentList);
+        model.addAttribute("enrollmentList", confirmedEnrollmentList);
     	return "lecturer-student-list";
     }
-    
-    @RequestMapping(value = "/lecturer/gradeStudent/{enrollmentId}", method = RequestMethod.GET)
-    public String showGradeCourse(@PathVariable long enrollmentId, Model model) {
-        Enrollment enrollment = enrlSvc.findById(enrollmentId);
-        CourseClass courseClass = cseClsSvc.findById(enrollment.getCourseClass().getClassId());
-        Course course = cseSvc.findById(enrollment.getCourseClass().getCourse().getCourseId());
-        Student student = stuSvc.findByStudentId(enrollment.getStudent().getStudentId());
 
-        model.addAttribute("enrollment", enrollment);
-        model.addAttribute("course", course);
-        model.addAttribute("courseClass", courseClass);
-        model.addAttribute("student", student);
-
-        return "lecturer-grade-student";
+// GPA calculator
+    private double calculateGpa(long score) {
+    	
+    	double gpa = 0.0; // < 40
+    	
+    	if(score >= 80) { // 80 to 100
+    		gpa = 5.0;
+    	}
+    	else if(score >= 75 && score < 80) { // 75 to 79
+    		gpa = 4.5;
+    	}
+    	else if(score >= 70 && score < 75) { // 70 to 74
+    		gpa = 4.0;
+    	}
+    	else if(score >= 65 && score < 70) { // 65 to 69
+    		gpa = 3.5;
+    	}
+    	else if(score >= 60 && score < 65) { // 60 to 64
+    		gpa = 3.0;
+    	}
+    	else if(score >= 55 && score < 60) { // 55 to 59
+    		gpa = 2.5;
+    	}
+    	else if(score >= 50 && score < 55) { // 50 to 54
+    		gpa = 2.0;
+    	}
+    	else if(score >= 45 && score < 50) { // 45 to 49
+    		gpa = 1.5;
+    	}
+    	else { // 40 to 44
+    		gpa = 1.0;
+    	}
+    	return gpa;
     }
 
-    @RequestMapping(value = "/lecturer/gradeStudent/{enrollmentId}", method = RequestMethod.POST)
-    public String gradeCourse(@PathVariable long enrollmentId, @ModelAttribute("enrollment") Enrollment enrollment) {
-        if (enrollment.getScore() == null) {
-            System.out.println("Score cannot by empty");
-        } else if (enrollment.getScore() > 100 || enrollment.getScore() < 0) {
-            System.out.println("Score out of range !");
-        } else {
-            System.out.println("Score updated successfully !");
+// Get the credits of the course
+	private int retrieveCourseCredits(long enrollmentId) {
+		long classId = enrlSvc.findByEnrollmentId(enrollmentId).getCourseClass().getClassId();
+		long courseId = cseClsSvc.findByClassId(classId).getCourse().getCourseId();
+		int courseCredits = cseSvc.findById(courseId).getCredits();
+		return courseCredits;
+	}
+
+// Cumulative GPA calculator
+	private double calculateCumulativeGpa(long enrollmentId, double gpa, int credits) {
+		long studentId = enrlSvc.findByEnrollmentId(enrollmentId).getStudent().getStudentId();
+		double retrieveGpa = stuSvc.findByStudentId(studentId).getGpa();
+		
+		// student first enrolled course, Cumulative GPA = first course GPA
+		if(retrieveGpa == 0.0) { 
+			return retrieveGpa = gpa; 
+		}
+		
+		// student has enrolled into other courses before, need to breakdown current Cumulative GPA and calculate new Cumulative GPA
+		List<Enrollment> studentEnrolledClass = enrlSvc.findByStudent(stuSvc.findByStudentId(studentId));
+		int totalCredits = 0;
+		double sumCurrentGpa = 0;
+		for(Enrollment enrolled : studentEnrolledClass) {
+			if(enrolled.getEnrollmentStatus() == EnrollmentEnum.FAILED || enrolled.getEnrollmentStatus() == EnrollmentEnum.COMPLETED) {
+				long currentScore = enrlSvc.findByEnrollmentId(enrolled.getEnrollmentId()).getScore();
+				int currentCredits = retrieveCourseCredits(enrolled.getEnrollmentId());
+				sumCurrentGpa += calculateGpa(currentScore) * currentCredits; // Sum of GPA * Credits
+				totalCredits += currentCredits;
+			}
+		}
+		double cumulativeGpa = (sumCurrentGpa + (gpa * credits) ) / (totalCredits + credits);
+		return cumulativeGpa;
+	}
+	
+// Update the database with the input score, calculated GPA and changed enrollment status
+
+	@RequestMapping(value = "/lecturer/gradeStudentList/{enrollmentId}", method = RequestMethod.POST)
+	public ModelAndView gradeCourse(@Valid @PathVariable long enrollmentId, @ModelAttribute("enrollment") Enrollment enrollment, BindingResult result) {
+		Enrollment currentEnrollment = enrlSvc.findById(enrollmentId);
+        ModelAndView modelAndView = new ModelAndView("redirect:/lecturer/gradeStudentList/" + currentEnrollment.getCourseClass().getClassId());
+		if(result.hasErrors() || enrollment.getScore() == null) {
+        	String message1 = "Invalid input! Please enter a valid score!";
+        	modelAndView.addObject("message1", message1);
+		}
+		else if(enrollment.getScore() < 0 || enrollment.getScore() > 100) {
+        	String message2 = "Score out of range! Please enter a range between 0 to 100.";
+        	modelAndView.addObject("message2", message2);
         }
-        Enrollment currentEnrollment = enrlSvc.findById(enrollmentId);
-        currentEnrollment.setScore(enrollment.getScore());
-        enrlSvc.update(currentEnrollment);
-        long classId = currentEnrollment.getCourseClass().getClassId();
-        return "redirect:/lecturer/studentList/" + classId;
-    }
+
+		else {
+			long score = enrollment.getScore();
+			double gpa = calculateGpa(score);
+			int credits = retrieveCourseCredits(enrollmentId);
+			double cumulativeGpa = calculateCumulativeGpa(enrollmentId, gpa, credits);
+			if(score < 40) {
+				currentEnrollment.setEnrollmentStatus(EnrollmentEnum.FAILED);
+			}
+			else {
+				currentEnrollment.setEnrollmentStatus(EnrollmentEnum.COMPLETED);
+			}
+			currentEnrollment.setScore(score);
+			enrlSvc.update(currentEnrollment);
+			Student student = stuSvc.findByStudentId(currentEnrollment.getStudent().getStudentId());
+			student.setGpa(cumulativeGpa);
+			stuSvc.update(student);
+            String message3 = "Score has been successfully uploaded!";
+            modelAndView.addObject("message3", message3);
+        } 
+        return modelAndView;
+	}
+	
+// Lecturer view student performance list
+	
 
 	@GetMapping(value = "/lecturer/performanceList")
 	public String studentperformancePage(HttpSession session, Model model) {
@@ -235,6 +316,5 @@ public class LecturerController {
 	    
 	    return "lec-view-std-detail";
 	}
-
 
 }

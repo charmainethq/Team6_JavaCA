@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Grade A Course</title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap.min.css">
+    <style type='text/css'>
+    	.d-none{
+    		display: none;
+    	}
+    </style>
+</head>
+<body>
+    <header>
+        <div th:include="lecturer-home-page.html"></div>
+    </header>
+    <div class="container" >
+        <h2> Select A Course and Class</h2>
+
+		<table class="table table-striped">
+			<tr>
+				<td style="font-size: 18px;">Course Name: </td>
+				<td>
+					<label for="searchClass"></label>
+					<select id="searchClass" oninput="filterTable1()" style="font-size: 18px;">
+							<option value="0"></option>
+							<option th:each="course : ${courseList}" th:value="${course.name}" th:text="${course.name}"></option>
+					</select>
+				</td>
+			</tr>
+		</table>
+        
+		<table id="classTable" class="table table-striped" style="display:none">
+			
+			<thead>
+				<tr>
+					<th>Class ID</th>
+					<th>Course Name</th>
+					<th>Class Room Number</th>
+					<th>Class Start Date</th>
+					<th>Select Class</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="class: ${courseClassList}" id="classRow">
+					<td th:text="${class.classId}"></td>
+					<td th:text="${class.course.name}"></td>
+					<td th:text="${class.roomNum}"></td>
+					<td th:text="${class.startDate}"></td>
+                    <td>
+                        <a class="btn btn-primary" th:href="@{/lecturer/gradeStudentList/} + ${class.classId}">Select</a>
+                    </td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<br/><br/>
+		<a th:href="@{/lecturer}"><button>Back to Home Page</button></a>
+	    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
+		<script>
+			function filterTable1() {
+				const id = searchClass.value;
+				if(id!=0){
+				var x = document.getElementById('classTable');
+				x.style.display="";
+				var y = document.getElementById('searchBar');
+				y.style.display="";
+				// Retrieve the search input value
+				const searchClass = document.querySelector('#searchClass').value
+						.toLowerCase();
+	
+				const classRows = document.querySelectorAll('#classRow');
+				
+				// Loop through class rows and check if they match the search input
+				classRows.forEach(function(row) {
+					// Retrieve the admin information from the row
+					const classId = row.cells[0].textContent.toLowerCase();
+					const name = row.cells[1].textContent.toLowerCase();
+					const roomNum = row.cells[2].textContent.toLowerCase();
+					const startDate = row.cells[3].textContent.toLowerCase();
+					
+					// Check if any of the class information matches the search input
+					if (name.includes(searchClass)
+							|| classId.includes(searchClass)
+							|| roomNum.includes(searchClass)
+							|| startDate.includes(searchClass)) {
+						// Show the row if it matches the search input
+						row.style.display = '';
+					} else {
+						// Hide the row if it doesn't match the search input
+						row.style.display = 'none';
+					}
+				});					
+				}
+				else{
+					var x = document.getElementById('classTable');
+					x.style.display="none";
+				}
+			}
+            $(document).ready(function() {
+                $('#classTable').DataTable({
+                    searching: false
+                });
+            });
+		</script>
+	</div>
+</body>
+</html>
