@@ -11,8 +11,8 @@ import sg.edu.iss.team6.model.*;
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Long> {
 
-    @Query("SELECT a from Admin a where a.user.username = :username")
-    public List<Admin>findByUser_Username(@Param("username")String username);
+
+    Admin findByUserUsername(String username);
 
     Admin findByUser(User u);
 }

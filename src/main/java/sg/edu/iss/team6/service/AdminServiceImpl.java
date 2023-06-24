@@ -3,6 +3,7 @@ package sg.edu.iss.team6.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sg.edu.iss.team6.model.Admin;
+import sg.edu.iss.team6.model.Student;
 import sg.edu.iss.team6.model.User;
 import sg.edu.iss.team6.repository.AdminRepository;
 import java.util.List;
@@ -47,6 +48,11 @@ public class AdminServiceImpl implements AdminService {
         return adminRepo.findByUser(u);
     }
 
-    
+    @Override
+    @Transactional
+    public Admin findByUserUsername(String username){
+        Admin admin = adminRepo.findByUserUsername(username);
+        return admin;
+    }
 
 }
