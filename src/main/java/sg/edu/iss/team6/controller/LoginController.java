@@ -1,6 +1,5 @@
 package sg.edu.iss.team6.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,23 +76,9 @@ public class LoginController {
 		return false; // User not found
 	}
 
-
-	@GetMapping("/logout")
-    public String logout(HttpSession session, HttpServletRequest request) {
-        String referer = request.getHeader("Referer"); // Get the URL of the previous page
-        
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
         session.removeAttribute("username");
-        
-        if (referer != null) {
-            if (referer.contains("/admin")) {
-                return "redirect:/admin";
-            } else if (referer.contains("/student")) {
-                return "redirect:/student";
-            } else if (referer.contains("/lecturer")) {
-                return "redirect:/lecturer";
-            }
-        }
-        
         return "redirect:/home";
 	}
 }

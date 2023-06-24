@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import sg.edu.iss.team6.model.Course;
 import sg.edu.iss.team6.model.CourseClass;
 import sg.edu.iss.team6.model.Enrollment;
+import sg.edu.iss.team6.model.EnrollmentEnum;
 import sg.edu.iss.team6.model.Lecturer;
 import sg.edu.iss.team6.model.Student;
 import sg.edu.iss.team6.service.CourseClassService;
@@ -44,23 +45,28 @@ public class LecturerController {
     @Autowired
     private StudentService stuSvc;
 
-    @GetMapping("/lecturer")
-    public String lecturerHomePage(HttpSession sessionObj, Model model) {
-        String lectuerUsername = (String) sessionObj.getAttribute("username");
-        List<Lecturer> lecturerList = lectSvc.findByUser_Username(lectuerUsername);
-        long lecturerId = 0;
-        for(Lecturer lecturer : lecturerList) {
-            if(lecturer != null) {
-                lecturerId = lecturer.getLecturerId();
-            }
-        }
-        model.addAttribute("lecturerId",lecturerId);
-        return "lecturer-home-page";
+    private long retrieveLecturerId(HttpSession sessionObj) {
+        String lecturerUsername = (String) sessionObj.getAttribute("username");
+        Lecturer lecturer = lectSvc.findByUsername(lecturerUsername);
+        return lecturer.getLecturerId();
     }
 
-
-    @RequestMapping(value = "/lecturer/coursesTaught/{lecturerId}", method = RequestMethod.GET)
-    public String coursesTaught(@PathVariable long lecturerId, Model model) {
+    @GetMapping("/lecturer")
+    public String lecturerHomePage(HttpSession sessionObj, Model model) {
+//        String lectuerUsername = (String) sessionObj.getAttribute("username");
+//        List<Lecturer> lecturerList = lectSvc.findByUser_Username(lectuerUsername);
+//        long lecturerId = 0;
+//        for(Lecturer lecturer : lecturerList) {
+//            if(lecturer != null) {
+//                lecturerId = lecturer.getLecturerId();
+//            }
+//        }
+//        model.addAttribute("lecturerId",lecturerId);
+        return "lecturer";
+    }
+    @RequestMapping(value = "/lecturer/coursesTaught/", method = RequestMethod.GET)
+    public String coursesTaught(HttpSession session, Model model) {
+    	long lecturerId = retrieveLecturerId(session);
         Lecturer lecturer = lectSvc.findById(lecturerId);
 
         List<Long> courseIdList = cseClsSvc.findDistinctCourseId(lecturerId);
@@ -76,8 +82,9 @@ public class LecturerController {
         return "lecturer-courses-taught";
     }
 
-    @RequestMapping(value = "/lecturer/courseEnrollment/{lecturerId}", method = RequestMethod.GET)
-    public String courseEnrollmentList(@PathVariable long lecturerId, Model model) {
+    @RequestMapping(value = "/lecturer/courseEnrollment/", method = RequestMethod.GET)
+    public String courseEnrollmentList(HttpSession session, Model model) {
+    	long lecturerId = retrieveLecturerId(session);
         Lecturer lecturer = lectSvc.findById(lecturerId);
         ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
         ArrayList<Course> courseList = new ArrayList<>();
@@ -86,70 +93,61 @@ public class LecturerController {
         for (CourseClass courseClass : courseClassList) {
             Course course = cseSvc.findById(courseClass.getCourse().getCourseId());
             courseList.add(course);
-            Enrollment enrollment = enrlSvc.findById(courseClass.getClassId());
-            enrollmentList.add(enrollment);
-        }
+            List<Enrollment> enrollments = enrlSvc.findByClassId(courseClass.getClassId());
+            for (Enrollment e: enrollments)
+                enrollmentList.add(e);
 
+        }
+        model.addAttribute(enrollmentList);
         model.addAttribute(lecturer);
         model.addAttribute(courseClassList);
         model.addAttribute(courseList);
-        model.addAttribute(enrollmentList);
+
+
         return "lecturer-course-enrollment";
     }
-
-    @RequestMapping(value = "/lecturer/classList/{lecturerId}", method = RequestMethod.GET)
-    public String viewClassList(@PathVariable long lecturerId, Model model) {
+// Lecturer Grade A Course
+    @RequestMapping(value = "/lecturer/courseList/", method = RequestMethod.GET)
+    public String viewCourseList(HttpSession session, Model model) {
+    	long lecturerId = retrieveLecturerId(session);
         ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
-        ArrayList<Long> courseIdList = new ArrayList<>();
-        ArrayList<Integer> courseNumList = new ArrayList<>();
-        ArrayList<String> courseNameList = new ArrayList<>();
-        ArrayList<String> courseDescriptionList = new ArrayList<>();
-
+        ArrayList<Course> courseList = new ArrayList<>();
         for (CourseClass current : courseClassList) {
-            Course course = cseSvc.findById(current.getCourse().getCourseId());
-            courseIdList.add(course.getCourseId());
-            courseNumList.add(course.getCourseNum());
-            courseNameList.add(course.getName());
-            courseDescriptionList.add(course.getDescription());
+        	long courseId = current.getCourse().getCourseId();
+        	Course course = cseSvc.findById(courseId);
+        	if(!courseList.contains(course)) {
+        		courseList.add(course);
+        	}
         }
+        model.addAttribute("courseList", courseList);
+        return "lecturer-course-list";
+    }
 
-        model.addAttribute("courseClassList", courseClassList);
-        model.addAttribute("courseIdList", courseIdList);
-        model.addAttribute("courseNumList", courseNumList);
-        model.addAttribute("courseNameList", courseNameList);
-        model.addAttribute("courseDescriptionList", courseDescriptionList);
+    @RequestMapping(value = "/lecturer/classList/{courseId}", method = RequestMethod.GET)
+    public String viewClassList(@PathVariable long courseId, Model model) {
+    	Course course = cseSvc.findById(courseId);
+    	ArrayList<CourseClass> classList = cseClsSvc.findByCourseId(courseId);
+    	model.addAttribute("course", course);
+        model.addAttribute("classList", classList);
         return "lecturer-class-list";
     }
 
-    @RequestMapping(value = "/lecturer/class/{classId}", method = RequestMethod.GET)
-    public String enrollmentList(@PathVariable long classId, Model model) {
-        ArrayList<Enrollment> enrollmentList = enrlSvc.findByClassId(classId);
-        ArrayList<String> studentFirstName = new ArrayList<>();
-        ArrayList<String> studentLastName = new ArrayList<>();
-        Course courseGet = null;
-
-        for (Enrollment current : enrollmentList) {
-            Student student = stuSvc.findByStudentId(current.getStudent().getStudentId());
-            if (courseGet == null) {
-                Course course = cseSvc.findById(current.getCourseClass().getCourse().getCourseId());
-                courseGet = course;
-            }
-            studentFirstName.add(student.getFirstName());
-            studentLastName.add(student.getLastName());
-        }
-
+    @RequestMapping(value = "/lecturer/studentList/{classId}", method = RequestMethod.GET)
+    public String viewStudentList(@PathVariable long classId, Model model) {
+    	CourseClass courseClass = cseClsSvc.findById(classId);
+    	Course course = cseSvc.findById(courseClass.getCourse().getCourseId());
+    	ArrayList<Enrollment> enrollmentList = enrlSvc.findByClassId(classId);
+    	model.addAttribute("courseClass", courseClass);
+    	model.addAttribute("course", course);
         model.addAttribute("enrollmentList", enrollmentList);
-        model.addAttribute("course", courseGet);
-        model.addAttribute("firstName", studentFirstName);
-        model.addAttribute("lastName", studentLastName);
-        return "lecturer-class-view";
+    	return "lecturer-student-list";
     }
-
-    @RequestMapping(value = "/lecturer/grade/{enrollmentId}", method = RequestMethod.GET)
+    
+    @RequestMapping(value = "/lecturer/gradeStudent/{enrollmentId}", method = RequestMethod.GET)
     public String showGradeCourse(@PathVariable long enrollmentId, Model model) {
         Enrollment enrollment = enrlSvc.findById(enrollmentId);
+        CourseClass courseClass = cseClsSvc.findById(enrollment.getCourseClass().getClassId());
         Course course = cseSvc.findById(enrollment.getCourseClass().getCourse().getCourseId());
-        CourseClass courseClass = cseClsSvc.findByClassId(enrollment.getCourseClass().getClassId());
         Student student = stuSvc.findByStudentId(enrollment.getStudent().getStudentId());
 
         model.addAttribute("enrollment", enrollment);
@@ -160,7 +158,7 @@ public class LecturerController {
         return "lecturer-grade-student";
     }
 
-    @RequestMapping(value = "/lecturer/grade/{enrollmentId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/lecturer/gradeStudent/{enrollmentId}", method = RequestMethod.POST)
     public String gradeCourse(@PathVariable long enrollmentId, @ModelAttribute("enrollment") Enrollment enrollment) {
         if (enrollment.getScore() == null) {
             System.out.println("Score cannot by empty");
@@ -173,6 +171,70 @@ public class LecturerController {
         currentEnrollment.setScore(enrollment.getScore());
         enrlSvc.update(currentEnrollment);
         long classId = currentEnrollment.getCourseClass().getClassId();
-        return "redirect:/lecturer/class/" + classId;
+        return "redirect:/lecturer/studentList/" + classId;
     }
+
+	@GetMapping(value = "/lecturer/performanceList")
+	public String studentperformancePage(HttpSession session, Model model) {
+		long lecturerId = retrieveLecturerId(session);
+		ArrayList<CourseClass> classIdList = cseClsSvc.findByLecturerId(lecturerId);
+		ArrayList<Enrollment> enrollmentList = new ArrayList<>();
+		for (CourseClass c : classIdList) {			
+			
+			enrollmentList.addAll(enrlSvc.findByClassId(c.getClassId()));
+		}
+
+		ArrayList<Student> stdList = new ArrayList<>();
+		ArrayList<Enrollment> updateEnrlList = new ArrayList<>();
+		for(Enrollment e : enrollmentList) {
+			if(e.getEnrollmentStatus()==EnrollmentEnum.FAILED ||
+			   e.getEnrollmentStatus()==EnrollmentEnum.COMPLETED || 
+			   e.getEnrollmentStatus()==EnrollmentEnum.CONFIRMED) {
+			   updateEnrlList.add(e);
+			    	}		
+		}
+
+		for (Enrollment current : updateEnrlList) {
+			long stdId = current.getStudent().getStudentId();
+			boolean isDuplicate = false;
+
+			for (Student std : stdList) {
+				if (stdId == std.getStudentId()) {
+					isDuplicate = true;
+					break;
+				}
+			}
+
+			if (!isDuplicate) {
+				stdList.add(stuSvc.findByStudentId(stdId));
+			}
+		}
+		model.addAttribute("stdList", stdList);
+		return "lecturer-view-std-performance";
+	}
+	@GetMapping(value="/lecturer/performance/{studentId}")
+	public String viewStudentDetails(@PathVariable long studentId, HttpSession session, Model model) {
+		long lecturerId = retrieveLecturerId(session);
+	    ArrayList<CourseClass> ccList = cseClsSvc.findByLecturerId(lecturerId);
+	    ArrayList<Enrollment> enrList = new ArrayList<>();
+	    for (CourseClass cc : ccList) {
+	        enrList.addAll(enrlSvc.findByClassId(cc.getClassId()));
+	    }
+	    ArrayList<Enrollment> updatedEnroll= new ArrayList<>();
+	    for(Enrollment e : enrList) {
+	    	if(e.getStudent().getStudentId()==studentId && 
+	    	  (e.getEnrollmentStatus()==EnrollmentEnum.FAILED ||
+	    	   e.getEnrollmentStatus()==EnrollmentEnum.COMPLETED || 
+	    	   e.getEnrollmentStatus()==EnrollmentEnum.CONFIRMED)) {
+	    		updatedEnroll.add(e);
+	    	}
+	    	
+	    }
+	    model.addAttribute("enrollList", updatedEnroll);
+	    model.addAttribute("student",stuSvc.findByStudentId(studentId));
+	    
+	    return "lec-view-std-detail";
+	}
+
+
 }

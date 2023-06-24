@@ -1,90 +1,95 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Enrollment List</title>
+    <title>EnrolList</title>
     <link rel="stylesheet" href="/css/detail.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css">
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/student-enrollment-tables.css}"/>
+    <link rel="stylesheet" href="/css/student-enrollment-list.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+
     <style>
-        #calendar {
-            padding: 60px;
+        .filter-container {
+            display: flex;
+            align-items: flex-end;
         }
+
+        .filter-label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .datepicker-wrapper {
+            width: 100px;
+            margin-right: 10px;
+        }
+
+        .datepicker-input {
+            height: 20px;
+        }
+
+        .clear-filter-button {
+            padding: 2px;
+        }
+
     </style>
 </head>
 
 <body>
-<header>
+  <header>
     <div th:include="studentPage.html"></div>
-</header>
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th>Courses</th>
-        <th>StartTime - EndTime</th>
-        <th>ClassRoom</th>
-        <th>EnrollmentStatus</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="enrol : ${enrollments}">
-        <td th:text="${enrol.CourseClass.Course.name}"></td>
-        <td th:text="${enrol.CourseClass.startDate + ' - ' + enrol.CourseClass.getFormatEndDate()}"></td>
-        <td th:text="${enrol.CourseClass.roomNum}"></td>
-        <td th:text="${enrol.enrollmentStatus}"></td>
-    </tr>
-    </tbody>
-</table>
+  </header>    
+  <div class="container">
+    <h1>EnrollmentStatus</h1>
+    <table class="table table-striped"id="enrolTable" >
+        <thead>
+        <tr>
+            <th>Courses</th>
+            <th>StartTime</th>
+            <th>EndTime</th>                 
+            <th>ClassRoom</th>
+            <th>EnrollmentStatus</th>
+            
+        </tr>
+        </thead>
+        <tbody>
 
-<div id="calendar"></div>
-
-<script>
-        document.addEventListener('DOMContentLoaded', function() {
-        // Retrieve the enrollment data from the table
-        const enrollmentData = [];
-        const enrollmentRows = document.querySelectorAll("tbody tr");
-        enrollmentRows.forEach(function(row) {
-            const courseName = row.cells[0].textContent.trim();
-            const dateRange = row.cells[1].textContent.trim();
-            const roomNum = row.cells[2].textContent.trim();
-            const enrollmentStatus = row.cells[3].textContent.trim();
-
-            // Filter events based on enrollment status
-            if (enrollmentStatus === "CONFIRMED") {
-                // Parse the start and end dates from the date range
-                const [startDate, endDate] = dateRange.split(" - ");
-
-                const event = {
-                    title: courseName,
-                    start: startDate,
-                    end: endDate,
-                    description: `Room: ${roomNum}\nEnrollment Status: ${enrollmentStatus}`,
-                };
-
-                // Add the event to the enrollment data array
-                enrollmentData.push(event);
-            }
-        });
-
-        // initialize fullcalendar
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
-          headerToolbar: {
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek'
-            },
-          events: enrollmentData,
-          eventDidMount: function(info) {
-                // Display the event description directly on the calendar
-                const descriptionElement = document.createElement('div');
-                descriptionElement.classList.add('event-description');
-                descriptionElement.innerHTML = info.event.extendedProps.description;
-                info.el.appendChild(descriptionElement);
-            }
-        });
-        calendar.render();
-      });
-    </script>
+        
+        <tr th:each="enrol : ${enrollments}">
+            <td th:text="${enrol.CourseClass.Course.name}"></td>
+            <td th:text="${enrol.CourseClass.getFormatStartDate()}"></td>
+            <td th:text="${enrol.CourseClass.getFormatEndDate()}"></td>
+            <td th:text="${enrol.CourseClass.roomNum}"></td>
+            <td th:text="${enrol.enrollmentStatus}"></td>
+        </tr>
+        </tbody>
+    </table>
+  </div>
 </body>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script th:inline="javascript">
+  
+  $(document).ready(function () {
+    var table = $('#enrolTable').DataTable({
+        "dom": '<"top"B>fltr<"bottom"ip><"clear">',
+        "lengthChange": false, // Disable the length change option
+        "pageLength": 5, // Set the initial number of rows per page
+        "search": true
+    });
+
+    // Apply DataTable options
+    table.on('draw', function () {
+        var info = table.page.info();
+        $('#pageInfo').text('Page ' + (info.page + 1) + ' of ' + info.pages);
+    });
+});
+</script>
 </html>

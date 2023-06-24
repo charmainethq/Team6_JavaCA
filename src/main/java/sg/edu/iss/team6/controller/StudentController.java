@@ -1,15 +1,10 @@
 package sg.edu.iss.team6.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import sg.edu.iss.team6.controller.exception.ResourceNotFoundException;
+import sg.edu.iss.team6.exception.ResourceNotFoundException;
 import sg.edu.iss.team6.model.*;
 import sg.edu.iss.team6.repository.EnrollmentRepository;
 import sg.edu.iss.team6.service.*;
@@ -19,8 +14,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -173,7 +166,6 @@ public class StudentController {
         return "student-register-success";
     }
 
-
     @GetMapping("/confirmEnrollment")
     public String createEnrollmentFromUrl(@RequestParam("studentId") Long studentId, @RequestParam("classId") Long classId, Model model) {
         Enrollment enrollment = enrollmentService.findByStudentAndClass(classId,studentId).orElse(null);
@@ -221,7 +213,7 @@ public class StudentController {
 
         String username= (String)session.getAttribute("username");
         Student curntStudent= studentService.findByUserUsername(username);
-        
+
         model.addAttribute("enrollments", studentService.getStudentEnroll(curntStudent.getStudentId()));
         return "stu-enrollist";
     }

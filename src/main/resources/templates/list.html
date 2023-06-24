@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Spring Boot Session Management Example</title>
+</head>
+
+<body>
+	<h2>My Todo List</h2>
+	<div>
+		<ul th:each="todo: ${todoList}">
+			<li th:text="${todo}"></li>
+		</ul>
+		<div>
+			<form th:action="@{/add}" method="post">
+				<input th:name="todo" type="text" />
+				<input type="submit" value="Add Todo" />
+			</form>
+		</div>
+		<br />
+		<div>
+			<form th:action="@{/clear-session}" method="post">
+				<input type="submit" value="Clear Session" />
+			</form>
+		</div>
+</body>
+
+</html>

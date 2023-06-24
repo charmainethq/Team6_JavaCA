@@ -11,7 +11,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
-    
+
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         HttpSession session = request.getSession();
@@ -31,6 +32,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         response.sendRedirect("/login"); // Redirect unauthorized users to the login page
         return false;
     }
-
 }
+
 

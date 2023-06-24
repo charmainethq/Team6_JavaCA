@@ -16,12 +16,14 @@
             <i style="font-size:30px" class="fa">&#xf137;</i>
         </button>
         <h1>Create Lecturer</h1>
+
         <label for="username">Username:</label> <span th:if="${#fields.hasErrors('user.username')}" th:errors="*{user.username}"
                                                       style="color: #bf1111; font-size: 12px;"></span>
         <select id="username" name="username" required>
             <option value="">- Select a username -</option>
             <option th:each="u : ${lecUsers}" th:value="${u.username}" th:text="${u.username}" th:if="${u.username.startsWith('lec')}"></option>
         </select><br/>
+
 
         <label for="firstName">First Name:</label> <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
                                                          style="color: #bf1111; font-size: 12px;"></span>

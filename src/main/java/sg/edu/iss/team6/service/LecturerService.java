@@ -17,8 +17,6 @@ public interface LecturerService {
     Lecturer findById(Long id);
 
 
-	// Lecturer findById(long id);
-
 
     Lecturer create(Lecturer l);
 
@@ -30,6 +28,8 @@ public interface LecturerService {
 
     long delete(long id);
 
-    List<Lecturer>findByUser_Username(String username);
+    Long findLecturerIdByUserUsername(String username);
+
+    Lecturer findByUsername(String username);
 
 }
