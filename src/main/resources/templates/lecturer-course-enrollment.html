@@ -81,9 +81,11 @@
             classRows.forEach(function (row) {
                 // Retrieve the class information from the row
                 const classId = row.cells[0].textContent.toLowerCase();
+
                 const courseNum = row.cells[1].textContent.toLowerCase();
                 const courseName =  row.cells[2].textContent.toLowerCase();
-                const roomNum = row.cells[4].textContent.toLowerCase();
+                const roomNum = row.cells[3].textContent.toLowerCase();
+
 
                 // Check if any of the class information matches the search input
                 if (classId.includes(searchInput) || 

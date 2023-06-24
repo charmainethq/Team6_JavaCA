@@ -48,15 +48,9 @@ public class LecturerController {
     private StudentService stuSvc;
 
     private Long retrieveLecturerId(HttpSession sessionObj) {
-        String lectuerUsername = (String) sessionObj.getAttribute("username");
-        List<Lecturer> lecturerList = lectSvc.findByUser_Username(lectuerUsername);
-        long lecturerId = 1; // mock up a lecturer ID
-        for(Lecturer lecturer : lecturerList) {
-            if(lecturer != null) {
-                lecturerId = lecturer.getLecturerId();
-            }
-        }
-        return lecturerId;
+		String lecturerUsername = (String) sessionObj.getAttribute("username");
+		Lecturer lecturer = lectSvc.findByUsername(lecturerUsername);
+		return lecturer.getLecturerId();
     }
     
     @GetMapping("/lecturer")
@@ -65,51 +59,50 @@ public class LecturerController {
     }
 // Lecturer view courses taught
 
-    @RequestMapping(value = "/lecturer/coursesTaught/{lecturerId}", method = RequestMethod.GET)
-    public String coursesTaught(@PathVariable long lecturerId, Model model) {
+	@RequestMapping(value = "/lecturer/coursesTaught/", method = RequestMethod.GET)
+	public String coursesTaught(HttpSession session, Model model) {
+		long lecturerId = retrieveLecturerId(session);
+		Lecturer lecturer = lectSvc.findById(lecturerId);
 
-        Lecturer lecturer = lectSvc.findById(lecturerId);
+		List<Long> courseIdList = cseClsSvc.findDistinctCourseId(lecturerId);
+		ArrayList<Course> courseList = new ArrayList<>();
 
-        List<Long> courseIdList = cseClsSvc.findDistinctCourseId(lecturerId);
-        ArrayList<Course> courseList = new ArrayList<>();
+		for (long courseId : courseIdList) {
+			Course course = cseSvc.findById(courseId);
+			courseList.add(course);
+		}
 
-        for (long courseId : courseIdList) {
-            Course course = cseSvc.findById(courseId);
-            courseList.add(course);
-        }
-
-        model.addAttribute("lecturer", lecturer);
-        model.addAttribute("courseList", courseList);
-        return "lecturer-courses-taught";
-    }
+		model.addAttribute("lecturer", lecturer);
+		model.addAttribute("courseList", courseList);
+		return "lecturer-courses-taught";
+	}
 
 // Lecturer view courses enrolled
-    
-    @RequestMapping(value = "/lecturer/courseEnrollment/{lecturerId}", method = RequestMethod.GET)
-    public String courseEnrollmentList(@PathVariable long lecturerId, Model model) {
 
-        Lecturer lecturer = lectSvc.findById(lecturerId);
-        ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
-        ArrayList<Course> courseList = new ArrayList<>();
-        ArrayList<Enrollment> enrollmentList = new ArrayList<>();
+	@RequestMapping(value = "/lecturer/courseEnrollment/", method = RequestMethod.GET)
+	public String courseEnrollmentList(HttpSession session, Model model) {
+		long lecturerId = retrieveLecturerId(session);
+		Lecturer lecturer = lectSvc.findById(lecturerId);
+		ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
+		ArrayList<Course> courseList = new ArrayList<>();
+		ArrayList<Enrollment> enrollmentList = new ArrayList<>();
 
-        for (CourseClass courseClass : courseClassList) {
-            Course course = cseSvc.findById(courseClass.getCourse().getCourseId());
-            courseList.add(course);
-            List<Enrollment> enrollments = enrlSvc.findByClassId(courseClass.getClassId());
-            for (Enrollment e: enrollments)
-                enrollmentList.add(e);
+		for (CourseClass courseClass : courseClassList) {
+			Course course = cseSvc.findById(courseClass.getCourse().getCourseId());
+			courseList.add(course);
+			List<Enrollment> enrollments = enrlSvc.findByClassId(courseClass.getClassId());
+			for (Enrollment e: enrollments)
+				enrollmentList.add(e);
 
-        }
-        model.addAttribute(enrollmentList);
-        model.addAttribute(lecturer);
-        model.addAttribute(courseClassList);
-        model.addAttribute(courseList);
+		}
+		model.addAttribute(enrollmentList);
+		model.addAttribute(lecturer);
+		model.addAttribute(courseClassList);
+		model.addAttribute(courseList);
 
 
-        return "lecturer-course-enrollment";
-    }
-
+		return "lecturer-course-enrollment";
+	}
     @RequestMapping(value = "/lecturer/selectCourseAndClass/", method = RequestMethod.GET)
     public String selectCourseAndClass(HttpSession sessionObj, Model model) {
     	long lecturerId = retrieveLecturerId(sessionObj);
@@ -148,9 +141,9 @@ public class LecturerController {
 
 // GPA calculator
     private double calculateGpa(long score) {
-    	
+
     	double gpa = 0.0; // < 40
-    	
+
     	if(score >= 80) { // 80 to 100
     		gpa = 5.0;
     	}
