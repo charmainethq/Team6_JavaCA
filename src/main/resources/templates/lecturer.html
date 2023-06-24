@@ -13,7 +13,7 @@
   <header>
     <div th:include="lecturer-home-page.html"></div>
   </header>
-  <h1>Welcome to Lecturer Page!</h1>
+  <h1>Welcome, <span th:text="${name}">!</span></h1>
   <div class="img-container">
     <img src="image/lecturer.jpeg" alt="Lecturer" class="img-fluid" style="max-width: 45%;">
   </div>

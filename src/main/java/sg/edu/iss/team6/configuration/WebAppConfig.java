@@ -1,8 +1,5 @@
 package sg.edu.iss.team6.configuration;
 
-import javax.annotation.processing.SupportedAnnotationTypes;
-import javax.naming.AuthenticationException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

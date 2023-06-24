@@ -37,7 +37,7 @@
 					<td th:text="${student.studentId}"></td>
 					<td th:text="${student.firstName}"></td>
 					<td th:text="${student.lastName}"></td>
-					<td th:text="${student.gpa}"></td>
+					<td th:text="${#numbers.formatDecimal(student.gpa, 1, 'POINT', 2, 'POINT')}"></td>
 					<td th:text="${student.contactNo}"></td>
 					<td th:text="${student.email}"></td>
 				    <td><a th:href="@{/lecturer/performance/} + ${student.studentId}">View Details</a></td>

@@ -8,8 +8,6 @@ import sg.edu.iss.team6.model.User;
 
 import java.util.*;
 
-import java.util.ArrayList;
-
 
 public interface StudentService {
     ArrayList<Student> findAllStudents();

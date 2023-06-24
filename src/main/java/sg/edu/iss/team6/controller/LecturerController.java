@@ -56,6 +56,9 @@ public class LecturerController {
     
     @GetMapping("/lecturer")
     public String lecturerHomePage(HttpSession sessionObj, Model model) {
+		String lecturerUsername = (String) sessionObj.getAttribute("username");
+		Lecturer lecturer = lectSvc.findByUsername(lecturerUsername);
+		model.addAttribute("name",lecturer.getFullName());
         return "lecturer";
     }
 // Lecturer view courses taught
@@ -80,7 +83,7 @@ public class LecturerController {
 
 // Lecturer view courses enrolled
 
-	@RequestMapping(value = "/lecturer/courseEnrollment/", method = RequestMethod.GET)
+	@RequestMapping(value = "/lecturer/viewClasses/", method = RequestMethod.GET)
 	public String courseEnrollmentList(HttpSession session, Model model) {
 		long lecturerId = retrieveLecturerId(session);
 		Lecturer lecturer = lectSvc.findById(lecturerId);
@@ -130,7 +133,7 @@ public class LecturerController {
     	ArrayList<Enrollment> confirmedEnrollmentList = new ArrayList<>();
     	for(Enrollment enrollment : enrollmentList) {
     		//check enrollment status is only confirmed
-    		if(enrollment.getEnrollmentStatus().equals(EnrollmentEnum.CONFIRMED)) {
+    		if(enrollment.getEnrollmentStatus().equals(EnrollmentEnum.CONFIRMED) || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.COMPLETED)) {
     			confirmedEnrollmentList.add(enrollment);
     		}
     	}

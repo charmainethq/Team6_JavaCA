@@ -52,7 +52,8 @@
 			<thead>
 				<tr>
 					<th>Class Id</th>
-					<th>Enrolment Id</th>
+					<th>Course Number</th>
+					<th>Course Name</th>
 					<th>Enrollment Status</th>
 					<th>Score</th>
 
@@ -61,7 +62,8 @@
 			<tbody>
 				<tr th:each="enroll : ${enrollList}" id="enrollRow">
 					<td th:text="${enroll.courseClass.classId}"></td>
-					<td th:text="${enroll.enrollmentId}"></td>
+					<td th:text="${enroll.courseClass.getCourse().getCourseNum()}"></td>
+					<td th:text="${enroll.courseClass.getCourse().getName()}"></td>
 					<td th:text="${enroll.enrollmentStatus}"></td>
 					<td th:text="${enroll.score}"></td>
 				</tr>
