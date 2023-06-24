@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
     <title>Classes</title>
@@ -16,7 +19,10 @@
         <label for="searchInput">Search:</label>
         <input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
     </div>
-
+<!--    <select id="viewSelect" class="view-select" onchange="changeView()">-->
+<!--        <option value="normal">Normal View</option>-->
+<!--        <option value="timetable">Timetable View</option>-->
+<!--    </select>-->
     <table class="table table-striped">
         <thead>
         <tr>
@@ -60,46 +66,46 @@
     <a class="btn btn-success custom-button" th:href="@{/admin/course/class/create/{id}(id=${course.courseId})}">
         Create New Class
     </a>
-
     <script>
-            function filterTable() {
-                // Retrieve the search input value
-                const searchInput = document.querySelector('#searchInput').value.toLowerCase();
+        function filterTable() {
+            // Retrieve the search input value
+            const searchInput = document.querySelector('#searchInput').value.toLowerCase();
 
-                // Retrieve all class rows
-                const classRows = document.querySelectorAll('#classRow');
+            // Retrieve all class rows
+            const classRows = document.querySelectorAll('#classRow');
 
-                // Loop through class rows and check if they match the search input
-                classRows.forEach(function(row) {
-                    // Retrieve the class information from the row
-                    const classId = row.cells[0].textContent.toLowerCase();
-                    const roomNum = row.cells[1].textContent.toLowerCase();
-                    const size = row.cells[2].textContent.toLowerCase();
-                    const lecturer = row.cells[3].textContent.toLowerCase();
-                    const confirmed = row.cells[4].textContent.toLowerCase();
-                    const startDate = row.cells[5].textContent.toLowerCase();
+            // Loop through class rows and check if they match the search input
+            classRows.forEach(function(row) {
+                // Retrieve the class information from the row
+                const classId = row.cells[0].textContent.toLowerCase();
+                const roomNum = row.cells[1].textContent.toLowerCase();
+                const size = row.cells[2].textContent.toLowerCase();
+                const lecturer = row.cells[3].textContent.toLowerCase();
+                const confirmed = row.cells[4].textContent.toLowerCase();
+                const startDate = row.cells[5].textContent.toLowerCase();
 
-                    // Check if any of the admin information matches the search input
-                    if (
-                        classId.includes(searchInput) ||
-                        roomNum.includes(searchInput) ||
-                        size.includes(searchInput) ||
-                        lecturer.includes(searchInput) ||
-                        confirmed.includes(searchInput) ||
-                        startDate.includes(searchInput)
-                    ) {
-                        // Show the row if it matches the search input
-                        row.style.display = '';
-                    } else {
-                        // Hide the row if it doesn't match the search input
-                        row.style.display = 'none';
-                    }
-                });
-            }
+                // Check if any of the admin information matches the search input
+                if (
+                    classId.includes(searchInput) ||
+                    roomNum.includes(searchInput) ||
+                    size.includes(searchInput) ||
+                    lecturer.includes(searchInput) ||
+                    confirmed.includes(searchInput) ||
+                    startDate.includes(searchInput)
+                ) {
+                    // Show the row if it matches the search input
+                    row.style.display = '';
+                } else {
+                    // Hide the row if it doesn't match the search input
+                    row.style.display = 'none';
+                }
+            });
+        }
 
-            function confirmDelete() {
-                return confirm('Are you sure you want to delete this class?');
-            }
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this class?');
+        }
+
         </script>
 
 </div>
