@@ -11,13 +11,17 @@
     </header>
 	<div class="container">
 		<div>
-			<h1>Select The Student To Be Graded</h1>
+			<h2>Grade A Course</h2>
 		</div>
 		<br/>
-		<div>
-			<div>
+		<div style="width: 100%; overflow: hidden;">
+			<div style="width: 500px; float: left;">
 				<h4>Course Details</h4>
-	
+
+				<div class="details">
+					<label>Course ID:</label> <span th:text="${course.courseId}"></span>
+				</div>
+
 				<div class="details">
 					<label>Course Name:</label> <span th:text="${course.name}"></span>
 				</div>
@@ -26,8 +30,8 @@
 						th:text="${course.description}"></span>
 				</div>
 			</div>
-			<br/>
-			<div>
+
+			<div style="margin-left: 620px;">
 				<h4>Class Details</h4>
 	
 				<div class="details">
@@ -44,35 +48,43 @@
 			</div>
 			<br/>
 		</div>
-		<div class="mb-3">
-			<label for="searchInput">Search:</label>
-			<input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
-		</div>
-		
-				<table id="studentTable" class="table table-striped">
-					<thead>
-						<tr>
-							<th onclick="sortTable('studentTable', 0)"><button class="transparent-btn"><span class="sort-text">Student First Name</span><i class="fas fa-sort"></i></button></th>
-							<th onclick="sortTable('studentTable', 1)"><button class="transparent-btn"><span class="sort-text">Student Last Name</span><i class="fas fa-sort"></i></button></th>
-							<th>Score</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="enrollment: ${enrollmentList}" id="studentRow">
-							<td th:text="${enrollment.student.firstName}"></td>
-							<td th:text="${enrollment.student.lastName}"></td>
-							<td>
-								<form th:action="@{/lecturer/gradeStudentList/} + ${enrollment.enrollmentId}" method="post">
-								<input type="text" name="score" required />
-								<button type="submit">Submit</button>
-								</form>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+
+	        <div>
+	        	<div th:if="${param.message1}" class="alert alert-danger" role="alert"><p th:text="${param.message1}"></p></div>
+	            <div th:if="${param.message2}" class="alert alert-warning" role="alert"><p th:text="${param.message2}"></p></div>
+	            <div th:if="${param.message3}" class="alert alert-success" role="alert"><p th:text="${param.message3}"></p></div>
+	        </div>
+	        <br/>
+
+			<div class="mb-3">
+				<label for="searchInput">Search:</label>
+				<input type="text" class="form-control" id="searchInput" placeholder="Enter keywords" oninput="filterTable()">
+			</div>
+ 
+			<table id="studentTable" class="table table-striped">
+				<thead>
+					<tr>
+						<th onclick="sortTable('studentTable', 0)"><button class="transparent-btn"><span class="sort-text">Student First Name</span><i class="fas fa-sort"></i></button></th>
+						<th onclick="sortTable('studentTable', 1)"><button class="transparent-btn"><span class="sort-text">Student Last Name</span><i class="fas fa-sort"></i></button></th>
+						<th>Score</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="enrollment: ${enrollmentList}" id="studentRow">
+						<td th:text="${enrollment.student.firstName}"></td>
+						<td th:text="${enrollment.student.lastName}"></td>
+						<td>
+							<form th:action="@{/lecturer/gradeStudentList/} + ${enrollment.enrollmentId}" th:object="${enrollment}" method="post">
+							<input type="text" id="score" name="score" required />
+							<button type="submit">Submit</button>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 	
 		<br><br>
-		<a th:href="@{/lecturer}"><button>Back to Home Page</button></a>
+		<a th:href="@{/lecturer/selectCourseAndClass/}"><button>Back to Previous Page</button></a>
 	    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 	    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>

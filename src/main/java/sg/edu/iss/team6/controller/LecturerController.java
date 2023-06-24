@@ -4,24 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import sg.edu.iss.team6.model.Course;
 import sg.edu.iss.team6.model.CourseClass;
 import sg.edu.iss.team6.model.Enrollment;
 import sg.edu.iss.team6.model.EnrollmentEnum;
 import sg.edu.iss.team6.model.Lecturer;
-import sg.edu.iss.team6.model.Student;
 import sg.edu.iss.team6.service.CourseClassService;
 import sg.edu.iss.team6.service.CourseService;
 import sg.edu.iss.team6.service.EnrollmentService;
@@ -60,15 +60,6 @@ public class LecturerController {
     
     @GetMapping("/lecturer")
     public String lecturerHomePage(HttpSession sessionObj, Model model) {
-//        String lectuerUsername = (String) sessionObj.getAttribute("username");
-//        List<Lecturer> lecturerList = lectSvc.findByUser_Username(lectuerUsername);
-//        long lecturerId = 0;
-//        for(Lecturer lecturer : lecturerList) {
-//            if(lecturer != null) {
-//                lecturerId = lecturer.getLecturerId();
-//            }
-//        }
-//        model.addAttribute("lecturerId",lecturerId);
         return "lecturer";
     }
 
@@ -148,19 +139,23 @@ public class LecturerController {
     }
 
 	@RequestMapping(value = "/lecturer/gradeStudentList/{enrollmentId}", method = RequestMethod.POST)
-    public String gradeStudent(@PathVariable long enrollmentId, @RequestParam("score") long score) {
-        if (score < 0 || score > 100) {
-            System.out.println("Score out of range !");
-        } else if (score < 40) {
-            System.out.println("Failed !");
-        } else {
-            System.out.println("Passed !");
+	public ModelAndView gradeCourse(@Valid @PathVariable long enrollmentId, @ModelAttribute("enrollment") Enrollment enrollment, BindingResult result) {
+		Enrollment currentEnrollment = enrlSvc.findById(enrollmentId);
+        ModelAndView modelAndView = new ModelAndView("redirect:/lecturer/gradeStudentList/" + currentEnrollment.getCourseClass().getClassId());
+		if(result.hasErrors() || enrollment.getScore() == null) {
+        	String message1 = "Invalid input! Please enter a valid score!";
+        	modelAndView.addObject("message1", message1);
+		}
+		else if(enrollment.getScore() < 0 || enrollment.getScore() > 100) {
+        	String message2 = "Score out of range! Please enter a range between 0 to 100.";
+        	modelAndView.addObject("message2", message2);
         }
-        Enrollment currentEnrollment = enrlSvc.findById(enrollmentId);
-        currentEnrollment.setScore(score);
-        enrlSvc.update(currentEnrollment);
-        long classId = currentEnrollment.getCourseClass().getClassId();
-        return "redirect:/lecturer/gradeStudentList/" + classId;
-    }
-    
+		else {
+			currentEnrollment.setScore(enrollment.getScore());
+			enrlSvc.update(currentEnrollment);
+            String message3 = "Score has been successfully uploaded!";
+            modelAndView.addObject("message3", message3);
+        } 
+        return modelAndView;
+	}
 }
