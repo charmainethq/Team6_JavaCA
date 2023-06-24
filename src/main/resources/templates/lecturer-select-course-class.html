@@ -59,7 +59,6 @@
 		<br/><br/>
 		<a th:href="@{/lecturer}"><button>Back to Home Page</button></a>
 	    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 	    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
 		<script>
 			function filterTable1() {
@@ -67,6 +66,8 @@
 				if(id!=0){
 				var x = document.getElementById('classTable');
 				x.style.display="";
+				var y = document.getElementById('searchBar');
+				y.style.display="";
 				// Retrieve the search input value
 				const searchClass = document.querySelector('#searchClass').value
 						.toLowerCase();

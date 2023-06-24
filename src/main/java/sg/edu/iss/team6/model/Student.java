@@ -40,7 +40,7 @@ public class Student {
     @Size(min=2, max=50, message="Address must be 2-30 characters long")
     private String address;
 
-    private long gpa;
+    private double gpa;
 
     @OneToMany(mappedBy="student")
     @JsonIgnore

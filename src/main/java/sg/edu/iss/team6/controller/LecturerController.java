@@ -140,29 +140,75 @@ public class LecturerController {
     	return "lecturer-student-list";
     }
 
-//	Score to Grade and GPA calculator
-//	Above 85: Grade A+, GPA 5.0	
-//	80 to 84: Grade A, GPA 5.0
-//	75 to 79: Grade A-, GPA 4.5
-//	70 to 74: Grade B+, GPA 4.0
-//	65 to 69: Grade B, GPA 3.5
-//	60 to 64: Grade B-, GPA 3.0
-//	55 to 59: Grade C+, GPA 2.5
-//	50 to 54: Grade C, GPA 2.0
-//	45 to 49: Grade D+, GPA 1.5
-//	40 to 44: Grade D, GPA 1.0
-//  Below 40: Grade F, GPA 0.0	
+// GPA calculator
+    private double calculateGpa(long score) {
+    	
+    	double gpa = 0.0; // < 40
+    	
+    	if(score >= 80) { // 80 to 100
+    		gpa = 5.0;
+    	}
+    	else if(score >= 75 && score < 80) { // 75 to 79
+    		gpa = 4.5;
+    	}
+    	else if(score >= 70 && score < 75) { // 70 to 74
+    		gpa = 4.0;
+    	}
+    	else if(score >= 65 && score < 70) { // 65 to 69
+    		gpa = 3.5;
+    	}
+    	else if(score >= 60 && score < 65) { // 60 to 64
+    		gpa = 3.0;
+    	}
+    	else if(score >= 55 && score < 60) { // 55 to 59
+    		gpa = 2.5;
+    	}
+    	else if(score >= 50 && score < 55) { // 50 to 54
+    		gpa = 2.0;
+    	}
+    	else if(score >= 45 && score < 50) { // 45 to 49
+    		gpa = 1.5;
+    	}
+    	else { // 40 to 44
+    		gpa = 1.0;
+    	}
+    	return gpa;
+    }
 
 // Get the credits of the course
-	
-// If student GPA = 0 (meaning first course), GPA = score GPA
-// Else, retrieve all the scores and its respective credits
-// Then tabulate based on the Cumulative GPA below
-	
-//	 Cumulative GPA calculator
-//	CGPA = (Sum of GPA * Credits) / (Sum of Credits
-//	e.g. (C1 GPA * C1 Credits) + (C2 GPA * C2 Credits) + any others / (Total number of Modular Credits)
+	private int retrieveCourseCredits(long enrollmentId) {
+		long classId = enrlSvc.findByEnrollmentId(enrollmentId).getCourseClass().getClassId();
+		long courseId = cseClsSvc.findByClassId(classId).getCourse().getCourseId();
+		int courseCredits = cseSvc.findById(courseId).getCredits();
+		return courseCredits;
+	}
 
+// Cumulative GPA calculator
+	private double calculateCumulativeGpa(long enrollmentId, double gpa, int credits) {
+		long studentId = enrlSvc.findByEnrollmentId(enrollmentId).getStudent().getStudentId();
+		double retrieveGpa = stuSvc.findByStudentId(studentId).getGpa();
+		
+		// student first enrolled course, Cumulative GPA = first course GPA
+		if(retrieveGpa == 0.0) { 
+			return retrieveGpa = gpa; 
+		}
+		
+		// student has enrolled into other courses before, need to breakdown current Cumulative GPA and calculate new Cumulative GPA
+		List<Enrollment> studentEnrolledClass = enrlSvc.findByStudent(stuSvc.findByStudentId(studentId));
+		int totalCredits = 0;
+		double sumCurrentGpa = 0;
+		for(Enrollment enrolled : studentEnrolledClass) {
+			if(enrolled.getEnrollmentStatus() == EnrollmentEnum.FAILED || enrolled.getEnrollmentStatus() == EnrollmentEnum.COMPLETED) {
+				long currentScore = enrlSvc.findByEnrollmentId(enrolled.getEnrollmentId()).getScore();
+				int currentCredits = retrieveCourseCredits(enrolled.getEnrollmentId());
+				sumCurrentGpa += calculateGpa(currentScore) * currentCredits; // Sum of GPA * Credits
+				totalCredits += currentCredits;
+			}
+		}
+		double cumulativeGpa = (sumCurrentGpa + (gpa * credits) ) / (totalCredits + credits);
+		return cumulativeGpa;
+	}
+	
 // Update the database with the input score, calculated GPA and changed enrollment status
 
 	@RequestMapping(value = "/lecturer/gradeStudentList/{enrollmentId}", method = RequestMethod.POST)
@@ -178,14 +224,21 @@ public class LecturerController {
         	modelAndView.addObject("message2", message2);
         }
 		else {
-//			if(enrollment.getScore() < 40) {
-//				currentEnrollment.setEnrollmentStatus(EnrollmentEnum.FAILED);
-//			}
-//			else {
-//				currentEnrollment.setEnrollmentStatus(EnrollmentEnum.COMPLETED);
-//			}
-			currentEnrollment.setScore(enrollment.getScore());
+			long score = enrollment.getScore();
+			double gpa = calculateGpa(score);
+			int credits = retrieveCourseCredits(enrollmentId);
+			double cumulativeGpa = calculateCumulativeGpa(enrollmentId, gpa, credits);
+			if(score < 40) {
+				currentEnrollment.setEnrollmentStatus(EnrollmentEnum.FAILED);
+			}
+			else {
+				currentEnrollment.setEnrollmentStatus(EnrollmentEnum.COMPLETED);
+			}
+			currentEnrollment.setScore(score);
 			enrlSvc.update(currentEnrollment);
+			Student student = stuSvc.findByStudentId(currentEnrollment.getStudent().getStudentId());
+			student.setGpa(cumulativeGpa);
+			stuSvc.update(student);
             String message3 = "Score has been successfully uploaded!";
             modelAndView.addObject("message3", message3);
         } 
