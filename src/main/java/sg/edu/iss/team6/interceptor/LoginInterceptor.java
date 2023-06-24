@@ -19,7 +19,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (session.getAttribute("username") != null) {
             String username = (String) session.getAttribute("username");
             String role = username.substring(0, 3); // Extract the role from the username
-            
+
             if (role.equals("adm") && request.getRequestURI().startsWith("/admin")) {
                 return true; // Allow access for admin role to /admin URLs
             } else if (role.equals("stu") && request.getRequestURI().startsWith("/student")) {
