@@ -95,8 +95,7 @@ public class StudentRestController {
 
 
     @GetMapping(value = "/fetchClasses/{courseId}")
-    public ResponseEntity<List<CourseClass>> getClassesByCourseId(
-            @PathVariable("courseId") Long courseId) {
+    public ResponseEntity<List<CourseClass>> getClassesByCourseId(@RequestHeader("X-Username") String username, @PathVariable("courseId") Long courseId) {
 
         try {
             List<CourseClass> classes = classService.findByCourseId(courseId);
@@ -109,8 +108,8 @@ public class StudentRestController {
     }
 
     @GetMapping(value = "/fetchLecturerNames/{courseId}")
-    public ResponseEntity<List<String>> getLecturerNamesByCourseId(
-            @PathVariable("courseId") Long courseId) {
+    public ResponseEntity<List<String>> getLecturerNamesByCourseId(@RequestHeader("X-Username") String username,
+                                                                   @PathVariable("courseId") Long courseId) {
 
         try {
             List<CourseClass> classes = classService.findByCourseId(courseId);
@@ -127,7 +126,7 @@ public class StudentRestController {
 
 
     @GetMapping(value = "/fetchCourse/{courseId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Course> getClassByCourseId(@PathVariable("courseId") Long courseId) {
+    public ResponseEntity<Course> getClassByCourseId(@RequestHeader("X-Username") String username, @PathVariable("courseId") Long courseId) {
         Course course = courseService.findCourseByCourseId(courseId);
         if (course == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -137,7 +136,7 @@ public class StudentRestController {
 
 
     @GetMapping(value = "/fetchStudent")
-    public ResponseEntity<Student> getStudent(HttpSession session,@RequestHeader("X-Username") String username) {
+    public ResponseEntity<Student> getStudent(@RequestHeader("X-Username") String username) {
         Student student = studentService.findByUserUsername(username);
         if (student == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -149,13 +148,11 @@ public class StudentRestController {
 
 
     @PostMapping(value = "/register/{classId}/{courseId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> registerClass(@PathVariable("classId") Long classId, @PathVariable("courseId") Long courseId) {
+    public ResponseEntity<Boolean> registerClass(@RequestHeader("X-Username") String username, @PathVariable("classId") Long classId, @PathVariable("courseId") Long courseId) {
 
         boolean success = true;
 
-        // TODO: Replace with session
-        Long studentId = testId;
-        Student student = studentService.findByStudentId(studentId);
+        Student student = studentService.findByUserUsername(username);
 
         CourseClass courseClass = classService.findByClassId(classId);
         //Course course = courseService.findCourseByCourseId(courseId);
@@ -165,7 +162,7 @@ public class StudentRestController {
 
 
         // Find the current enrollment status if any
-        Enrollment existingEnrollment = enrollmentService.findByStudentAndClass(classId, studentId).orElse(null);
+        Enrollment existingEnrollment = enrollmentService.findByStudentAndClass(classId, student.getStudentId()).orElse(null);
         if (existingEnrollment != null)
             System.out.println(existingEnrollment.getEnrollmentStatus());
 
@@ -193,7 +190,7 @@ public class StudentRestController {
             // Send confirmation email with link
             String testRecepientEmail = "sa56team6@outlook.com";
 
-            String confirmationLink = emailUtility.generateConfirmationLink(studentId, classId);
+            String confirmationLink = emailUtility.generateConfirmationLink(student.getStudentId(), classId);
             emailService.sendConfirmationEmail(testRecepientEmail, confirmationLink, student.getFullName(), courseClass);
         }
         return ResponseEntity.ok(success);
