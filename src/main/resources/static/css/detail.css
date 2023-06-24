@@ -18,13 +18,16 @@ body {
     border-radius: 5px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
+.container .details {
+    margin-left: 20px;
+}
 
 h1 {
     text-align: center;
     color: #4287f5;
     font-size: 36px;
     margin-top: 0;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
 }
 
 label {
@@ -54,5 +57,16 @@ label {
 .actions a.btn:nth-child(2) {
     background-color: #ff0000;
     color: #ffffff;
+}
+.icon-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            margin-top: -5px;
+            margin-bottom: -10px;
+            margin-left: -3px
+        }
+.fa {
+    color: #b5b5b5;
 }
 

@@ -3,20 +3,19 @@ package sg.edu.iss.team6.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import sg.edu.iss.team6.model.Admin;
 import sg.edu.iss.team6.model.Enrollment;
+import sg.edu.iss.team6.model.Lecturer;
 import sg.edu.iss.team6.model.Student;
 import sg.edu.iss.team6.model.User;
-import sg.edu.iss.team6.repository.StudentRepository;
-import sg.edu.iss.team6.repository.UserRepository;
 import sg.edu.iss.team6.service.EnrollmentService;
 import sg.edu.iss.team6.service.StudentService;
 import sg.edu.iss.team6.service.UserService;
-import sg.edu.iss.team6.service.UserServiceImpl;
+import sg.edu.iss.team6.validator.UserValidator;
 
-import javax.annotation.Resource;
-import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.*;
 
 @Controller
@@ -43,18 +42,36 @@ public class AdminStudentController {
     @GetMapping(value = "/create")
     public String createStudentPage(Model model){
         model.addAttribute("student", new Student());
+        List<User> stuUsers = uService.findAll();
+        model.addAttribute("stuUsers", stuUsers);
         return "student-create";
     }
 
     @PostMapping(value = "/create")
-    public String createStudent(@ModelAttribute("student") Student student){
-        // Remember to save user object
-        User user = student.getUser();
-        uService.create(user);
-        // Save the student object to the database
-        sService.create(student);
-        return "redirect:/admin/student/list";
+    public String createStudent(@Valid @ModelAttribute("student") Student student,
+                                BindingResult bindingResult,
+                                @RequestParam("username") String username,
+                                Model model){
+        User user = uService.findByUsername(username);
+        Student existingStudent = sService.findByUser(user);
+        if (existingStudent != null) {
+            model.addAttribute("stuUsers", uService.findAll());
+            bindingResult.rejectValue("user.username", "error.user.username.alreadyExists",
+                    "A student has been created under this username.");
+            return "student-create";
+        }
+        else {
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("stuUsers", uService.findAll());
+                return "student-create";
+            }
+            student.setUser(user);
+            // Save the student object to the database
+            sService.create(student);
+            return "redirect:/admin/student/list";
+        }
     }
+
     @GetMapping("/update/{id}")
     public String updateStudentPage(@PathVariable("id") long id, Model model){
         Student student = sService.findByStudentId(id);
@@ -62,9 +79,13 @@ public class AdminStudentController {
         return "student-update";
     }
     @PostMapping(value = "/update/{id}")
-    public String updateStudent(@PathVariable("id") long id, @ModelAttribute("student") Student student){
-        User user = student.getUser();
-        uService.update(user);
+    public String updateStudent(@PathVariable("id") long id,
+                                @Valid @ModelAttribute("student") Student student,
+                                BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            // Return the same view if there are validation errors
+            return "student-update";
+        }
         sService.update(student);
         return "redirect:/admin/student/list";
     }

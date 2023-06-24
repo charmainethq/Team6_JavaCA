@@ -17,8 +17,6 @@ import java.util.List;
 
 @Service
 public class CourseClassServiceImpl implements CourseClassService{
-
-
     @Resource
     private CourseClassRepository classRepo;
     @Autowired
@@ -83,6 +81,11 @@ public class CourseClassServiceImpl implements CourseClassService{
     @Transactional
     public void delete(long id) {
         ccRepo.deleteByClassId(id);
+    }
+
+    @Override
+    public void deleteList(List<CourseClass> cc) {
+        ccRepo.deleteAll(cc);
     }
 
 }

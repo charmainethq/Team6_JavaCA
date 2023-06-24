@@ -1,4 +1,4 @@
-package sg.edu.iss.team6.controller.exception;
+package sg.edu.iss.team6.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

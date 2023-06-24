@@ -89,7 +89,7 @@
             <td th:text="${class.getFormatStartDate()}"></td>
             <td th:text="${class.getFormatEndDate()}"></td>
             <td th:text="${class.size}"></td>
-            <td th:text="${class.confirmed}"></td>
+            <td th:text="${class.getConfirmedNumber()}"></td>
             <td th:text="${class.roomNum}"></td>
             <td th:text="${lecturerNames[__${index.index}__]}"></td>
 
@@ -100,7 +100,9 @@
                     <input type="hidden" name="studentId" th:value="${student.studentId}"/>
                     <!-- <input type="hidden" name="studentId" th:value="${session.studentId}" /> -->
                     <button type="submit" class="btn btn-primary btn-block"
-                            th:onclick="'return showPopup(' + ${class.size} + ', ' + ${class.confirmed} + ');'">
+
+                            th:onclick="'return showPopup(' + ${class.size} + ', ' + ${class.getConfirmedNumber()} + ');'">
+
                         Register
                     </button>
                 </form>

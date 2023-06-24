@@ -1,31 +1,56 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
   <title>Sidebar and Navbar</title>
+
   <meta charset="utf-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
   <link rel="stylesheet" href="/css/index.css">
+
 </head>
+
 <body>
+
   <header>
+
     <div th:include="index.html"></div>
+
   </header>
+
   <div class="container-fluid">
+
     <div class="row">
+
       <div class="col-sm-3 sidebar">
+
         <ul class="nav nav-pills nav-stacked">
+
           <li><a href="/lecturer" class="tab-link">Lecturer</a></li>
+
           <li><a class="manage-link tab-link" th:href="@{/lecturer/coursesTaught/} + ${lecturerId}">View Courses Taught</a></li>
           <li><a class="manage-link tab-link" th:href="@{/lecturer/courseEnrollment/} + ${lecturerId}">View Course Enrollment</a></li>
           <li><a class="manage-link tab-link" th:href="@{/lecturer/selectCourseAndClass/}">Grade A Course</a></li>
           <li><a class="manage-link tab-link" th:href="@{/lecturer/performanceList/}">View a Student Performance</a></li>
+
         </ul>
+
       </div>
+
     </div>
+
   </div>
+
   <script>
     $(document).ready(function() {
       // Retrieve the current URL path
@@ -38,5 +63,9 @@
       activeLink.parent().addClass('active');
     });
   </script>
+
 </body>
+
 </html>
+
+ 
