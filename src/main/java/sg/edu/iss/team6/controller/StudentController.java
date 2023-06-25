@@ -168,12 +168,26 @@ public class StudentController {
         if (enrollment== null) {
             throw new ResourceNotFoundException("Resource not found");
         }
-        enrollmentService.updateEnrollmentStatus(enrollment.getEnrollmentId(), EnrollmentEnum.CONFIRMED);
-        courseClass.setConfirmedNumber(courseClass.getConfirmedNumber()+1);
-        classService.update(courseClass);
-        String courseName = enrollment.getCourseClass().getCourse().getCourseNum() + " " + enrollment.getCourseClass().getCourse().getName();
-        model.addAttribute("courseName", courseName);
-        return "student-enrollment-success";
+
+        if (enrollment.getEnrollmentStatus() == EnrollmentEnum.CONFIRMED
+                        || enrollment.getEnrollmentStatus() == EnrollmentEnum.COMPLETED
+                        || enrollment.getEnrollmentStatus() ==EnrollmentEnum.REMOVED
+                ) {
+            model.addAttribute("eStatus", enrollment.getEnrollmentStatus().toString());
+            return "student-register-fail";
+        }
+        else {
+            //change status to confirmed
+            enrollmentService.updateEnrollmentStatus(enrollment.getEnrollmentId(), EnrollmentEnum.CONFIRMED);
+            //increase class count
+            courseClass.setConfirmedNumber(courseClass.getConfirmedNumber()+1);
+            classService.update(courseClass);
+            //send to confirmation page
+            String courseName = enrollment.getCourseClass().getCourse().getCourseNum() + " " + enrollment.getCourseClass().getCourse().getName();
+            model.addAttribute("courseName", courseName);
+            return "student-enrollment-success";
+        }
+
     }
 
 
