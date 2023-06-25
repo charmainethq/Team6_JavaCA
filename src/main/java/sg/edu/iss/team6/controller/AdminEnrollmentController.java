@@ -61,7 +61,7 @@ public class AdminEnrollmentController {
             int confirmedNumber = courseClass.getConfirmedNumber();
             if (status == EnrollmentEnum.CONFIRMED) {
                 courseClass.setConfirmedNumber(confirmedNumber + 1);
-            } else if (status == EnrollmentEnum.REMOVED) {
+            } else if (status == EnrollmentEnum.REMOVED || status == EnrollmentEnum.WITHDRAWN) {
                 courseClass.setConfirmedNumber(confirmedNumber - 1);
             }
             ccService.update(courseClass);
