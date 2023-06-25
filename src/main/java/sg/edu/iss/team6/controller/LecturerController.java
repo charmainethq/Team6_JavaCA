@@ -51,7 +51,6 @@ public class LecturerController {
 		String lecturerUsername = (String) sessionObj.getAttribute("username");
 		Lecturer lecturer = lectSvc.findByUsername(lecturerUsername);
 		return lecturer.getLecturerId();
-
     }
     
     @GetMapping("/lecturer")
@@ -61,28 +60,8 @@ public class LecturerController {
 		model.addAttribute("name",lecturer.getFullName());
         return "lecturer";
     }
-// Lecturer view courses taught
-
-	@RequestMapping(value = "/lecturer/coursesTaught/", method = RequestMethod.GET)
-	public String coursesTaught(HttpSession session, Model model) {
-		long lecturerId = retrieveLecturerId(session);
-		Lecturer lecturer = lectSvc.findById(lecturerId);
-
-		List<Long> courseIdList = cseClsSvc.findDistinctCourseId(lecturerId);
-		ArrayList<Course> courseList = new ArrayList<>();
-
-		for (long courseId : courseIdList) {
-			Course course = cseSvc.findById(courseId);
-			courseList.add(course);
-		}
-
-		model.addAttribute("lecturer", lecturer);
-		model.addAttribute("courseList", courseList);
-		return "lecturer-courses-taught";
-	}
 
 // Lecturer view courses enrolled
-
 	@RequestMapping(value = "/lecturer/viewClasses/", method = RequestMethod.GET)
 	public String courseEnrollmentList(HttpSession session, Model model) {
 		long lecturerId = retrieveLecturerId(session);
@@ -90,28 +69,27 @@ public class LecturerController {
 		ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
 		ArrayList<Course> courseList = new ArrayList<>();
 		ArrayList<Enrollment> enrollmentList = new ArrayList<>();
-
+		// get the enrollment and course details
 		for (CourseClass courseClass : courseClassList) {
 			Course course = cseSvc.findById(courseClass.getCourse().getCourseId());
 			courseList.add(course);
 			List<Enrollment> enrollments = enrlSvc.findByClassId(courseClass.getClassId());
 			for (Enrollment e: enrollments)
 				enrollmentList.add(e);
-
 		}
 		model.addAttribute(enrollmentList);
 		model.addAttribute(lecturer);
 		model.addAttribute(courseClassList);
 		model.addAttribute(courseList);
-
-
 		return "lecturer-course-enrollment";
 	}
+	
+//Grade A Course
     @RequestMapping(value = "/lecturer/selectCourseAndClass/", method = RequestMethod.GET)
     public String selectCourseAndClass(HttpSession sessionObj, Model model) {
     	long lecturerId = retrieveLecturerId(sessionObj);
-
         ArrayList<CourseClass> courseClassList = cseClsSvc.findByLecturerId(lecturerId);
+        // Distinct list of courses
         ArrayList<Course> distinctCourseList = new ArrayList<>();
         for (CourseClass current : courseClassList) {
         	long courseId = current.getCourse().getCourseId();
@@ -132,8 +110,10 @@ public class LecturerController {
     	ArrayList<Enrollment> enrollmentList = enrlSvc.findByClassId(classId);
     	ArrayList<Enrollment> confirmedEnrollmentList = new ArrayList<>();
     	for(Enrollment enrollment : enrollmentList) {
-    		//check enrollment status is only confirmed
-    		if(enrollment.getEnrollmentStatus().equals(EnrollmentEnum.CONFIRMED) || enrollment.getEnrollmentStatus().equals(EnrollmentEnum.COMPLETED)) {
+    		//check enrollment status
+    		if(enrollment.getEnrollmentStatus().equals(EnrollmentEnum.CONFIRMED) 
+    				|| enrollment.getEnrollmentStatus().equals(EnrollmentEnum.FAILED)
+    				|| enrollment.getEnrollmentStatus().equals(EnrollmentEnum.COMPLETED)) {
     			confirmedEnrollmentList.add(enrollment);
     		}
     	}
@@ -145,36 +125,16 @@ public class LecturerController {
 
 // GPA calculator
     private double calculateGpa(long score) {
-
     	double gpa = 0.0; // < 40
-
-    	if(score >= 80) { // 80 to 100
-    		gpa = 5.0;
-    	}
-    	else if(score >= 75 && score < 80) { // 75 to 79
-    		gpa = 4.5;
-    	}
-    	else if(score >= 70 && score < 75) { // 70 to 74
-    		gpa = 4.0;
-    	}
-    	else if(score >= 65 && score < 70) { // 65 to 69
-    		gpa = 3.5;
-    	}
-    	else if(score >= 60 && score < 65) { // 60 to 64
-    		gpa = 3.0;
-    	}
-    	else if(score >= 55 && score < 60) { // 55 to 59
-    		gpa = 2.5;
-    	}
-    	else if(score >= 50 && score < 55) { // 50 to 54
-    		gpa = 2.0;
-    	}
-    	else if(score >= 45 && score < 50) { // 45 to 49
-    		gpa = 1.5;
-    	}
-    	else { // 40 to 44
-    		gpa = 1.0;
-    	}
+    	if(score >= 80) { gpa = 5.0; }  // 80 to 100
+    	else if(score >= 75 && score < 80) { gpa = 4.5; } // 75 to 79
+    	else if(score >= 70 && score < 75) { gpa = 4.0;	} // 70 to 74
+    	else if(score >= 65 && score < 70) { gpa = 3.5;	} // 65 to 69
+    	else if(score >= 60 && score < 65) { gpa = 3.0;	} // 60 to 64
+    	else if(score >= 55 && score < 60) { gpa = 2.5;	} // 55 to 59
+    	else if(score >= 50 && score < 55) { gpa = 2.0;	} // 50 to 54
+    	else if(score >= 45 && score < 50) { gpa = 1.5; } // 45 to 49
+    	else { gpa = 1.0; } // 40 to 44
     	return gpa;
     }
 
@@ -190,12 +150,10 @@ public class LecturerController {
 	private double calculateCumulativeGpa(long enrollmentId, double gpa, int credits) {
 		long studentId = enrlSvc.findByEnrollmentId(enrollmentId).getStudent().getStudentId();
 		double retrieveGpa = stuSvc.findByStudentId(studentId).getGpa();
-		
 		// student first enrolled course, Cumulative GPA = first course GPA
 		if(retrieveGpa == 0.0) { 
 			return retrieveGpa = gpa; 
 		}
-		
 		// student has enrolled into other courses before, need to breakdown current Cumulative GPA and calculate new Cumulative GPA
 		List<Enrollment> studentEnrolledClass = enrlSvc.findByStudent(stuSvc.findByStudentId(studentId));
 		int totalCredits = 0;
@@ -213,12 +171,12 @@ public class LecturerController {
 	}
 	
 // Update the database with the input score, calculated GPA and changed enrollment status
-
 	@RequestMapping(value = "/lecturer/gradeStudentList/{enrollmentId}", method = RequestMethod.POST)
 	public ModelAndView gradeCourse(@Valid @PathVariable long enrollmentId, @ModelAttribute("enrollment") Enrollment enrollment, BindingResult result) {
 		Enrollment currentEnrollment = enrlSvc.findById(enrollmentId);
         ModelAndView modelAndView = new ModelAndView("redirect:/lecturer/gradeStudentList/" + currentEnrollment.getCourseClass().getClassId());
-		if(result.hasErrors() || enrollment.getScore() == null) {
+		// invalid score input
+        if(result.hasErrors() || enrollment.getScore() == null) {
         	String message1 = "Invalid input! Please enter a valid score!";
         	modelAndView.addObject("message1", message1);
 		}
@@ -226,7 +184,7 @@ public class LecturerController {
         	String message2 = "Score out of range! Please enter a range between 0 to 100.";
         	modelAndView.addObject("message2", message2);
         }
-
+        // valid score input
 		else {
 			Long score = enrollment.getScore();
 			double gpa = calculateGpa(score);
@@ -245,23 +203,19 @@ public class LecturerController {
 			stuSvc.update(student);
             String message3 = "Score has been successfully uploaded!";
             modelAndView.addObject("message3", message3);
-        } 
+        }
         return modelAndView;
 	}
 	
 // Lecturer view student performance list
-	
-
 	@GetMapping(value = "/lecturer/performanceList")
 	public String studentperformancePage(HttpSession session, Model model) {
 		long lecturerId = retrieveLecturerId(session);
 		ArrayList<CourseClass> classIdList = cseClsSvc.findByLecturerId(lecturerId);
 		ArrayList<Enrollment> enrollmentList = new ArrayList<>();
 		for (CourseClass c : classIdList) {			
-			
 			enrollmentList.addAll(enrlSvc.findByClassId(c.getClassId()));
 		}
-
 		ArrayList<Student> stdList = new ArrayList<>();
 		ArrayList<Enrollment> updateEnrlList = new ArrayList<>();
 		for(Enrollment e : enrollmentList) {
@@ -271,7 +225,7 @@ public class LecturerController {
 			   updateEnrlList.add(e);
 			    	}		
 		}
-
+		// Distinct list of students
 		for (Enrollment current : updateEnrlList) {
 			long stdId = current.getStudent().getStudentId();
 			boolean isDuplicate = false;
@@ -282,7 +236,6 @@ public class LecturerController {
 					break;
 				}
 			}
-
 			if (!isDuplicate) {
 				stdList.add(stuSvc.findByStudentId(stdId));
 			}
@@ -310,8 +263,7 @@ public class LecturerController {
 	    }
 	    model.addAttribute("enrollList", updatedEnroll);
 	    model.addAttribute("student",stuSvc.findByStudentId(studentId));
-	    
-	    return "lec-view-std-detail";
+	    return "lecturer-view-std-detail";
 	}
 
 }

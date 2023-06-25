@@ -32,7 +32,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<!-- Iterate over the admins and display their information -->
+				<!-- Iterate over the students and display their information -->
 				<tr th:each="student : ${stdList}" id="studentRow">
 					<td th:text="${student.studentId}"></td>
 					<td th:text="${student.firstName}"></td>
@@ -46,7 +46,7 @@
 			</tbody>
 		</table>
 		<br><br>
-		<button onclick="goBack()">Back</button>
+		<a th:href="@{/lecturer}"><button>Back to Home Page</button></a>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 		<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
@@ -85,10 +85,6 @@
 						row.style.display = 'none';
 					}
 				});
-			}
-
-			function goBack() {
-				window.history.back();
 			}
 		     $(document).ready(function() {
 		        $('#perfTable').DataTable({

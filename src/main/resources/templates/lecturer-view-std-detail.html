@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <br>
 <br>
 
@@ -9,7 +9,7 @@
 	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">	 
 </head>
 <body>
-		    <header>
+	<header>
         <div th:include="lecturer-home-page.html"></div>
     </header>
 
@@ -18,7 +18,6 @@
 		<h1>Student Details</h1>
 		</div>
 		<br/>
-		<div>
 		<div class="details">
 			<label>StudentID:</label>
 			<span th:text="${student.studentId}"></span>
@@ -70,16 +69,7 @@
 			</tbody>
 		</table>
 		<br><br>
-		<button onclick="goBack()">Back</button>
-		<script>
-
-			function goBack() {
-				window.history.back();
-			}
-		</script>
-
-
-
+		<a th:href="@{/lecturer/performanceList}"><button>Back to Previous Page</button></a>
 	</div>
 </body>
 
