@@ -59,10 +59,7 @@ public class UserController{
             return "user-create";
         }
         // Check if the user already exists
-        if (userSvc.findByUsername(user.getUsername()) != null) {
-            bindingResult.rejectValue("username", "error.username.exists", "Username already exists");
-            return "user-create";
-        }
+
         user.setPassword(encoder.encode(user.getPassword()));
         userSvc.create(user);
         return "redirect:/admin/user/list";

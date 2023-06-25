@@ -53,7 +53,7 @@
                             </button>
                             <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" th:href="@{{enrollmentId}/detail(enrollmentId=${enrollment.enrollmentId})}">View</a>
-                                <a class="dropdown-item" th:href="@{{enrollmentId}/status(enrollmentId=${enrollment.enrollmentId})}">Update</a>
+                                <a class="dropdown-item" th:href="@{{enrollmentId}/status(enrollmentId=${enrollment.enrollmentId})}">Edit</a>
                                 <a class="dropdown-item" th:href="@{student/{enrollmentId}/remove(enrollmentId=${enrollment.enrollmentId})}">Remove</a>
                             </div>
                         </div>
@@ -62,6 +62,7 @@
             </tbody>
         </table>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"></script>
         <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
@@ -72,24 +73,27 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+        
         <script>
-            '<"top"i>rt<"bottom"flp><"clear">'
-            $(document).ready(function() {
-                $('#enrollmentTable').DataTable({
-                    dom: '<"top"B>fltr<"bottom"ip><"clear">',
-                    buttons: [
-                        'copy',
-                        'excel',
-                        'csv',
-                        'pdf'
-                    ],
-                    columnDefs: [
-                        { targets: [0, 1, 2, 3, 4, 5], orderable: true },
-                        { targets: '_all', orderable: false }
-                    ]
-                });
+        $(document).ready(function() {
+            $('#enrollmentTable').DataTable({
+                dom: '<"top"Bfl>rt<"bottom"ip><"clear">',
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    'pdf'
+                ],
+                columnDefs: [
+                    { targets: [0, 1, 2, 3, 4, 5], orderable: true },
+                    { targets: '_all', orderable: false }
+                ],
+                fnInitComplete: function () {
+                    $('.dataTables_paginate').addClass('custom-pagination');
+                }
             });
-        </script>
+        });
+        </script>              
     </div>
 </body>
 </html>

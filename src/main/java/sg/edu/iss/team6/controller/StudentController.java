@@ -159,20 +159,44 @@ public class StudentController {
         return "student-register-success";
     }
 
+    // @GetMapping("/confirmEnrollment")
+    // public String createEnrollmentFromUrl(@RequestParam("enrollmentId") Long enrollmentId, Model model) {
+    //     Enrollment enrollment = enrollmentService.findByEnrollmentId(enrollmentId);
+    //     CourseClass courseClass = enrollment.getCourseClass();
+
+
+    //     if (enrollment== null) {
+    //         throw new ResourceNotFoundException("Resource not found");
+    //     }
+    //     enrollmentService.updateEnrollmentStatus(enrollment.getEnrollmentId(), EnrollmentEnum.CONFIRMED);
+    //     courseClass.setConfirmedNumber(courseClass.getConfirmedNumber()+1);
+    //     classService.update(courseClass);
+    //     String courseName = enrollment.getCourseClass().getCourse().getCourseNum() + " " + enrollment.getCourseClass().getCourse().getName();
+    //     model.addAttribute("courseName", courseName);
+    //     return "student-enrollment-success";
+    // }
     @GetMapping("/confirmEnrollment")
     public String createEnrollmentFromUrl(@RequestParam("enrollmentId") Long enrollmentId, Model model) {
         Enrollment enrollment = enrollmentService.findByEnrollmentId(enrollmentId);
-        CourseClass courseClass = enrollment.getCourseClass();
 
-
-        if (enrollment== null) {
+        if (enrollment == null) {
             throw new ResourceNotFoundException("Resource not found");
         }
+
+        CourseClass courseClass = enrollment.getCourseClass();
+        if (courseClass == null) {
+            throw new ResourceNotFoundException("Related course class not found");
+        }
+
         enrollmentService.updateEnrollmentStatus(enrollment.getEnrollmentId(), EnrollmentEnum.CONFIRMED);
-        courseClass.setConfirmedNumber(courseClass.getConfirmedNumber()+1);
+
+        int confirmedNumber = courseClass.getConfirmedNumber();
+        courseClass.setConfirmedNumber(confirmedNumber + 1);
         classService.update(courseClass);
-        String courseName = enrollment.getCourseClass().getCourse().getCourseNum() + " " + enrollment.getCourseClass().getCourse().getName();
+
+        String courseName = courseClass.getCourse().getCourseNum() + " " + courseClass.getCourse().getName();
         model.addAttribute("courseName", courseName);
+
         return "student-enrollment-success";
     }
 

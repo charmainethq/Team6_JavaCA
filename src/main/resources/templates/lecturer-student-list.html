@@ -64,14 +64,16 @@
 			<table id="studentTable" class="table table-striped">
 				<thead>
 					<tr>
-						<th onclick="sortTable('studentTable', 0)"><button class="transparent-btn"><span class="sort-text">Student First Name</span><i class="fas fa-sort"></i></button></th>
-						<th onclick="sortTable('studentTable', 1)"><button class="transparent-btn"><span class="sort-text">Student Last Name</span><i class="fas fa-sort"></i></button></th>
-						<th onclick="sortTable('studentTable', 1)"><button class="transparent-btn"><span class="sort-text">Current Score</span><i class="fas fa-sort"></i></button></th>
+						<th onclick="sortTable('studentTable', 0)"><button class="transparent-btn"><span class="sort-text">Student ID</span><i class="fas fa-sort"></i></button></th>
+						<th onclick="sortTable('studentTable', 1)"><button class="transparent-btn"><span class="sort-text">Student First Name</span><i class="fas fa-sort"></i></button></th>
+						<th onclick="sortTable('studentTable', 2)"><button class="transparent-btn"><span class="sort-text">Student Last Name</span><i class="fas fa-sort"></i></button></th>
+						<th onclick="sortTable('studentTable', 3)"><button class="transparent-btn"><span class="sort-text">Current Score</span><i class="fas fa-sort"></i></button></th>
 						<th>Score</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="enrollment: ${enrollmentList}" id="studentRow">
+						<td th:text="${enrollment.student.studentId}"></td>
 						<td th:text="${enrollment.student.firstName}"></td>
 						<td th:text="${enrollment.student.lastName}"></td>
 						<td th:text="${enrollment.score}"></td>

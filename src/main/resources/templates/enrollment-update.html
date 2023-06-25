@@ -20,6 +20,7 @@
                 <select name="status" id="status" class="form-control">
                     <option value="SUBMITTED" th:selected="${enrollments.enrollmentStatus == 'SUBMITTED'}">SUBMITTED</option>
                     <option value="CONFIRMED" th:selected="${enrollments.enrollmentStatus == 'CONFIRMED'}">CONFIRMED</option>
+                    <option value="REMOVED" th:selected="${enrollments.enrollmentStatus == 'REMOVED'}">REMOVED</option>
                     <option value="WITHDRAWN" th:selected="${enrollments.enrollmentStatus == 'DROPPED'}">WITHDRAWN</option>
                     <option value="FAILED" th:selected="${enrollments.enrollmentStatus == 'FAILED'}">FAILED</option>
                     <option value="COMPLETED" th:selected="${enrollments.enrollmentStatus == 'COMPLETED'}">COMPLETED</option>

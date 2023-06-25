@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 import sg.edu.iss.team6.model.User;
 import sg.edu.iss.team6.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.time.ZoneId;
+
 import javax.annotation.Resource;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })

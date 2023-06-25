@@ -209,7 +209,7 @@ public class LecturerController {
 			}
 		}
 		double cumulativeGpa = (sumCurrentGpa + (gpa * credits) ) / (totalCredits + credits);
-		return cumulativeGpa;
+		return Math.round(cumulativeGpa * 1000.0) / 1000.0; // Round to 3 decimal places
 	}
 	
 // Update the database with the input score, calculated GPA and changed enrollment status

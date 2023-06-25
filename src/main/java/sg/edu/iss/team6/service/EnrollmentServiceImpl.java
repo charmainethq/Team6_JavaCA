@@ -100,7 +100,4 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     public void deleteList(List<Enrollment> enrollments){
         eRepo.deleteAll(enrollments);
     }
-
-
-
 }
