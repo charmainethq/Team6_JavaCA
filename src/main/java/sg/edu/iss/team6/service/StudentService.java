@@ -22,7 +22,7 @@ public interface StudentService {
     Student update(Student student);
     void delete(long id);
 
-    List<Enrollment> getCompletedEnrollmentsForStudent(long studentId);
+    List<Enrollment> getGradedEnrollmentsForStudent(long studentId);
     List<Course> getStudentcourse(long studentId);
 
 

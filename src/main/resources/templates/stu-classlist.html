@@ -45,22 +45,22 @@
       <div class="details">
           <h3>GPA: <span th:text="${#numbers.formatDecimal(gpa, 1, 'POINT', 2, 'POINT')}"></span></h3>
       </div>
-    <div class="details">
-      <h3>Average Score: <span th:text="${avge}"></span></h3>
-    </div>
+
 
 
 
       <table class="table table-striped" id="courseTable">
           <thead>
           <tr>
-              <th>Courses</th>
+              <th>Course Number</th>
+              <th>Course Name</th>
               <th>Score</th>
               <th>Credits</th>
           </tr>
           </thead>
           <tbody>
           <tr th:each="courseAnds : ${courseAndscore}">
+              <td th:text="${courseAnds.key.courseNum}"></td>
               <td th:text="${courseAnds.key.name}"></td>
               <td th:text="${courseAnds.value}"></td>
               <td th:text="${courseAnds.key.credits}"></td>
