@@ -1,16 +1,22 @@
 package sg.edu.iss.team6.validator;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import sg.edu.iss.team6.model.User;
+import sg.edu.iss.team6.service.UserService;
 
 @Component
 public class UserValidator implements Validator {
 
     private static final int MIN_PASSWORD_LENGTH = 10;
+
+    @Autowired
+    UserService userSvc;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -26,6 +32,9 @@ public class UserValidator implements Validator {
 
         if (!isValidUsername(user.getUsername())) {
             errors.rejectValue("username", "username.invalidFormat", "Invalid username format");
+        }
+        if (userSvc.findByUsername(user.getUsername()) != null) {
+            errors.rejectValue("username", "error.username.exists", "Username already exists");
         }
 
         if (user.getPassword().length() < MIN_PASSWORD_LENGTH) {

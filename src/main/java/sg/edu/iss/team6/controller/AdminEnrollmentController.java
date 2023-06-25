@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import sg.edu.iss.team6.exception.ResourceNotFoundException;
+import sg.edu.iss.team6.model.CourseClass;
 import sg.edu.iss.team6.model.Enrollment;
 import sg.edu.iss.team6.model.EnrollmentEnum;
 import sg.edu.iss.team6.service.CourseClassService;
@@ -41,12 +43,29 @@ public class AdminEnrollmentController {
         model.addAttribute("enrollments", enroll);
         return "enrollment-update";
     }
-    
+
     @PostMapping("/{enrollmentId}/status")
     public ModelAndView updateEnrollmentStatus(
             @PathVariable("enrollmentId") long enrollmentId,
             @RequestParam("status") String newStatus) {
-        enrollmentService.updateEnrollmentStatus(enrollmentId, EnrollmentEnum.valueOf(newStatus));
+        Enrollment enrollment = enrollmentService.findByEnrollmentId(enrollmentId);
+        if (enrollment == null) {
+            throw new ResourceNotFoundException("Enrollment not found");
+        }
+
+        EnrollmentEnum status = EnrollmentEnum.valueOf(newStatus);
+        enrollmentService.updateEnrollmentStatus(enrollmentId, status);
+
+        CourseClass courseClass = enrollment.getCourseClass();
+        if (courseClass != null) {
+            int confirmedNumber = courseClass.getConfirmedNumber();
+            if (status == EnrollmentEnum.CONFIRMED) {
+                courseClass.setConfirmedNumber(confirmedNumber + 1);
+            } else if (status == EnrollmentEnum.REMOVED) {
+                courseClass.setConfirmedNumber(confirmedNumber - 1);
+            }
+            ccService.update(courseClass);
+        }
 
         ModelAndView modelAndView = new ModelAndView("redirect:/admin/enrollment/list");
         modelAndView.addObject("message", "Enrollment status updated successfully.");
