@@ -178,6 +178,7 @@ public class StudentController {
     @GetMapping("/confirmEnrollment")
     public String createEnrollmentFromUrl(@RequestParam("enrollmentId") Long enrollmentId, Model model) {
         Enrollment enrollment = enrollmentService.findByEnrollmentId(enrollmentId);
+        CourseClass courseClass = enrollment.getCourseClass();
 
         if (enrollment == null) {
             throw new ResourceNotFoundException("Resource not found");
