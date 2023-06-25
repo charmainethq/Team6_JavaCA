@@ -63,7 +63,7 @@ public class StudentServiceImpl implements StudentService {
         List<Course> crol = new ArrayList<>();
         if (student != null) {
             crol =  student.getStudentEnrollments().stream()
-                    .filter(e -> e.getEnrollmentStatus() == EnrollmentEnum.COMPLETED)
+                    .filter(e -> e.getEnrollmentStatus() == EnrollmentEnum.COMPLETED )
                     .map(e -> e.getCourseClass().getCourse())
                     .collect(Collectors.toList());
         }
@@ -120,11 +120,11 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public List<Enrollment> getCompletedEnrollmentsForStudent(long studentId){
+    public List<Enrollment> getGradedEnrollmentsForStudent(long studentId){
         Student student = srepo.findByStudentId(studentId);
         if (student != null) {
             return student.getStudentEnrollments().stream()
-                    .filter(e -> e.getEnrollmentStatus() == EnrollmentEnum.COMPLETED)
+                    .filter(e -> e.getEnrollmentStatus() == EnrollmentEnum.COMPLETED|| e.getEnrollmentStatus() == EnrollmentEnum.FAILED)
                     .collect(Collectors.toList());
         }
         return Collections.emptyList();
@@ -145,7 +145,7 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     public Map<Course, String> getCourseandScore(long studentId){
 
-        List<Enrollment> enrollments = getCompletedEnrollmentsForStudent(studentId);
+        List<Enrollment> enrollments = getGradedEnrollmentsForStudent(studentId);
         Map<Course, String> courseAndScoreMap = new HashMap<>();
 
         for (Enrollment enrollment : enrollments) {

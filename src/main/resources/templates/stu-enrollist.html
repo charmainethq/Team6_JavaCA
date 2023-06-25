@@ -28,11 +28,12 @@
     <div th:include="studentPage.html"></div>
 </header>
 <div class="container">
-    <h1>EnrollmentStatus</h1>
+    <h1>My Enrollments</h1>
     <table class="table table-striped"id="enrolTable" >
         <thead>
         <tr>
-            <th>Courses</th>
+            <th>Course Number</th>
+            <th>Course Name</th>
             <th>StartTime</th>
             <th>EndTime</th>
             <th>ClassRoom</th>
@@ -43,6 +44,7 @@
         <tbody>
 
         <tr th:each="enrol : ${enrollments}">
+            <td th:text="${enrol.CourseClass.Course.courseNum}"></td>
             <td th:text="${enrol.CourseClass.Course.name}"></td>
             <td th:text="${enrol.CourseClass.getFormatStartDate()}"></td>
             <td th:text="${enrol.CourseClass.getFormatEndDate()}"></td>
@@ -87,17 +89,19 @@
         const enrollmentData = [];
         const enrollmentRows = document.querySelectorAll("tbody tr");
         enrollmentRows.forEach(function(row) {
-            const courseName = row.cells[0].textContent.trim();
-            const startDate = row.cells[1].textContent.trim();
-            const endDate = row.cells[2].textContent.trim();
-            const roomNum = row.cells[3].textContent.trim();
-            const enrollmentStatus = row.cells[4].textContent.trim();
+            const courseNum = row.cells[0].textContent.trim();
+            const courseName = row.cells[1].textContent.trim();
+            const startDate = new Date(row.cells[2].textContent.trim());
+            const endDate = new Date(row.cells[3].textContent.trim());
+            const roomNum = row.cells[4].textContent.trim();
+            const enrollmentStatus = row.cells[5].textContent.trim();
+
 
             // Filter events based on enrollment status
             if (enrollmentStatus === "CONFIRMED") {
 
                 const event = {
-                    title: courseName,
+                    title: courseNum + " " + courseName,
                     start: startDate,
                     end: endDate,
                     description: `Room: ${roomNum}`,
@@ -112,6 +116,7 @@
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
+            displayEventTime: false,
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
