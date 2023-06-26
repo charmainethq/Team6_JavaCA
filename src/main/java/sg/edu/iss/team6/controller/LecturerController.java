@@ -150,15 +150,20 @@ public class LecturerController {
 	private double calculateCumulativeGpa(long enrollmentId, double gpa, int credits) {
 		long studentId = enrlSvc.findByEnrollmentId(enrollmentId).getStudent().getStudentId();
 		double retrieveGpa = stuSvc.findByStudentId(studentId).getGpa();
-		// student first enrolled course, Cumulative GPA = first course GPA
+		// student is being graded for the very first time, Cumulative GPA = first course GPA
 		if(retrieveGpa == 0.0) { 
 			return retrieveGpa = gpa; 
 		}
-		// student has enrolled into other courses before, need to breakdown current Cumulative GPA and calculate new Cumulative GPA
+		// student has been graded before, thus with an existing GPA
 		List<Enrollment> studentEnrolledClass = enrlSvc.findByStudent(stuSvc.findByStudentId(studentId));
 		int totalCredits = 0;
 		double sumCurrentGpa = 0;
 		for(Enrollment enrolled : studentEnrolledClass) {
+			// lecturer is updating the score for this enrollment
+			if(enrolled.getEnrollmentId() == enrollmentId) {
+				continue; // should not add into cumulative GPA calculation process
+			}
+			// student has enrolled into other courses before, need to breakdown current Cumulative GPA and calculate new Cumulative GPA
 			if(enrolled.getEnrollmentStatus() == EnrollmentEnum.FAILED || enrolled.getEnrollmentStatus() == EnrollmentEnum.COMPLETED) {
 				long currentScore = enrlSvc.findByEnrollmentId(enrolled.getEnrollmentId()).getScore();
 				int currentCredits = retrieveCourseCredits(enrolled.getEnrollmentId());
@@ -166,6 +171,7 @@ public class LecturerController {
 				totalCredits += currentCredits;
 			}
 		}
+		// if no other enrolled courses (just update score), only GPA is updated (total credits & sumCurrentGpa are still 0).
 		double cumulativeGpa = (sumCurrentGpa + (gpa * credits) ) / (totalCredits + credits);
 		return Math.round(cumulativeGpa * 1000.0) / 1000.0; // Round to 3 decimal places
 	}
@@ -244,14 +250,10 @@ public class LecturerController {
 		return "lecturer-view-std-performance";
 	}
 	@GetMapping(value="/lecturer/performance/{studentId}")
-	public String viewStudentDetails(@PathVariable long studentId, HttpSession session, Model model) {
-		long lecturerId = retrieveLecturerId(session);
-	    ArrayList<CourseClass> ccList = cseClsSvc.findByLecturerId(lecturerId);
-	    ArrayList<Enrollment> enrList = new ArrayList<>();
-	    for (CourseClass cc : ccList) {
-	        enrList.addAll(enrlSvc.findByClassId(cc.getClassId()));
-	    }
+	public String viewStudentDetails(@PathVariable long studentId, Model model) {
+	    List<Enrollment> enrList = enrlSvc.findAllEnrollments();
 	    ArrayList<Enrollment> updatedEnroll= new ArrayList<>();
+	    // student enrollment status cannot be withdrawn, removed or submitted (pending course registration)
 	    for(Enrollment e : enrList) {
 	    	if(e.getStudent().getStudentId()==studentId && 
 	    	  (e.getEnrollmentStatus()==EnrollmentEnum.FAILED ||
