@@ -196,7 +196,7 @@ public class LecturerController {
 			double gpa = calculateGpa(score);
 			int credits = retrieveCourseCredits(enrollmentId);
 			double cumulativeGpa = calculateCumulativeGpa(enrollmentId, gpa, credits);
-			if(score < 40) {
+			if(score < 50) {
 				currentEnrollment.setEnrollmentStatus(EnrollmentEnum.FAILED);
 			}
 			else {
